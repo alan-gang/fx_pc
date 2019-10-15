@@ -1,0 +1,518 @@
+
+let commonRow = {
+  // 名字
+  n: '',
+  // ????
+  ncls: '',
+  // 类型
+  t: 'times',
+  // 最小值
+  min: 0,
+  // 最大值
+  max: 9,
+  // length of number, ex. 1 => 01
+  l: 1,
+  // 至多可以选择多少个号码selected length
+  sl: 0,
+  // last selected item
+  lsv: null,
+  // 结构
+  struct: '',
+  rcls: 'default',
+  // 按钮
+  btns: [],
+  // 待生成
+  // values
+  vs: null,
+  // 所选的号的值v集
+  vc: [],
+  // 所选的号的名n集
+  nc: [],
+  // 所选的号的行名n集
+  rnc: [],
+}
+
+
+let getCommonRow = (args = {}) => {
+  return Object.assign({}, commonRow, args)
+}
+
+function cpArr(arr: object[]) {
+  let temp: object[] = [];
+  arr.forEach(a => {
+    temp.push(toString.call(a) === '[object Object]' ? Object.assign({}, a) : a);
+  });
+  return temp;
+}
+
+function cp(from = {}, to = {}) {
+  return Object.assign({}, to, from);
+}
+
+export default {
+  '1250:1' () {
+    // ssc 双面
+    return {
+      rows: [
+        getCommonRow({n: '万位', vs: [{s: false, n: '大', v: 1}, {s: false, n: '小', v: 2}, {s: false, n: '单', v: 3}, {s: false, n: '双', v: 4},]}),
+        getCommonRow({n: '千位', vs: [{s: false, n: '大', v: 1}, {s: false, n: '小', v: 2}, {s: false, n: '单', v: 3}, {s: false, n: '双', v: 4},]}),
+        getCommonRow({n: '百位', vs: [{s: false, n: '大', v: 1}, {s: false, n: '小', v: 2}, {s: false, n: '单', v: 3}, {s: false, n: '双', v: 4},]}),
+        getCommonRow({n: '十位', vs: [{s: false, n: '大', v: 1}, {s: false, n: '小', v: 2}, {s: false, n: '单', v: 3}, {s: false, n: '双', v: 4},]}),
+        getCommonRow({n: '个位', vs: [{s: false, n: '大', v: 1}, {s: false, n: '小', v: 2}, {s: false, n: '单', v: 3}, {s: false, n: '双', v: 4},]}),
+      ]
+    }
+  },
+  '1251:1' () {
+    // ssc '总和、龙虎', 
+    return {
+      rows: [
+        getCommonRow({nonasv: true, nstyle: 't', vs: [{s: false, n: '总大', v: '1', oddIndex: 2, col: 12, d: '23-45'}, {s: false, n: '总小', v: '2', oddIndex: 2, col: 12, d: '0-22'}, {s: false, n: '总单', v: '3', oddIndex: 2, col: 12}, {s: false, n: '总双', v: '4', oddIndex: 2, col: 12}, {s: false, n: '龙', v: '5', oddIndex: 1, col: 8, pn: '万个'}, {s: false, n: '虎', v: '6', oddIndex: 1, col: 8, pn: '万个'}, {s: false, n: '和', v: '7', oddIndex: 0, col: 8, pn: '万个'}]}),
+      ]
+    }
+  },
+  '1273:1' () {
+    // ssc 龙虎和
+    let vs = [{s: false, n: '龙', v: '5', oddIndex: 1, col: 7}, {s: false, n: '和', v: '7', oddIndex: 0, col: 7}, {s: false, n: '虎', v: '6', oddIndex: 1, col: 7}];
+    return {
+      rows: [
+        getCommonRow({n: '万千', col: 3, p: '龙1vs虎2', nstyle: 'lhh_1v2', vs: cpArr(vs)}),
+        getCommonRow({n: '万百', col: 3, p: '龙1vs虎3', nstyle: 'lhh_1v3', vs: cpArr(vs)}),
+        getCommonRow({n: '万十', col: 3, p: '龙1vs虎4', nstyle: 'lhh_1v4', vs: cpArr(vs)}),
+        getCommonRow({n: '万个', col: 3, p: '龙1vs虎5', nstyle: 'lhh_1v5', vs: cpArr(vs)}),
+        getCommonRow({n: '千百', col: 3, p: '龙2vs虎3', nstyle: 'lhh_2v3', vs: cpArr(vs)}),
+        getCommonRow({n: '千十', col: 3, p: '龙2vs虎4', nstyle: 'lhh_2v4', vs: cpArr(vs)}),
+        getCommonRow({n: '千个', col: 3, p: '龙2vs虎5', nstyle: 'lhh_2v5', vs: cpArr(vs)}),
+        getCommonRow({n: '百十', col: 3, p: '龙3vs虎4', nstyle: 'lhh_3v4', vs: cpArr(vs)}),
+        getCommonRow({n: '百个', col: 3, p: '龙3vs虎5', nstyle: 'lhh_3v5', vs: cpArr(vs)}),
+        getCommonRow({n: '十个', col: 3, p: '龙4vs虎5', nstyle: 'lhh_4v5', vs: cpArr(vs)})
+      ]
+    }
+  },
+  '1254:1' () {
+    // ssc 牌型
+    let vs = [{s: false, n: '豹子', v: '5', oddIndex: 1, col: 7}, {s: false, n: '顺子', v: '6', oddIndex: 1, col: 7}, {s: false, n: '对子', v: '7', oddIndex: 0, col: 7}, {s: false, n: '半顺', v: '7', oddIndex: 0, col: 7}, {s: false, n: '杂六', v: '7', oddIndex: 0, col: 7}];
+    return {
+      rows: [
+        getCommonRow({n: '前三', col: 3, height: 2, vs: cpArr(vs)}),
+        getCommonRow({n: '中三', col: 3, height: 2, vs: cpArr(vs)}),
+        getCommonRow({n: '后三', col: 3, height: 2, vs: cpArr(vs)})
+      ]
+    }
+  },
+  '1253:1' () {
+    // ssc 定位
+    let vs = [{s: false, n: '0', col: 5}, {s: false, n: '1', col: 5}, {s: false, n: '2', col: 5}, {s: false, n: '3', col: 5}, {s: false, n: '4', col: 5}, {s: false, n: '5', col: 5}, {s: false, n: '6', col: 5}, {s: false, n: '7', col: 5}, {s: false, n: '8', col: 5}, {s: false, n: '9', col: 5}];
+    return {
+      rows: [
+        getCommonRow({n: '万位', col: 4, height: 3, p: '万定位', oddIndex: 0, vs: cpArr(vs)}),
+        getCommonRow({n: '千位', col: 4, height: 3, p: '千定位', oddIndex: 0, vs: cpArr(vs)}),
+        getCommonRow({n: '百位', col: 4, height: 3, p: '百定位', oddIndex: 0, vs: cpArr(vs)}),
+        getCommonRow({n: '十位', col: 4, height: 3, p: '十定位', oddIndex: 0, vs: cpArr(vs)}),
+        getCommonRow({n: '个位', col: 4, height: 3, p: '个定位', oddIndex: 0, vs: cpArr(vs)})
+      ]
+    }
+  },
+  '1256:1' () {
+    // ssc 一字组合 全五一字
+    return {
+      rows: [
+        getCommonRow({n: '全五一字', nonasv: true, col: 4, oddIndex: 0, height: 3, nstyle: 'yzzh_qw', vs: [{s: false, n: '0', col: 5}, {s: false, n: '1', col: 5}, {s: false, n: '2', col: 5}, {s: false, n: '3', col: 5}, {s: false, n: '4', col: 5}, {s: false, n: '5', col: 5}, {s: false, n: '6', col: 5}, {s: false, n: '7', col: 5}, {s: false, n: '8', col: 5}, {s: false, n: '9', col: 5}]}),
+      ]
+    }
+  },
+  '1257:1' () {
+    // ssc 一字组合 前三一字
+    return {
+      rows: [
+        getCommonRow({n: '前三一字', nonasv: true, col: 4, oddIndex: 0, height: 3, nstyle: 'yzzh_qs', vs: [{s: false, n: '0', col: 5}, {s: false, n: '1', col: 5}, {s: false, n: '2', col: 5}, {s: false, n: '3', col: 5}, {s: false, n: '4', col: 5}, {s: false, n: '5', col: 5}, {s: false, n: '6', col: 5}, {s: false, n: '7', col: 5}, {s: false, n: '8', col: 5}, {s: false, n: '9', col: 5}]}),
+      ]
+    }
+  },
+  '1258:1' () {
+    // ssc 一字组合 中三一字
+    return {
+      rows: [
+        getCommonRow({n: '中三一字', nonasv: true, col: 4, oddIndex: 0, height: 3, nstyle: 'yzzh_zs', vs: [{s: false, n: '0', col: 5}, {s: false, n: '1', col: 5}, {s: false, n: '2', col: 5}, {s: false, n: '3', col: 5}, {s: false, n: '4', col: 5}, {s: false, n: '5', col: 5}, {s: false, n: '6', col: 5}, {s: false, n: '7', col: 5}, {s: false, n: '8', col: 5}, {s: false, n: '9', col: 5}]}),
+      ]
+    }
+  },
+  '1259:1' () {
+    // ssc 一字组合 后三一字
+    return {
+      rows: [
+        getCommonRow({n: '后三一字', nonasv: true, col: 4, oddIndex: 0, height: 3, nstyle: 'yzzh_hs', vs: [{s: false, n: '0', col: 5}, {s: false, n: '1', col: 5}, {s: false, n: '2', col: 5}, {s: false, n: '3', col: 5}, {s: false, n: '4', col: 5}, {s: false, n: '5', col: 5}, {s: false, n: '6', col: 5}, {s: false, n: '7', col: 5}, {s: false, n: '8', col: 5}, {s: false, n: '9', col: 5}]}),
+      ]
+    }
+  },
+
+  '2050:1' () {
+    // 11x5
+    // 总大,总小,总单,总双
+    return {
+      rows: [
+        getCommonRow({nonasv: true, nstyle: 'zhdxds', vs: [{s: false, n: '总大', v: '1', oddIndex: 1, col: 12, d: '31-45'}, {s: false, n: '总小', v: '2', oddIndex: 1, col: 12, d: '15-29'}, {s: false, n: '总单', v: '3', oddIndex: 2, col: 12}, {s: false, n: '总双', v: '4', oddIndex: 0, col: 12},{s: false, n: '和尾大', v: '7', oddIndex: 1, col: 12, pn: ''}, {s: false, n: '和尾小', v: '7', oddIndex: 1, col: 12, pn: ''}]}),
+      ]
+    }
+  },
+  '2050:2' () {
+    // 11x5
+    // 和尾大,和尾小
+    return {
+      rows: [
+        getCommonRow({nonasv: true, nstyle: 'hwdx', vs: [{s: false, n: '和尾大', v: '', oddIndex: 1, col: 12, pn: ''}, {s: false, n: '和尾小', v: '', oddIndex: 1, col: 12, pn: ''}]}),
+      ]
+    }
+  },
+  '2051:1' () {
+    // 11x5大，小，单，双
+    return {
+      rows: [
+        getCommonRow({n: '第一位', vs: [{s: false, n: '大', v: 1}, {s: false, n: '小', v: 2}, {s: false, n: '单', v: 3}, {s: false, n: '双', v: 4},]}),
+        getCommonRow({n: '第二位', vs: [{s: false, n: '大', v: 1}, {s: false, n: '小', v: 2}, {s: false, n: '单', v: 3}, {s: false, n: '双', v: 4},]}),
+        getCommonRow({n: '第三位', vs: [{s: false, n: '大', v: 1}, {s: false, n: '小', v: 2}, {s: false, n: '单', v: 3}, {s: false, n: '双', v: 4},]}),
+        getCommonRow({n: '第四位', vs: [{s: false, n: '大', v: 1}, {s: false, n: '小', v: 2}, {s: false, n: '单', v: 3}, {s: false, n: '双', v: 4},]}),
+        getCommonRow({n: '第五位', vs: [{s: false, n: '大', v: 1}, {s: false, n: '小', v: 2}, {s: false, n: '单', v: 3}, {s: false, n: '双', v: 4},]}),
+      ]
+    }
+  },
+  '2052:1' () {
+    // 11x5 定位
+    let vs = [{s: false, n: '01', col: 5}, {s: false, n: '02', col: 5}, {s: false, n: '03', col: 5}, {s: false, n: '04', col: 5}, {s: false, n: '05', col: 5}, {s: false, n: '06', col: 5}, {s: false, n: '07', col: 5}, {s: false, n: '08', col: 5}, {s: false, n: '09', col: 5}, {s: false, n: '10', col: 5}, {s: false, n: '11', col: 5}];
+    return {
+      rows: [
+        getCommonRow({n: '第一位', col: 4, height: 3, vs: cpArr(vs)}),
+        getCommonRow({n: '第二位', col: 4, height: 3, vs: cpArr(vs)}),
+        getCommonRow({n: '第三位', col: 4, height: 3, vs: cpArr(vs)}),
+        getCommonRow({n: '第四位', col: 4, height: 3, vs: cpArr(vs)}),
+        getCommonRow({n: '第五位', col: 4, height: 3, vs: cpArr(vs)})
+      ]
+    }
+  },
+  '2053:1' () {
+    // 11x5
+    // 龙，虎
+    let vs = [{s: false, n: '龙', col: 9}, {s: false, n: '虎', col: 9}];
+    return {
+      rows: [
+        getCommonRow({n: '一位VS二位', nstyle: 'lh_1v2', oddIndex: 0, col: 6, vs: cpArr(vs)}),
+        getCommonRow({n: '一位VS三位', nstyle: 'lh_1v3', oddIndex: 0, col: 6, vs: cpArr(vs)}),
+        getCommonRow({n: '一位VS四位', nstyle: 'lh_1v4', oddIndex: 0, col: 6, vs: cpArr(vs)}),
+        getCommonRow({n: '一位VS五位', nstyle: 'lh_1v5', oddIndex: 0, col: 6, vs: cpArr(vs)}),
+        getCommonRow({n: '二位VS三位', nstyle: 'lh_2v3', oddIndex: 0, col: 6, vs: cpArr(vs)}),
+        getCommonRow({n: '二位VS四位', nstyle: 'lh_2v4', oddIndex: 0, col: 6, vs: cpArr(vs)}),
+        getCommonRow({n: '二位VS五位', nstyle: 'lh_2v5', oddIndex: 0, col: 6, vs: cpArr(vs)}),
+        getCommonRow({n: '三位VS四位', nstyle: 'lh_3v4', oddIndex: 0, col: 6, vs: cpArr(vs)}),
+        getCommonRow({n: '三位VS五位', nstyle: 'lh_3v5', oddIndex: 0, col: 6, vs: cpArr(vs)}),
+        getCommonRow({n: '四位VS五位', nstyle: 'lh_4v5', oddIndex: 0, col: 6, vs: cpArr(vs)})
+      ]
+    }
+  },
+  '2054:1' () {
+    // 11x5 任选
+    return {
+        rows: [
+        getCommonRow({nonasv: true, nstyle: 'rx', height: 3, noodd: true, vs:[{s: false, n: '01', col: 8},{s: false, n: '02', col: 8},{s: false, n: '03', col: 8},{s: false, n: '04', col: 8},{s: false, n: '05', col: 8},{s: false, n: '06', col: 8},{s: false, n: '07', col: 8},{s: false, n: '08', col: 8},{s: false, n: '09', col: 8},{s: false, n: '10', col: 8},{s: false, n: '11', col: 8}]}),
+      ]
+    }
+  },
+  '2054:1:1' () {
+    // 11x5 任选 一中一
+    return {
+      methodTypeName: 'rx_nzn',
+      rows: [
+        getCommonRow({nonasv: true, nstyle: 'rx_nzn', height: 3, noodd: true, oddIndex: 7, vs:[{s: false, n: '01', col: 8},{s: false, n: '02', col: 8},{s: false, n: '03', col: 8},{s: false, n: '04', col: 8},{s: false, n: '05', col: 8},{s: false, n: '06', col: 8},{s: false, n: '07', col: 8},{s: false, n: '08', col: 8},{s: false, n: '09', col: 8},{s: false, n: '10', col: 8},{s: false, n: '11', col: 8}]}),
+      ]
+    }
+  },
+  '2054:1:2' () {
+    // 11x5 任选 二中二
+    return {
+      methodTypeName: 'rx_nzn',
+      rows: [
+        getCommonRow({nonasv: true, nstyle: 'rx_nzn', height: 3, noodd: true, oddIndex: 6, vs:[{s: false, n: '01', col: 8},{s: false, n: '02', col: 8},{s: false, n: '03', col: 8},{s: false, n: '04', col: 8},{s: false, n: '05', col: 8},{s: false, n: '06', col: 8},{s: false, n: '07', col: 8},{s: false, n: '08', col: 8},{s: false, n: '09', col: 8},{s: false, n: '10', col: 8},{s: false, n: '11', col: 8}]}),
+      ]
+    }
+  },
+  '2054:1:3' () {
+    // 11x5 任选 三中三
+    return {
+      methodTypeName: 'rx_nzn',
+      rows: [
+        getCommonRow({nonasv: true, nstyle: 'rx_nzn', height: 3, noodd: true, oddIndex: 4, vs:[{s: false, n: '01', col: 8},{s: false, n: '02', col: 8},{s: false, n: '03', col: 8},{s: false, n: '04', col: 8},{s: false, n: '05', col: 8},{s: false, n: '06', col: 8},{s: false, n: '07', col: 8},{s: false, n: '08', col: 8},{s: false, n: '09', col: 8},{s: false, n: '10', col: 8},{s: false, n: '11', col: 8}]}),
+      ]
+    }
+  },
+  '2054:1:4' () {
+    // 11x5 任选 四中四
+    return {
+      methodTypeName: 'rx_nzn',
+      rows: [
+        getCommonRow({nonasv: true, nstyle: 'rx_nzn', height: 3, noodd: true, oddIndex: 2, vs:[{s: false, n: '01', col: 8},{s: false, n: '02', col: 8},{s: false, n: '03', col: 8},{s: false, n: '04', col: 8},{s: false, n: '05', col: 8},{s: false, n: '06', col: 8},{s: false, n: '07', col: 8},{s: false, n: '08', col: 8},{s: false, n: '09', col: 8},{s: false, n: '10', col: 8},{s: false, n: '11', col: 8}]}),
+      ]
+    }
+  },
+  '2054:1:5' () {
+    // 11x5 任选 五中五
+    return {
+      methodTypeName: 'rx_nzn',
+      rows: [
+        getCommonRow({nonasv: true, nstyle: 'rx_nzn', height: 3, noodd: true, oddIndex: 0, vs:[{s: false, n: '01', col: 8},{s: false, n: '02', col: 8},{s: false, n: '03', col: 8},{s: false, n: '04', col: 8},{s: false, n: '05', col: 8},{s: false, n: '06', col: 8},{s: false, n: '07', col: 8},{s: false, n: '08', col: 8},{s: false, n: '09', col: 8},{s: false, n: '10', col: 8},{s: false, n: '11', col: 8}]}),
+      ]
+    }
+  },
+  '2054:1:6' () {
+    // 11x5 任选 六中五
+    return {
+      methodTypeName: 'rx_nzn',
+      rows: [
+        getCommonRow({nonasv: true, nstyle: 'rx_nzn', height: 3, noodd: true, oddIndex: 1, vs:[{s: false, n: '01', col: 8},{s: false, n: '02', col: 8},{s: false, n: '03', col: 8},{s: false, n: '04', col: 8},{s: false, n: '05', col: 8},{s: false, n: '06', col: 8},{s: false, n: '07', col: 8},{s: false, n: '08', col: 8},{s: false, n: '09', col: 8},{s: false, n: '10', col: 8},{s: false, n: '11', col: 8}]}),
+      ]
+    }
+  },
+  '2054:1:7' () {
+    // 11x5 任选 七中五
+    return {
+      methodTypeName: 'rx_nzn',
+      rows: [
+        getCommonRow({nonasv: true, nstyle: 'rx_nzn', height: 3, noodd: true, oddIndex: 3, vs:[{s: false, n: '01', col: 8},{s: false, n: '02', col: 8},{s: false, n: '03', col: 8},{s: false, n: '04', col: 8},{s: false, n: '05', col: 8},{s: false, n: '06', col: 8},{s: false, n: '07', col: 8},{s: false, n: '08', col: 8},{s: false, n: '09', col: 8},{s: false, n: '10', col: 8},{s: false, n: '11', col: 8}]}),
+      ]
+    }
+  },
+  '2054:1:8' () {
+    // 11x5 任选 八中五
+    return {
+      methodTypeName: 'rx_nzn',
+      rows: [
+        getCommonRow({nonasv: true, nstyle: 'rx_nzn', height: 3, noodd: true, oddIndex: 5, vs:[{s: false, n: '01', col: 8},{s: false, n: '02', col: 8},{s: false, n: '03', col: 8},{s: false, n: '04', col: 8},{s: false, n: '05', col: 8},{s: false, n: '06', col: 8},{s: false, n: '07', col: 8},{s: false, n: '08', col: 8},{s: false, n: '09', col: 8},{s: false, n: '10', col: 8},{s: false, n: '11', col: 8}]}),
+      ]
+    }
+  },
+  '2055:1' () {
+    // 11x5 前二组选 nstyle: 'zx', 
+    let c = {s: false, col: 7, dis: false}
+    let vs = [cp({n: '01'}, c), cp({n: '02'}, c), cp({n: '03'}, c), cp({n: '04'}, c), cp({n: '05'}, c), cp({n: '06'}, c), cp({n: '07'}, c), cp({n: '08'}, c), cp({n: '09'}, c), cp({n: '10'}, c), cp({n: '11'}, c)];
+    return {
+      methodTypeName: 'zux_q2',
+      rows: [
+        getCommonRow({n: '前二组选', height: 4, col: 3, class: 'col-txt', nstyle: 'zux_q2', vs: cpArr(vs)}),
+      ]
+    }
+  },
+  '2056:1' () {
+    // 11选5 前三组选
+    let c = {s: false, col: 7, dis: false}
+    let vs = [cp({n: '01'}, c), cp({n: '02'}, c), cp({n: '03'}, c), cp({n: '04'}, c), cp({n: '05'}, c), cp({n: '06'}, c), cp({n: '07'}, c), cp({n: '08'}, c), cp({n: '09'}, c), cp({n: '10'}, c), cp({n: '11'}, c)];
+    return {
+      methodTypeName: 'zux_q3',
+      rows: [
+        getCommonRow({n: '前三组选', nstyle: 'zx', height: 4, col: 3, class: 'col-txt', vs: cpArr(vs)})
+      ]
+    }
+  },
+  '2057:1' () {
+    // 11x5 前二直选
+    let c = {s: false, col: 5, dis: false}
+    let vs = [cp({n: '01'}, c), cp({n: '02'}, c), cp({n: '03'}, c), cp({n: '04'}, c), cp({n: '05'}, c), cp({n: '06'}, c), cp({n: '07'}, c), cp({n: '08'}, c), cp({n: '09'}, c), cp({n: '10'}, c), cp({n: '11'}, c)];
+    return {
+      name: '前二直选',
+      nstyle: '',
+      height: 3,
+      noodd: true,
+      methodTypeName: 'zx_q2',
+      choiceNoRepeat: true,
+      rows: [
+        getCommonRow({n: '第一位', vs: cpArr(vs)}),
+        getCommonRow({n: '第二位', vs: cpArr(vs)})
+      ]
+    }
+  },
+  '2058:1' () {
+    // 11x5 前三直选
+    let vs = [{s: false, n: '01', col: 5},{s: false, n: '02', col: 5},{s: false, n: '03', col: 5},{s: false, n: '04', col: 5},{s: false, n: '05', col: 5},{s: false, n: '06', col: 5},{s: false, n: '07', col: 5},{s: false, n: '08', col: 5},{s: false, n: '09', col: 5},{s: false, n: '10', col: 5},{s: false, n: '11', col: 5}];
+    return {
+      name: '前三直选',
+      nstyle: '',
+      height: 3,
+      noodd: true,
+      methodTypeName: 'zx_q3',
+      choiceNoRepeat: true,
+      rows: [
+        getCommonRow({n: '第一位', vs: cpArr(vs)}),
+        getCommonRow({n: '第二位', vs: cpArr(vs)}),
+        getCommonRow({n: '第三位', vs: cpArr(vs)})
+      ]
+    }
+  },
+
+  '4050:1' () {
+    // PK10
+    // 冠亚和大, 冠亚和小， 冠亚和单，冠亚和双
+    return {
+      rows: [
+        getCommonRow({nonasv: true, nstyle: 'zhdxds', vs: [{s: false, n: '冠亚和大', pv: '总大', oddIndex: 0, col: 12}, {s: false, n: '冠亚和小', pv: '总小', oddIndex: 1, col: 12}, {s: false, n: '冠亚和单', pv: '总单', oddIndex: 1, col: 12}, {s: false, n: '冠亚和双', pv: '总双', oddIndex: 0, col: 12}]}),
+      ]
+    }
+  },
+  '4050:1:1' () {
+    // PK10
+    // 冠亚和大, 冠亚和小， 冠亚和单，冠亚和双 nstyle: 'gyhdxds', 
+    return {
+      rows: [
+        getCommonRow({nonasv: true, nstyle: 'zhdxds', vs: [{s: false, n: '大', oddIndex: 0, col: 12}, {s: false, n: '小', oddIndex: 1, col: 12}, {s: false, n: '单', oddIndex: 1, col: 12}, {s: false, n: '双', oddIndex: 0, col: 12}]}),
+      ]
+    }
+  },
+  '4052:1' () {
+    // PK10 冠亚和值-定位
+    let c = {s: false, col: 6, dis: false}
+    let vs = [cp({n: '03', pv: '3', oddIndex: 0}, c), cp({n: '04', pv: '4', oddIndex: 0}, c), cp({n: '05', pv: '5', oddIndex: 1}, c), cp({n: '06', pv: '6', oddIndex: 1}, c), cp({n: '07', pv: '7', oddIndex: 2}, c), cp({n: '08', pv: '8', oddIndex: 2}, c), cp({n: '09', pv: '9', oddIndex: 3}, c), cp({n: '10', pv: '10', oddIndex: 3}, c), cp({n: '11', pv: '11', oddIndex: 4}, c), cp({n: '12', pv: '12', oddIndex: 3}, c), cp({n: '13', pv: '13', oddIndex: 3}, c), cp({n: '14', pv: '14', oddIndex: 2}, c), cp({n: '15', pv: '15', oddIndex: 2}, c), cp({n: '16', pv: '16', oddIndex: 1}, c), cp({n: '17', pv: '17', oddIndex: 1}, c), cp({n: '18', pv: '18', oddIndex: 0}, c), cp({n: '19', pv: '19', oddIndex: 0}, c)];
+    return {
+      rows: [
+        getCommonRow({n: '', nstyle: 'gydw', vs: cpArr(vs)})
+      ]
+    }
+  },
+  '4053:1' () {
+    // PK10 大，小，单，双
+    let vs = [{s: false, n: '大', v: 1}, {s: false, n: '小', v: 2}, {s: false, n: '单', v: 3}, {s: false, n: '双', v: 4}];
+    return {
+      rows: [
+        getCommonRow({n: '冠军', vs: cpArr(vs)}),
+        getCommonRow({n: '亚军', vs: cpArr(vs)}),
+        getCommonRow({n: '季军',  vs: cpArr(vs)}),
+        getCommonRow({n: '第四名', vs: cpArr(vs)}),
+        getCommonRow({n: '第五名', vs: cpArr(vs)})
+      ]
+    }
+  },
+  '4055:1:1' () {
+    // PK10 定位胆 冠军-亚军
+    let vs = [{s: false, n: '01', col: 7},{s: false, n: '02', col: 7},{s: false, n: '03', col: 7},{s: false, n: '04', col: 7},{s: false, n: '05', col: 7},{s: false, n: '06', col: 7},{s: false, n: '07', col: 7},{s: false, n: '08', col: 7},{s: false, n: '09', col: 7},{s: false, n: '10', col: 7}];
+    return {
+      rows: [
+        getCommonRow({n: '冠军', height: 4, col: 3, class: 'col-txt', vs: cpArr(vs)}),
+        getCommonRow({n: '亚军', height: 4, col: 3, class: 'col-txt', vs: cpArr(vs)})
+      ]
+    }
+  },
+  '4055:1:2' () {
+    // PK10 定位胆 第三名-第四名
+    let vs = [{s: false, n: '01', col: 7},{s: false, n: '02', col: 7},{s: false, n: '03', col: 7},{s: false, n: '04', col: 7},{s: false, n: '05', col: 7},{s: false, n: '06', col: 7},{s: false, n: '07', col: 7},{s: false, n: '08', col: 7},{s: false, n: '09', col: 7},{s: false, n: '10', col: 7}];
+    return {
+      rows: [
+        getCommonRow({n: '第三名', height: 4, col: 3, class: 'col-txt', p: '季军', vs: cpArr(vs)}),
+        getCommonRow({n: '第四名', height: 4, col: 3, class: 'col-txt', vs: cpArr(vs)})
+      ]
+    }
+  },
+  '4055:1:3' () {
+    // PK10 定位胆 第五名-第六名
+    let vs = [{s: false, n: '01', col: 7},{s: false, n: '02', col: 7},{s: false, n: '03', col: 7},{s: false, n: '04', col: 7},{s: false, n: '05', col: 7},{s: false, n: '06', col: 7},{s: false, n: '07', col: 7},{s: false, n: '08', col: 7},{s: false, n: '09', col: 7},{s: false, n: '10', col: 7}];
+    return {
+      rows: [
+        getCommonRow({n: '第五名', height: 4, col: 3, class: 'col-txt', vs: cpArr(vs)}),
+        getCommonRow({n: '第六名', height: 4, col: 3, class: 'col-txt', vs: cpArr(vs)})
+      ]
+    }
+  },
+  '4055:1:4' () {
+    // PK10 定位胆 第七名-第八名
+    let vs = [{s: false, n: '01', col: 7},{s: false, n: '02', col: 7},{s: false, n: '03', col: 7},{s: false, n: '04', col: 7},{s: false, n: '05', col: 7},{s: false, n: '06', col: 7},{s: false, n: '07', col: 7},{s: false, n: '08', col: 7},{s: false, n: '09', col: 7},{s: false, n: '10', col: 7}];
+    return {
+      rows: [
+        getCommonRow({n: '第七名', height: 4, col: 3, class: 'col-txt', vs: cpArr(vs)}),
+        getCommonRow({n: '第八名', height: 4, col: 3, class: 'col-txt', vs: cpArr(vs)})
+      ]
+    }
+  },
+  '4055:1:5' () {
+    // PK10 定位胆 第九名-第十名
+    let vs = [{s: false, n: '01', col: 7},{s: false, n: '02', col: 7},{s: false, n: '03', col: 7},{s: false, n: '04', col: 7},{s: false, n: '05', col: 7},{s: false, n: '06', col: 7},{s: false, n: '07', col: 7},{s: false, n: '08', col: 7},{s: false, n: '09', col: 7},{s: false, n: '10', col: 7}];
+    return {
+      rows: [
+        getCommonRow({n: '第九名', height: 4, col: 3, class: 'col-txt', vs: cpArr(vs)}),
+        getCommonRow({n: '第十名', height: 4, col: 3, class: 'col-txt', vs: cpArr(vs)})
+      ]
+    }
+  },
+  '5050:1' () {
+    // K3 大小单双
+    let vs = [{s: false, n: '大', d: '11-17', v: 1, col: 10, rcol: 12}, {s: false, n: '小', d: '4-10', v: 2, col: 10, rcol: 12}, {s: false, n: '单', v: 3, col: 10, rcol: 12}, {s: false, n: '双', v: 4, col: 10, rcol: 12}];
+    return {
+      rows: [
+        getCommonRow({nonasv: true, n: '大小单双', nstyle: 'zhdxds', col: 3, height: 2, class: 'col-txt col2-txt', vs: cpArr(vs)}),
+      ]
+    }
+  },
+  '5051:1' () {
+    // K3 点数
+    return {
+      rows: [
+        getCommonRow({nonasv: true, n: '点数', nstyle: 'diansu', col: 3, height: 5, vs:[{s: false, n: '4点', col: 7, pv: '4', oddIndex: 0},{s: false, n: '5点', col: 7, pv: '5', oddIndex: 1},{s: false, n: '6点', col: 7, pv: '6', oddIndex: 2},{s: false, n: '7点', col: 7, pv: '7', oddIndex: 3},{s: false, n: '8点', col: 7, pv: '8', oddIndex: 4},{s: false, n: '9点', col: 7, pv: '9', oddIndex: 5},{s: false, n: '10点', col: 7, pv: '10', oddIndex: 6},{s: false, n: '11点', col: 7, pv: '11', oddIndex: 6},{s: false, n: '12', col: 7, pv: '12', oddIndex: 5},{s: false, n: '13点', col: 7, pv: '13', oddIndex: 4},{s: false, n: '14点', col: 7, pv: '14', oddIndex: 3},{s: false, n: '15点', col: 7, pv: '15', oddIndex: 2},{s: false, n: '16点', col: 7, pv: '16', oddIndex: 1},{s: false, n: '17点', col: 7, pv: '17', oddIndex: 0}]}),
+      ]
+    }
+  },
+  '5052:1' () {
+    // K3 三军
+    let vs = [{s: false, n: '1', v: 1, col: 10, class: 'icon', icons: 1}, {s: false, n: '2', v: 2, col: 10, class: 'icon', icons: 1}, {s: false, n: '3', v: 3, col: 10, class: 'icon', icons: 1}, {s: false, n: '4', v: 4, col: 10, class: 'icon', icons: 1}, {s: false, n: '5', v: 4, col: 10, class: 'icon', icons: 1}, {s: false, n: '6', v: 4, col: 10, class: 'icon', icons: 1}];
+    return {
+      rows: [
+        getCommonRow({nonasv: true, n: '三军', height: 3, nstyle: 'shanjun', vs: cpArr(vs)}),
+      ]
+    }
+  },
+  '5053:1' () {
+    // K3 围骰/全骰
+    let vs = [
+      {s: false, n: '1', v: 1, col: 10, class: 'icon', icons: 3}, 
+      {s: false, n: '2', v: 2, col: 10, class: 'icon', icons: 3}, 
+      {s: false, n: '3', v: 3, col: 10, class: 'icon', icons: 3}, 
+      {s: false, n: '4', v: 4, col: 10, class: 'icon', icons: 3}, 
+      {s: false, n: '5', v: 5, col: 10, class: 'icon', icons: 3}, 
+      {s: false, n: '6', v: 6, col: 10, class: 'icon', icons: 3}
+    ];
+    return {
+      rows: [
+        getCommonRow({nonasv: true, n: '围骰', height: 3, oddIndex: 0, vs: cpArr(vs)}),
+        getCommonRow({nonasv: true, n: '全骰', oddIndex: 1, vs: [{s: false, n: '全骰', v: 1, col: 10}]})
+      ]
+    }
+  },
+  '5054:1' () {
+    // K3 长牌
+    let c = {s: false, v: 1, col: 10, class: 'icon', icons: 1};
+    let vs = [cp({n: '12'}, c), cp({n: '13'}, c), cp({n: '14'}, c), cp({n: '15'}, c), cp({n: '16'}, c), cp({n: '23'}, c), cp({n: '24'}, c), cp({n: '25'}, c), cp({n: '26'}, c), cp({n: '34'}, c), cp({n: '35'}, c), cp({n: '36'}, c), cp({n: '45'}, c), cp({n: '46'}, c), cp({n: '56'}, c) ]
+    return {
+      rows: [
+        getCommonRow({nonasv: true, n: '长牌', height: 8, class: "cp", vs: cpArr(vs)}),
+      ]
+    }
+  },
+  '5055:1' () {
+    // K3 短牌
+    let vs = [{s: false, n: '1', v: 1, col: 10, class: 'icon', icons: 2, pv: '11'}, {s: false, n: '2', v: 2, col: 10, class: 'icon', icons: 2, pv: '22'}, {s: false, n: '3', v: 3, col: 10, class: 'icon', icons: 2, pv: '33'}, {s: false, n: '4', v: 4, col: 10, class: 'icon', icons: 2, pv: '44'}, {s: false, n: '5', v: 4, col: 10, class: 'icon', icons: 2, pv: '55'}, {s: false, n: '6', v: 4, col: 10, class: 'icon', icons: 2, pv: '66'}];
+    return {
+      rows: [
+        getCommonRow({nonasv: true, n: '短牌', height: 3, vs: cpArr(vs)}),
+      ]
+    }
+  },
+  '5056:1' () {
+    // K3 颜色
+    let vs = [{s: false, n: '全红', v: 1, col: 10, oddIndex: 0}, {s: false, n: '全黑', v: 2, col: 10, oddIndex: 1}, {s: false, n: '1红2黑', v: 3, col: 10, oddIndex: 2}, {s: false, n: '2红1黑', v: 4, col: 10, oddIndex: 3}];
+    return {
+      rows: [
+        getCommonRow({nonasv: true, n: '颜色', height: 2, nstyle: 'ys', vs: cpArr(vs)}),
+      ]
+    }
+  },
+  '5057:1' () {
+    // K3 跨度
+    let vs = [{s: false, n: '0', v: 1, col: 10, oddIndex: 0, pv: '0'}, {s: false, n: '1', v: 2, col: 10, oddIndex: 1, pv: '1'}, {s: false, n: '2', v: 3, col: 10, oddIndex: 2, pv: '2'}, {s: false, n: '3', v: 4, col: 10, oddIndex: 3, pv: '3'}, {s: false, n: '4', v: 4, col: 10, oddIndex: 2, pv: '4'}, {s: false, n: '5', v: 4, col: 10, oddIndex: 3, pv: '5'}];
+    return {
+      rows: [
+        getCommonRow({nonasv: true, n: '跨度', height: 3, nstyle: 'kd', vs: cpArr(vs)}),
+      ]
+    }
+  }
+};

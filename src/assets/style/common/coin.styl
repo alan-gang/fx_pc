@@ -1,0 +1,32 @@
+bg(uri, size=auto 100%)
+  background-image url(uri)
+  background-repeat no-repeat
+  background-position left
+  background-size size
+
+coins = {
+  coin_10: '../../images/icon_chip01',
+  coin_20: '../../images/icon_chip02',
+  coin_50: '../../images/icon_chip03',
+  coin_100: '../../images/icon_chip04',
+  coin_500: '../../images/icon_chip05',
+  coin_all: '../../images/icon_chip06'
+}
+coin_colors = {
+  coin_10: #ab05a3,
+  coin_20: #008800,
+  coin_50: #4c4c4c,
+  coin_100: #c71c23,
+  coin_500: #0366e0,
+  coin_all: #c49601
+}
+
+.coin_
+  bg(coins[coin_all]+'.png')
+  
+
+for k, v in coins
+  .{k}
+    bg(v+'.png')
+    color coin_colors[k]
+    

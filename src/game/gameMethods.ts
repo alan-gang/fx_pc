@@ -1,0 +1,168 @@
+
+import { LOTTERY_TYPES } from '../utils/config';
+import { MethodsConfig } from '../typings/game-methods';
+
+// 玩法配置
+export let methodsConfig: MethodsConfig = {
+  [LOTTERY_TYPES.SSC]: [
+    {
+      name: '两面',
+      ename: 'lm',
+      ids: ['1251:1', '1250:1']
+    },
+    {
+      name: '龙虎',
+      ename: 'lhh',
+      ids: ['1273:1']
+    },
+    // {
+    //   name: '牌型',
+    //   ename: 'px',
+    //   ids: ['1254:1']
+    // },
+    {
+      name: '定位',
+      ename: 'dw',
+      ids: ['1253:1']
+    },
+    {
+      name: '一字组合',
+      ename: 'yzzh',
+      ids: ['1256:1', '1257:1', '1258:1', '1259:1']
+    }
+  ],
+  [LOTTERY_TYPES.G11X5]: [
+    {
+      name: '两面',
+      ename: 'lm',
+      ids: ['2050:1', '2051:1']
+    },
+    {
+      name: '龙虎',
+      ename: 'lh',
+      ids: ['2053:1']
+    },
+    {
+      name: '定位',
+      ename: 'dw',
+      ids: ['2052:1']
+    },
+    {
+      name: '任选',
+      ename: 'rx',
+      ids: ['2054:1:1'],
+      subMethods: [
+        {s: true, name: '一中一', v: '1z1', oddIndex: 7, col: 7, class: 'layout-lr', mid: '2054', odd: '', ids: ['2054:1:1']},
+        {s: false, name: '二中二', v: '2z2', oddIndex: 6, col: 7, class: 'layout-lr', mid: '2054', odd: '', ids: ['2054:1:2']},
+        {s: false, name: '三中三', v: '3z3', oddIndex: 4, col: 7, class: 'layout-lr', mid: '2054', odd: '', ids: ['2054:1:3']},
+        {s: false, name: '四中四', v: '4z4', oddIndex: 2, col: 7, class: 'layout-lr', mid: '2054', odd: '', ids: ['2054:1:4']},
+        {s: false, name: '五中五', v: '5z5', oddIndex: 0, col: 7, class: 'layout-lr', mid: '2054', odd: '', ids: ['2054:1:5']},
+        {s: false, name: '六中五', v: '6z5', oddIndex: 1, col: 7, class: 'layout-lr', mid: '2054', odd: '', ids: ['2054:1:6']},
+        {s: false, name: '七中五', v: '7z5', oddIndex: 3, col: 7, class: 'layout-lr', mid: '2054', odd: '', ids: ['2054:1:7']},
+        {s: false, name: '八中五', v: '8z5', oddIndex: 5, col: 7, class: 'layout-lr', mid: '2054', odd: '', ids: ['2054:1:8']}
+      ]
+    },
+    {
+      name: '组选',
+      ename: 'zux',
+      ids: ['2055:1', '2056:1']
+    },
+    {
+      name: '直选',
+      ename: 'zx',
+      ids: ['2057:1'],
+      subMethods: [
+        {s: true, name: '前二直选', col: 11, oddIndex: 0, class: 'layout-lr pd-lr-10', mid: '2057', odd: '', ids: ['2057:1']},
+        {s: false, name: '前三直选', col: 11, oddIndex: 0, class: 'layout-lr pd-lr-10', mid: '2058', odd: '', ids: ['2058:1']}
+      ]
+    }
+  ],
+  [LOTTERY_TYPES.PK10]: [
+    {
+      name: '两面',
+      ename: 'lm',
+      ids: ['4050:1', '4053:1']
+    },
+    {
+      name: '定位冠军/亚军',
+      ename: 'dwgy',
+      ids: ['4055:1:1']
+    },
+    {
+      name: '定位第三/第四',
+      ename: 'dwss',
+      ids: ['4055:1:2']
+    },
+    {
+      name: '定位第五/第六',
+      ename: 'dwwl',
+      ids: ['4055:1:3']
+    },
+    {
+      name: '定位第七/第八',
+      ename: 'dwqb',
+      ids: ['4055:1:4']
+    },
+    {
+      name: '定位第九/第十',
+      ename: 'dwjs',
+      ids: ['4055:1:5']
+    },
+    {
+      name: '冠亚和值',
+      ename: 'gyhz',
+      ids: ['4050:1:1', '4052:1']
+    }
+  ],
+  [LOTTERY_TYPES.K3]: [
+    {
+      name: '点数',
+      ename: 'diansu',
+      ids: ['5050:1', '5051:1']
+    },
+    {
+      name: '围骰/全骰',
+      ename: 'wqshai',
+      ids: ['5053:1']
+    },
+    {
+      name: '三军',
+      ename: 'shanjun',
+      ids: ['5052:1']
+    },
+    {
+      name: '长牌',
+      ename: 'changpai',
+      ids: ['5054:1']
+    },
+    {
+      name: '短牌',
+      ename: 'duanpai',
+      ids: ['5055:1']
+    },
+    {
+      name: '颜色/跨度',
+      ename: 'yskd',
+      ids: ['5056:1', '5057:1']
+    }
+  ]
+};
+
+// 匹配玩法对象
+export function getMethodByIds(ids: string[], gameType: string) {
+  let curGameTypeMethods = methodsConfig[gameType] || [];
+  for (let i = 0; i < curGameTypeMethods.length; i++) {
+    if (curGameTypeMethods[i].ids.join('') === ids.join('')) {
+      return curGameTypeMethods[i];
+    }
+  }
+  return null;
+}
+
+/**
+ * 获取子玩法列表
+ * @param {*} gameType 游戏类型（必须）
+ */
+export function getMethodsConfigByType(gameType: string) {
+  return methodsConfig[gameType];
+}

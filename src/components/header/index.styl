@@ -1,0 +1,78 @@
+
+.header-view {
+  width $app-header-width
+  height $app-header-height
+  background $app-header-bg-color
+  margin 0 auto
+  padding 0 0.3rem
+  box-sizing border-box
+  justify-content space-between
+  i {
+    font-style normal
+  }
+  .icon-logo {
+    width 2.13rem
+    height 0.5rem
+    bg($app-header-icon-logo)
+    background-position left 0.08rem
+    img {
+      width 100%
+      height 100%
+    }
+  }
+  icon() {
+    position absolute
+    left -0.2rem
+    width 0.42rem
+    height 0.42rem
+  }
+  borderImg() {
+    // border-image: linear-gradient(to top, #ff0000, #00ff00);
+    border-image-slice 0.02rem
+  }
+  .icon-avatar {
+    icon()
+    // border solid 0.01rem $app-header-bd-r-color
+    // background-color $app-header-bd-t-color
+  }
+  .icon-money {
+    icon()
+    bg($app-header-icon-money)
+  }
+  .r-cir {
+    rightCircle(0.2rem)
+    &::before {
+      rightCircle(0.2rem)
+    }
+  }
+  item() {
+    width 1.8rem
+    height 0.38rem
+    // border-top solid 0.01rem $app-header-bd-t-color
+    // border-right solid 0.01rem $app-header-bd-r-color
+    // border-bottom solid 0.01rem $app-header-bd-b-color
+    padding 0 0.15rem 0 0
+    box-sizing border-box
+  }
+  .username-wp {
+    item()
+    // color $app-header-username-color
+    i:last-child {
+      flex 1
+      padding-left 0.2rem
+    }
+  }
+  .balance-wp {
+    item()
+    width 1.9rem
+    span {
+      i:first-child {
+        // color $app-header-balance-color
+      }
+      i:last-child {
+        // color $app-header-balance-unit-color
+        padding-left 0.02rem
+      }
+    }
+  }
+}

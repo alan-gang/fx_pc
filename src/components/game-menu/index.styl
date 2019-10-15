@@ -1,0 +1,105 @@
+.game-menu-view {
+  width 2rem
+  top 1.4rem
+  position fixed
+  left 1rem
+  .game-menu-header {
+    height 0.5rem
+    line-height 0.5rem
+    background $game-menu-header-bg-color url($game-menu-header-bg-image) center no-repeat
+    color $theme-txt-color-4
+    border-top-left-radius 0.08rem
+    border-top-right-radius 0.08rem
+  }
+  .game-type-icon {
+    display inline-block
+    width 0.22rem
+    height 0.22rem
+    margin-right 0.1rem
+    for type in box ssc '11x5' k3 pk10 {
+      &.icon-{type} {
+        background url('../../assets/images/default/icon-'+type+'.png') center no-repeat;
+        background-size 0.22rem
+      }
+    }
+  }
+  .game-menu-item {
+    display flex
+    justify-content space-between
+    align-items center
+    .nav-link-wp {
+      flexLayout() {
+        flex 1
+        display flex
+        justify-content space-between
+        align-items center
+      }
+      flexLayout()
+      & > a {
+        flexLayout()
+      }
+      .game-timer {
+        padding-right 0.02rem
+      }
+    }
+  }
+  .favourite {
+    display inline-block
+    width 0.17rem
+    height 0.17rem
+    background-image url($game-menu-favourite-image)
+    background-size 100%
+    background-repeat no-repeat
+    &.selected {
+      background-image url($game-menu-favourite-selected-image)
+    }
+  }
+  .ant-menu-root {
+    border-bottom-left-radius 0.08rem
+    border-bottom-right-radius 0.08rem
+  }
+  .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background $game-menu-item-selected-bg-color
+    color $theme-txt-color-4
+  }
+  .ant-menu,
+  .ant-menu-submenu,
+  .ant-menu-item,
+  .ant-menu-submenu .ant-menu-sub {
+    transition none
+  }
+  .ant-menu-submenu-title {
+    background $game-menu-submenu-title-bg-color
+    margin-top 0
+    margin-bottom 0
+  }
+  .ant-menu-submenu-title:active {
+    background transparent
+  }
+  .ant-menu-submenu-title {
+    transition none
+    & > span {
+      display flex
+      align-items center      
+    }
+  }
+
+  .ant-menu-item {
+    padding-left 0.15rem !important
+  }
+  .ant-menu-submenu-selected {
+    color $theme-txt-color-2
+  }
+  .ant-menu-item a:hover {
+    // color $game-menu-item-hover-txt-color
+    color $theme-txt-color-4
+  }
+  .ant-menu-submenu-title:hover {
+    color $theme-txt-color
+  }
+  .ant-menu-submenu-arrow::before,
+  .ant-menu-submenu-arrow::after {
+    background $theme-bg-color-1 !important
+  }
+}
+
