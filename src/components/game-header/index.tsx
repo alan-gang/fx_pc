@@ -7,6 +7,11 @@ interface Props {
   store?: any;
   gameType?: string;
   gameId?: number;
+  curIssue?: number;
+  lastIssue?: number;
+  curTime?: number;
+  openNumbers: string[];
+  numCss: string;
 }
 
 @inject("store")
@@ -16,11 +21,11 @@ class GameHeader extends Component<Props, object> {
     return (
       <section className="game-header-view flex ai-c">
         <div className={`game-logo game-header-logo-${this.props.gameId}`}>
-          <span className="volumn-switch open"></span>
+          <span className="volumn-switch close"></span>
         </div>
         <div className="flex ai-c">
           <div className="txt-r cur-issue-wp">
-            <div>123124142期</div>
+            <div>{this.props.curIssue}期</div>
             <div>截止时间</div>
           </div>
           <div className="time-wp flex ai-c jc-c">
@@ -31,12 +36,10 @@ class GameHeader extends Component<Props, object> {
             <span className="second-wp">22</span>
           </div>
         </div>
-        <div className="last-issue-wp">
-          <div className="txt-r last-issue-num-wp">
-            12414213421期
-          </div>
+        <div className="last-issue-wp flex ai-c">
+          <div className="txt-r last-issue-num-wp">{this.props.lastIssue}期</div>
           <div>
-            {/* <RollingNumbers /> */}
+            <RollingNumbers numbers={this.props.openNumbers} hl={this.props.numCss} gameType={this.props.gameType}/>
           </div>
         </div>
         <div className="limit-set-wp">
@@ -44,7 +47,7 @@ class GameHeader extends Component<Props, object> {
             <span>限红设置</span>
             <span></span>
           </div>
-          <div>限红说明</div>
+          <div className="limit-explain">限红说明</div>
         </div>
       </section>
     );

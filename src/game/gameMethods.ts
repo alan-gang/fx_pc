@@ -1,29 +1,25 @@
 
 import { LOTTERY_TYPES } from '../utils/config';
 import { MethodsConfig } from '../typings/game-methods';
+import { GameMethodMenu } from '../typings/games';
 
 // 玩法配置
 export let methodsConfig: MethodsConfig = {
   [LOTTERY_TYPES.SSC]: [
     {
-      name: '两面',
-      ename: 'lm',
-      ids: ['1251:1', '1250:1']
+      name: '整合',
+      ename: 'zhenghe',
+      ids: ['1251:1', '1250:1','1251:2', '1260:1', '1261:1', '1262:1']
+    },
+    {
+      name: '定位',
+      ename: 'dw',
+      ids: ['1253:1']
     },
     {
       name: '龙虎',
       ename: 'lhh',
       ids: ['1273:1']
-    },
-    // {
-    //   name: '牌型',
-    //   ename: 'px',
-    //   ids: ['1254:1']
-    // },
-    {
-      name: '定位',
-      ename: 'dw',
-      ids: ['1253:1']
     },
     {
       name: '一字组合',
@@ -33,19 +29,19 @@ export let methodsConfig: MethodsConfig = {
   ],
   [LOTTERY_TYPES.G11X5]: [
     {
-      name: '两面',
-      ename: 'lm',
-      ids: ['2050:1', '2051:1']
-    },
-    {
-      name: '龙虎',
-      ename: 'lh',
-      ids: ['2053:1']
+      name: '整合',
+      ename: 'zhenghe',
+      ids: ['2050:1', '2050:2', '2053:2', '2051:1']
     },
     {
       name: '定位',
       ename: 'dw',
       ids: ['2052:1']
+    },
+    {
+      name: '龙虎',
+      ename: 'lh',
+      ids: ['2053:1']
     },
     {
       name: '任选',
@@ -79,37 +75,22 @@ export let methodsConfig: MethodsConfig = {
   ],
   [LOTTERY_TYPES.PK10]: [
     {
-      name: '两面',
-      ename: 'lm',
-      ids: ['4050:1', '4053:1']
+      name: '整合',
+      ename: 'zhenghe',
+      ids: ['4050:1', '4053:1', '4053:2']
     },
     {
-      name: '定位冠军/亚军',
+      name: '龙虎',
+      ename: 'lh',
+      ids: ['4054:1']
+    },
+    {
+      name: '定位01-10',
       ename: 'dwgy',
-      ids: ['4055:1:1']
+      ids: ['4055:1:1', '4055:1:2']
     },
     {
-      name: '定位第三/第四',
-      ename: 'dwss',
-      ids: ['4055:1:2']
-    },
-    {
-      name: '定位第五/第六',
-      ename: 'dwwl',
-      ids: ['4055:1:3']
-    },
-    {
-      name: '定位第七/第八',
-      ename: 'dwqb',
-      ids: ['4055:1:4']
-    },
-    {
-      name: '定位第九/第十',
-      ename: 'dwjs',
-      ids: ['4055:1:5']
-    },
-    {
-      name: '冠亚和值',
+      name: '冠亚组合',
       ename: 'gyhz',
       ids: ['4050:1:1', '4052:1']
     }
@@ -121,14 +102,14 @@ export let methodsConfig: MethodsConfig = {
       ids: ['5050:1', '5051:1']
     },
     {
-      name: '围骰/全骰',
-      ename: 'wqshai',
-      ids: ['5053:1']
-    },
-    {
       name: '三军',
       ename: 'shanjun',
       ids: ['5052:1']
+    },
+    {
+      name: '围骰/全骰',
+      ename: 'wqshai',
+      ids: ['5053:1']
     },
     {
       name: '长牌',
@@ -141,9 +122,14 @@ export let methodsConfig: MethodsConfig = {
       ids: ['5055:1']
     },
     {
-      name: '颜色/跨度',
+      name: '颜色',
       ename: 'yskd',
-      ids: ['5056:1', '5057:1']
+      ids: ['5056:1']
+    },
+    {
+      name: '跨度',
+      ename: 'yskd',
+      ids: ['5057:1']
     }
   ]
 };
@@ -163,6 +149,6 @@ export function getMethodByIds(ids: string[], gameType: string) {
  * 获取子玩法列表
  * @param {*} gameType 游戏类型（必须）
  */
-export function getMethodsConfigByType(gameType: string) {
+export function getMethodsConfigByType(gameType: string): GameMethodMenu[] {
   return methodsConfig[gameType];
 }

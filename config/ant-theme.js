@@ -1,5 +1,6 @@
 module.exports = {
   modifyVars: {
+    '@primary-color': '#eeeeee',
     '@menu-bg': '#eeeeee',
     '@menu-item-color': '#333',
     // '@menu-highlight-color': '#666',

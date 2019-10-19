@@ -1,0 +1,116 @@
+.play-view {
+  margin-top 0.1rem
+  .pos-lebel {
+    background-color $theme-bg-color-2
+    text-align center
+    height 0.32rem
+    line-height 0.32rem
+    box-sizing border-box
+    border-bottom solid 0.01rem $theme-bd-color-1
+    &.hide {
+      display none
+    }
+  }
+  .method {
+    border solid 0.01rem $theme-bd-color-1
+    margin-bottom 0.08rem
+    &.col {
+      display flex
+    }
+    .ant-row {
+      flex 1
+      border-right dashed 0.01rem $theme-bd-color-2
+    }
+    .ant-row:last-child {
+      border-right none
+    }
+    .method-item {
+      display flex
+      height 0.32rem
+      align-items center
+      padding-left 0.15rem
+      &.selected {
+        background-color $play-method-item-selected-bg-color
+      }
+    }
+    &::after {
+      clear both
+    }
+    .col5 {
+      width 20%
+      float left
+    }
+    &.no-b-m {
+      border-bottom none
+      margin-bottom 0
+    }
+    &.no-t-b {
+      border-top none
+    }
+    &.min-auto-w {
+      .method-item-name {
+        padding 0 0.08rem
+        border-radius 0.2rem
+      }
+    }
+    &.m-lh {
+      border none
+      .ant-row {
+        border solid 0.01rem $theme-bd-color-1
+        margin-bottom 0.08rem
+      }
+    }
+    &.yzzh {
+      width 2.08rem
+      float left
+      margin-right 0.16rem
+      &:last-child {
+        margin 0;
+      }
+    }
+    &.layout-2-c {
+      width 4.35rem
+      float left
+      &.left {
+       margin-right 0.1rem 
+      }
+    }
+    &.one-line-balls {
+      padding 0.2rem 0
+      .pos-lebel {
+        background-color $theme-txt-color-4
+        border-bottom none
+      }
+      .method-item {
+        float left
+        padding-left 0.08rem
+      }
+    }
+  }
+  .mi-pl-50 {
+    .method-item {
+      padding-left 0.5rem
+    }
+  }
+  .odd {
+    color $theme-txt-color-6
+    padding 0 0.1rem
+  }
+  .method-item-name {
+    min-width 0.25rem
+    height 0.25rem
+    line-height 0.25rem
+    border-radius 50%
+    background-color $theme-bg-color-3
+    display inline-block
+    text-align center
+    color $theme-txt-color-5
+    border solid 0.01rem $play-method-name-bd-color
+    cursor pointer
+  } 
+  .ant-input {
+    width 0.6rem
+    height 0.2rem
+    border-radius 0.02rem
+  }
+}

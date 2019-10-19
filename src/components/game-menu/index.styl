@@ -42,6 +42,19 @@
         padding-right 0.02rem
       }
     }
+    .favourite {
+      visibility hidden
+    }
+    &:hover {
+      .favourite {
+        visibility visible
+      }
+    }
+  }
+  .sub-menu-box {
+    .favourite {
+      visibility visible
+    }
   }
   .favourite {
     display inline-block
@@ -50,10 +63,24 @@
     background-image url($game-menu-favourite-image)
     background-size 100%
     background-repeat no-repeat
+    
     &.selected {
       background-image url($game-menu-favourite-selected-image)
     }
   }
+  // for n in ssc '11x5' pk10 k3 {
+  //   .sub-menu-{n} {
+  //     .favourite {
+  //       visibility hidden
+  //     }
+  //     // &:hover {
+  //     //   .favourite {
+  //     //     visibility visible
+  //     //   }
+  //     // }
+  //   }
+  // }
+
   .ant-menu-root {
     border-bottom-left-radius 0.08rem
     border-bottom-right-radius 0.08rem
@@ -86,6 +113,7 @@
 
   .ant-menu-item {
     padding-left 0.15rem !important
+    padding-right 0.10rem
   }
   .ant-menu-submenu-selected {
     color $theme-txt-color-2

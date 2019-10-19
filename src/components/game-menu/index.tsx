@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { NavLink } from 'react-router-dom';
 import games, { getGameById } from '../../game/games';
 import { Menu } from 'antd';
-import { ClickParam } from 'antd/lib/menu/index';
+// import { ClickParam } from 'antd/lib/menu/index';
 import { GameCategory, Game } from '../../typings/games';
 
 import './index.styl';
@@ -34,7 +34,7 @@ class GameMenu extends Component<Props, object> {
 
     this.state = {
       offsetLeft: 30,
-      openKeys: ['ssc'],
+      openKeys: ['box', 'ssc'],
       navData
     };
   }
@@ -63,9 +63,9 @@ class GameMenu extends Component<Props, object> {
     }
   };
 
-  onMenuItemHandler = ({ item, key, keyPath, domEvent }: ClickParam) => {
-    console.log('item=', item, 'key=', key, 'keyPath=', keyPath, 'domEvent=', domEvent, domEvent.target);
-  }
+  // onMenuItemHandler = ({ item, key, keyPath, domEvent }: ClickParam) => {
+  //   console.log('item=', item, 'key=', key, 'keyPath=', keyPath, 'domEvent=', domEvent, domEvent.target);
+  // }
 
   onAddFavourite = (id: number, type: string, event: MouseEvent<HTMLSpanElement>) => {
     event.stopPropagation();
@@ -109,7 +109,7 @@ class GameMenu extends Component<Props, object> {
           mode="inline"
           openKeys={this.state.openKeys}
           onOpenChange={this.onOpenChange}
-          onClick={this.onMenuItemHandler}
+          // onClick={this.onMenuItemHandler}
           style={{ width: 200 }}
           subMenuCloseDelay={0}
           subMenuOpenDelay={0}
@@ -117,6 +117,7 @@ class GameMenu extends Component<Props, object> {
           {this.state.navData.map((gameCate) => (
             <Menu.SubMenu
               key={gameCate.type}
+              className={`sub-menu-${gameCate.type}`}
               title={
                 <span>
                   <i className={`game-type-icon icon-${gameCate.type}`}></i>
