@@ -1,0 +1,38 @@
+.coin-set-view {
+  $base-dir = '../../assets/images/default/';
+  margin-left 0.15rem
+  .coin-item {
+    width 0.4rem
+    height 0.4rem
+    line-height 0.4rem
+    text-align center
+    background-size 100% !important
+    margin-right 0.05rem
+    cursor pointer
+    font-weight bold
+    &:hover {
+      transform rotateX(40deg)
+    }
+  }
+  bgImage(img) {
+    background url($base-dir + img) center repeat
+  }
+  .coin-green {
+    bgImage('coin-1.png')
+  }
+  .coin-yellow {
+    bgImage('coin-2.png')
+  }
+  .coin-gray {
+    bgImage('coin-3.png')
+  }
+  .coin-red {
+    bgImage('coin-4.png')
+  }
+  .coin-blue {
+    bgImage('coin-5.png')
+  }
+  .coin-grape {
+    bgImage('coin-6.png')
+  }
+}

@@ -2,34 +2,17 @@
 let commonRow = {
   // 名字
   n: '',
-  // ????
-  ncls: '',
-  // 类型
-  t: 'times',
   // 最小值
   min: 0,
   // 最大值
   max: 9,
-  // length of number, ex. 1 => 01
-  l: 1,
-  // 至多可以选择多少个号码selected length
-  sl: 0,
-  // last selected item
-  lsv: null,
-  // 结构
-  struct: '',
-  rcls: 'default',
-  // 按钮
-  btns: [],
-  // 待生成
-  // values
   vs: null,
   // 所选的号的值v集
   vc: [],
   // 所选的号的名n集
   nc: [],
   // 所选的号的行名n集
-  rnc: [],
+  rnc: []
 }
 
 
@@ -56,11 +39,11 @@ export default {
       layout: 'col',
       class: 'no-b-m',
       rows: [
-        getCommonRow({n: '万位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'},]}),
-        getCommonRow({n: '千位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'},]}),
-        getCommonRow({n: '百位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'},]}),
-        getCommonRow({n: '十位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'},]}),
-        getCommonRow({n: '个位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'},]}),
+        getCommonRow({n: '万位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'}]}),
+        getCommonRow({n: '千位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'}]}),
+        getCommonRow({n: '百位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'}]}),
+        getCommonRow({n: '十位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'}]}),
+        getCommonRow({n: '个位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'}]})
       ]
     }
   },
@@ -69,7 +52,7 @@ export default {
     return {
       layout: 'row',
       rows: [
-        getCommonRow({n: '总和', nonasv: true, col: 24, vs: [{s: false, n: '大', oddIndex: 2, col: 6}, {s: false, n: '小', oddIndex: 2, col: 6}, {s: false, n: '单', oddIndex: 2, col: 6}, {s: false, n: '双', oddIndex: 2, col: 6}]}),
+        getCommonRow({n: '总和', nonasv: true, col: 24, vs: [{s: false, n: '大', oddIndex: 2, col: 6}, {s: false, n: '小', oddIndex: 2, col: 6}, {s: false, n: '单', oddIndex: 2, col: 6}, {s: false, n: '双', oddIndex: 2, col: 6}]})
       ]
     }
   },
@@ -92,7 +75,7 @@ export default {
     let vs = [{s: false, n: '龙', oddIndex: 1, col: 6}, {s: false, n: '和', oddIndex: 0, col: 6}, {s: false, n: '虎', oddIndex: 1, col: 6}];
     return {
       layout: 'row',
-      class: 'mi-pl-50 m-lh',
+      class: 'mi-pl-50 m-lh no-bd-b-pos-label',
       rows: [
         getCommonRow({n: '万千', col: 6, p: '龙1vs虎2', nstyle: 'lhh_1v2', vs: cpArr(vs)}),
         getCommonRow({n: '万百', col: 6, p: '龙1vs虎3', nstyle: 'lhh_1v3', vs: cpArr(vs)}),
@@ -217,7 +200,7 @@ export default {
     return {
       class: 'layout-c-2 left',
       rows: [
-        getCommonRow({n: '总和尾', nonasv: true, vs: [{s: false, n: '大', v: '', oddIndex: 1, col: 12, pn: ''}, {s: false, n: '小', v: '', oddIndex: 1, col: 12, pn: ''}]}),
+        getCommonRow({n: '总和尾', nonasv: true, vs: [{s: false, n: '大', oddIndex: 1, col: 12, pn: ''}, {s: false, n: '小', oddIndex: 1, col: 12, pn: ''}]}),
       ]
     }
   },
@@ -230,7 +213,7 @@ export default {
         getCommonRow({n: '第二位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'},]}),
         getCommonRow({n: '第三位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'},]}),
         getCommonRow({n: '第四位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'},]}),
-        getCommonRow({n: '第五位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'},]}),
+        getCommonRow({n: '第五位', vs: [{s: false, n: '大'}, {s: false, n: '小'}, {s: false, n: '单'}, {s: false, n: '双'},]})
       ]
     }
   },
@@ -254,7 +237,7 @@ export default {
     let vs = [{s: false, n: '龙', col: 7}, {s: false, n: '虎', col: 7}];
     return {
       layout: 'row',
-      class: 'mi-pl-50 m-lh',
+      class: 'mi-pl-50 m-lh no-bd-b-pos-label',
       rows: [
         getCommonRow({n: '一位VS二位', nstyle: 'lh_1v2', oddIndex: 0, col: 6, vs: cpArr(vs)}),
         getCommonRow({n: '一位VS三位', nstyle: 'lh_1v3', oddIndex: 0, col: 6, vs: cpArr(vs)}),
@@ -593,7 +576,7 @@ export default {
     let vs = [{s: false, n: '0', col: 8, oddIndex: 0, pv: '0'}, {s: false, n: '1', col: 8, oddIndex: 1, pv: '1'}, {s: false, n: '2', col: 8, oddIndex: 2, pv: '2'}, {s: false, n: '3', col: 8, oddIndex: 3, pv: '3'}, {s: false, n: '4', col: 8, oddIndex: 2, pv: '4'}, {s: false, n: '5', col: 8, oddIndex: 3, pv: '5'}];
     return {
       rows: [
-        getCommonRow({nonasv: true, n: '跨度', vs: cpArr(vs)}),
+        getCommonRow({nonasv: true, n: '跨度', vs: cpArr(vs)})
       ]
     }
   }

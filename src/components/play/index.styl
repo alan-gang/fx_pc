@@ -112,6 +112,11 @@
         width 0.9rem
       }
     }
+    &.no-bd-b-pos-label {
+      .pos-lebel {
+        border-bottom none
+      }
+    }
   }
   .mi-pl-50 {
     .method-item {
@@ -146,25 +151,19 @@
       margin-right 0.04rem
     }
     for num in 1 2 3 4 5 6 {
-      // .icon .method-item-name[n=\"{num}\"] {
-      //   .icon-item {
-      //     background url("../../assets/images/default/dice-" + num + ".png") center no-repeat
-      //     dice()
-      //   }
-      // }
       .icon .method-item-name .icon-item-{num} {
         background url("../../assets/images/default/dice-" + num + ".png") center no-repeat
         dice()
       }
-      .method-item.selected {
-        .icon .method-item-name .icon-item-{num} {
+      .method-item.selected.icon {
+        .method-item-name .icon-item-{num} {
           background url("../../assets/images/default/dice-red-" + num + ".png") center no-repeat
           dice()
         }
       }
     }
   }
-  
+
   .ant-input {
     width 0.6rem
     height 0.2rem

@@ -4,10 +4,12 @@ import GameHeader from 'comp/game-header';
 import MethodMenu from 'comp/method-menu';
 import SubMethodMenu from 'comp/sub-method-menu';
 import Play from 'comp/play';
+import OrderBar from 'comp/order-bar';
 import { RouteComponentProps } from "react-router-dom";
 import { getGameTypeByGameId } from '../../game/games';
 import { getMethodsConfigByType } from '../../game/gameMethods';
 import { GameMethodMenu, GameSubMethodMenu } from '../../typings/games';
+import methodItems from '../../game/methodItems';
 
 import './index.styl';
 
@@ -25,8 +27,8 @@ interface State {
   openNumbers: string[];
   numCss: string;
   curMenuIndex: number;
-  methodIds: string[];
   subMethods: GameSubMethodMenu[];
+  curGameMethodItems: any[]
 }
 
 interface MatchParams {
@@ -40,13 +42,8 @@ type Props = IProps & RouteComponentProps<MatchParams>;
 class Game extends Component<Props, object> {
   id: number = 1;
   gameType: string = 'ssc';
-  // curIssue: number = 1231242121;
-  // lastIssue: number = 123124120;
-  // curTime: number = 1571212837157;
-  // openNumbers: string[] = ['0', '5', '7', '2', '2'];
-  // numCss: string = '';
-  // methodIds: string[] = [];
   state: State;
+  methodItems: any = methodItems;
   constructor(props: Props) {
     super(props);
     let menus: GameMethodMenu[] = getMethodsConfigByType(this.gameType);
@@ -59,37 +56,63 @@ class Game extends Component<Props, object> {
       openNumbers: ['0', '5', '7', '2', '2'],
       numCss: '',
       curMenuIndex: 0,
-      methodIds: (menus && menus[0].ids) || [],
-      subMethods: []
+      subMethods: [],
+      curGameMethodItems: this.getMethodItemsByIds((menus && menus[0].ids) || [])
     }
-    console.log('game constructor');
   }
-  componentWillMount() {
-    console.log('game componentWillMount');
+  componentWillReceiveProps(nextProps: Props, nextState: State) {
+    this.id = parseInt(nextProps.match.params.id || '1', 10);
+    this.gameType = getGameTypeByGameId(this.id);
+    console.log('render id=', this.id, this.gameType);
+    console.log('game componentWillReceiveProps', nextProps, nextState);
+    if (this.props.match.params.id !== nextProps.match.params.id) {
+      let menus: GameMethodMenu[] = getMethodsConfigByType(this.gameType);
+      this.setState({
+        curMenuIndex: 0, 
+        curGameMethodItems: this.getMethodItemsByIds((menus && menus[0].ids) || [])
+      });
+    }
   }
-  componentDidMount() {
-    console.log('game componentDidMount');
-  }
-  componentWillUpdate(nextProps: Props, nextState: State) {
-    console.log('game componentWillUpdate ', nextProps, nextState);
-  }
-  UNSAFE_componentWillUpdate(nextProps: Props, nextState: State) {
-    console.log('game UNSAFE_componentWillUpdate ', nextProps, nextState);
-  }
-  componentWillReceiveProps() {
-    console.log('game componentWillReceiveProps');
-  }
-  componentWillUnmount() {
-    console.log('game componentWillUnmount');
+  getMethodItemsByIds(ids: string[]) {
+    let mItems: any[] = [];
+    ids.forEach((id: string) => {
+      let items =  this.methodItems[id]();
+      items.rows = items.rows.map((row: any) => {
+        row.vs.map((vs: any) => {
+          vs.val = '';
+          return vs;
+        });
+        return row;
+      })
+      mItems.push(Object.assign({id}, items));
+    });
+    return mItems;
   }
   updateMethodMenuIndex = (index: number) => {
     this.setState({curMenuIndex: index});
   }
   updateMethodIds = (method: GameMethodMenu) => {
-    this.setState({methodIds: method.ids, subMethods: method.subMethods || []});
+    this.setState({
+      subMethods: method.subMethods || [],
+      curGameMethodItems: this.getMethodItemsByIds(method.ids || [])
+    });
   }
   updateSubMethods = (method: GameSubMethodMenu) => {
-    this.setState({methodIds: method.ids});
+    this.setState({
+      curGameMethodItems: this.getMethodItemsByIds(method.ids || [])
+    });
+  }
+  updateMethdItem = (i: number, j: number, k: number, selected?: boolean | undefined, value?: string | undefined) => {
+    let methodItems = this.state.curGameMethodItems;
+    if (selected !== undefined) {
+      methodItems[i].rows[j].vs[k].s = selected;
+    }
+    if (value !== undefined) {
+      methodItems[i].rows[j].vs[k].val = value;
+    }
+    this.setState({
+      curGameMethodItems: methodItems
+    });
   }
   render() {
     this.id = parseInt(this.props.match.params.id || '1', 10);
@@ -109,7 +132,8 @@ class Game extends Component<Props, object> {
         <section className="game-main">
           <MethodMenu gameType={this.gameType} curMenuIndex={this.state.curMenuIndex} updateMethodIds={this.updateMethodIds} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
           {this.state.subMethods.length > 0 && <SubMethodMenu gameType={this.gameType} subMethods={this.state.subMethods} updateSubMethods={this.updateSubMethods} />}
-          <Play methodIds={this.state.methodIds} gameType={this.gameType} />
+          <Play curGameMethodItems={this.state.curGameMethodItems} gameType={this.gameType} updateMethdItem={this.updateMethdItem} />
+          <OrderBar />
         </section>
         <section className="recent-open"></section>
       </article>

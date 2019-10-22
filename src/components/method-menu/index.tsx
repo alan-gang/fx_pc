@@ -38,8 +38,11 @@ class MethodMenu extends Component<Props, object> {
     this.props.updateMethodMenuIndex(index);
     this.props.updateMethodIds(menu);
   }
+  componentWillReceiveProps(nextProps: Props, nextState: State) {
+  }
   render() {
     let menus: GameMethodMenu[] = getMethodsConfigByType(this.props.gameType);
+    console.log('MethodMenu=', this.props.curMenuIndex)
     return (
       <section className="method-menu-view">
         <section className="menu-wp">
