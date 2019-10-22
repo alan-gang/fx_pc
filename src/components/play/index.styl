@@ -68,7 +68,7 @@
         margin 0;
       }
     }
-    &.layout-2-c {
+    &.layout-c-2 {
       width 4.35rem
       float left
       &.left {
@@ -84,6 +84,32 @@
       .method-item {
         float left
         padding-left 0.08rem
+      }
+    }
+    .icon {
+      height 0.7rem
+      .method-item-name {
+        height 0.7rem
+        background-color transparent
+        border-radius 0
+        border none
+      }
+      .ant-input {
+        width 0.9rem
+      }
+    }
+    .white-bg-img {
+      height 0.7rem
+      .method-item-name {
+        width 1.6rem
+        height 0.5rem
+        background $play-white-bg-img
+        border solid 0.01rem $theme-bd-color-1
+        border-radius 0.08rem
+        font-weight bold
+      }
+      .ant-input {
+        width 0.9rem
       }
     }
   }
@@ -102,12 +128,43 @@
     line-height 0.25rem
     border-radius 50%
     background-color $theme-bg-color-3
-    display inline-block
-    text-align center
+    // display inline-block
+    // text-align center
     color $theme-txt-color-5
     border solid 0.01rem $play-method-name-bd-color
     cursor pointer
-  } 
+    display flex
+    align-items center
+    justify-content center
+  }
+  &.k3 {
+    dice() {
+      display inline-block
+      width 0.5rem
+      height 0.5rem
+      background-size 0.5rem
+      margin-right 0.04rem
+    }
+    for num in 1 2 3 4 5 6 {
+      // .icon .method-item-name[n=\"{num}\"] {
+      //   .icon-item {
+      //     background url("../../assets/images/default/dice-" + num + ".png") center no-repeat
+      //     dice()
+      //   }
+      // }
+      .icon .method-item-name .icon-item-{num} {
+        background url("../../assets/images/default/dice-" + num + ".png") center no-repeat
+        dice()
+      }
+      .method-item.selected {
+        .icon .method-item-name .icon-item-{num} {
+          background url("../../assets/images/default/dice-red-" + num + ".png") center no-repeat
+          dice()
+        }
+      }
+    }
+  }
+  
   .ant-input {
     width 0.6rem
     height 0.2rem

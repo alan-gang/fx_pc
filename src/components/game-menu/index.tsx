@@ -130,7 +130,7 @@ class GameMenu extends Component<Props, object> {
                   <span className="nav-link-wp">
                     <NavLink to={`/game/${game.id}`}><span>{game.name}</span><span className="game-timer">00:15:36</span></NavLink>
                   </span>
-                  <span className={`favourite ${game.favourite ? 'selected' : ''}`} onClick={(e) => this.onAddFavourite(game.id, gameCate.type, e)}></span>
+                  <span className={`favourite ${game.favourite ? 'selected' : ''}`} onClick={(e: any) => this.onAddFavourite(game.id, gameCate.type, e)}></span>
                 </Menu.Item>
               ))}
             </Menu.SubMenu>

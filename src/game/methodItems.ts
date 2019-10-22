@@ -215,7 +215,7 @@ export default {
     // 11x5
     // 和尾大,和尾小
     return {
-      class: 'layout-2-c left',
+      class: 'layout-c-2 left',
       rows: [
         getCommonRow({n: '总和尾', nonasv: true, vs: [{s: false, n: '大', v: '', oddIndex: 1, col: 12, pn: ''}, {s: false, n: '小', v: '', oddIndex: 1, col: 12, pn: ''}]}),
       ]
@@ -274,7 +274,7 @@ export default {
     // 龙，虎
     let vs = [{s: false, n: '龙', col: 12}, {s: false, n: '虎', col: 12}];
     return {
-      class: 'layout-2-c',
+      class: 'layout-c-2',
       rows: [
         getCommonRow({n: '一位VS二位', nstyle: 'lh_1v2', oddIndex: 0, vs: cpArr(vs)})
       ]
@@ -535,7 +535,7 @@ export default {
   },
   '5052:1' () {
     // K3 三军
-    let vs = [{s: false, n: '1', col: 8, class: 'icon', icons: 1}, {s: false, n: '2', col: 8, class: 'icon', icons: 1}, {s: false, n: '3', col: 8, class: 'icon', icons: 1}, {s: false, n: '4', col: 8, class: 'icon', icons: 1}, {s: false, n: '5', col: 8, class: 'icon', icons: 1}, {s: false, n: '6', col: 8, class: 'icon', icons: 1}];
+    let vs = [{s: false, n: '1', col: 8, class: 'icon', icons: [1]}, {s: false, n: '2', col: 8, class: 'icon', icons: [1]}, {s: false, n: '3', col: 8, class: 'icon', icons: [1]}, {s: false, n: '4', col: 8, class: 'icon', icons: [1]}, {s: false, n: '5', col: 8, class: 'icon', icons: [1]}, {s: false, n: '6', col: 8, class: 'icon', icons: [1]}];
     return {
       rows: [
         getCommonRow({nonasv: true, n: '三军', vs: cpArr(vs)}),
@@ -545,13 +545,13 @@ export default {
   '5053:1' () {
     // K3 围骰/全骰
     let vs = [
-      {s: false, n: '1', col: 12, class: 'icon', icons: 3}, 
-      {s: false, n: '2', col: 12, class: 'icon', icons: 3}, 
-      {s: false, n: '3', col: 12, class: 'icon', icons: 3}, 
-      {s: false, n: '4', col: 12, class: 'icon', icons: 3}, 
-      {s: false, n: '5', col: 12, class: 'icon', icons: 3}, 
-      {s: false, n: '6', col: 12, class: 'icon', icons: 3},
-      {s: false, n: '全骰', col: 12, class: ''}
+      {s: false, n: '1', col: 12, class: 'icon', icons: [1,1,1]}, 
+      {s: false, n: '2', col: 12, class: 'icon', icons: [2,2,2]}, 
+      {s: false, n: '3', col: 12, class: 'icon', icons: [3,3,3]}, 
+      {s: false, n: '4', col: 12, class: 'icon', icons: [4,4,4]}, 
+      {s: false, n: '5', col: 12, class: 'icon', icons: [5,5,5]}, 
+      {s: false, n: '6', col: 12, class: 'icon', icons: [6,6,6]},
+      {s: false, n: '全骰', col: 12, class: 'white-bg-img'}
     ];
     return {
       rows: [
@@ -562,8 +562,8 @@ export default {
   },
   '5054:1' () {
     // K3 长牌
-    let c = {s: false, col: 8, class: 'icon', icons: 1};
-    let vs = [cp({n: '12'}, c), cp({n: '13'}, c), cp({n: '14'}, c), cp({n: '15'}, c), cp({n: '16'}, c), cp({n: '23'}, c), cp({n: '24'}, c), cp({n: '25'}, c), cp({n: '26'}, c), cp({n: '34'}, c), cp({n: '35'}, c), cp({n: '36'}, c), cp({n: '45'}, c), cp({n: '46'}, c), cp({n: '56'}, c) ]
+    let c = {s: false, col: 8, class: 'icon'};
+    let vs = [cp({n: '12', icons: [1,2]}, c), cp({n: '13', icons: [1,3]}, c), cp({n: '14', icons: [1,4]}, c), cp({n: '15', icons: [1,5]}, c), cp({n: '16', icons: [1,6]}, c), cp({n: '23', icons: [2,3]}, c), cp({n: '24', icons: [2,4]}, c), cp({n: '25', icons: [2,5]}, c), cp({n: '26', icons: [2,6]}, c), cp({n: '34', icons: [3,4]}, c), cp({n: '35', icons: [3,5]}, c), cp({n: '36', icons: [3,6]}, c), cp({n: '45', icons: [4,5]}, c), cp({n: '46', icons: [4,6]}, c), cp({n: '56', icons: [5,6]}, c) ]
     return {
       rows: [
         getCommonRow({nonasv: true, n: '长牌', height: 8, class: "cp", vs: cpArr(vs)}),
@@ -572,7 +572,7 @@ export default {
   },
   '5055:1' () {
     // K3 短牌
-    let vs = [{s: false, n: '1', col: 8, class: 'icon', icons: 2, pv: '11'}, {s: false, n: '2', col: 10, class: 'icon', icons: 2, pv: '22'}, {s: false, n: '3', col: 10, class: 'icon', icons: 2, pv: '33'}, {s: false, n: '4', col: 10, class: 'icon', icons: 2, pv: '44'}, {s: false, n: '5', col: 10, class: 'icon', icons: 2, pv: '55'}, {s: false, n: '6', col: 10, class: 'icon', icons: 2, pv: '66'}];
+    let vs = [{s: false, n: '1', col: 8, class: 'icon', icons: [1,1], pv: '11'}, {s: false, n: '2', col: 8, class: 'icon', icons: [2,2], pv: '22'}, {s: false, n: '3', col: 8, class: 'icon', icons: [3,3], pv: '33'}, {s: false, n: '4', col: 8, class: 'icon', icons: [4,4], pv: '44'}, {s: false, n: '5', col: 8, class: 'icon', icons: [5,5], pv: '55'}, {s: false, n: '6', col: 8, class: 'icon', icons: [6,6], pv: '66'}];
     return {
       rows: [
         getCommonRow({nonasv: true, n: '短牌', vs: cpArr(vs)}),
@@ -581,7 +581,7 @@ export default {
   },
   '5056:1' () {
     // K3 颜色
-    let vs = [{s: false, n: '全红', col: 12, oddIndex: 0}, {s: false, n: '全黑', col: 12, oddIndex: 1}, {s: false, n: '1红2黑', col: 12, oddIndex: 2}, {s: false, n: '2红1黑', col: 12, oddIndex: 3}];
+    let vs = [{s: false, n: '全红', col: 12, oddIndex: 0, class: 'white-bg-img'}, {s: false, n: '全黑', col: 12, oddIndex: 1, class: 'white-bg-img'}, {s: false, n: '1红2黑', col: 12, oddIndex: 2, class: 'white-bg-img'}, {s: false, n: '2红1黑', col: 12, oddIndex: 3, class: 'white-bg-img'}];
     return {
       rows: [
         getCommonRow({nonasv: true, n: '颜色', nstyle: 'ys', vs: cpArr(vs)}),

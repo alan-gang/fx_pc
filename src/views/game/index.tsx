@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import GameHeader from 'comp/game-header';
 import MethodMenu from 'comp/method-menu';
+import SubMethodMenu from 'comp/sub-method-menu';
 import Play from 'comp/play';
 import { RouteComponentProps } from "react-router-dom";
 import { getGameTypeByGameId } from '../../game/games';
@@ -23,7 +24,9 @@ interface State {
   curTime: number;
   openNumbers: string[];
   numCss: string;
+  curMenuIndex: number;
   methodIds: string[];
+  subMethods: GameSubMethodMenu[];
 }
 
 interface MatchParams {
@@ -55,16 +58,43 @@ class Game extends Component<Props, object> {
       curTime: 1571212837157,
       openNumbers: ['0', '5', '7', '2', '2'],
       numCss: '',
-      methodIds: (menus && menus[0].ids) || []
+      curMenuIndex: 0,
+      methodIds: (menus && menus[0].ids) || [],
+      subMethods: []
     }
+    console.log('game constructor');
   }
-  updateMethodIds = (methodIds: string[]) => {
-    this.setState({methodIds});
+  componentWillMount() {
+    console.log('game componentWillMount');
+  }
+  componentDidMount() {
+    console.log('game componentDidMount');
+  }
+  componentWillUpdate(nextProps: Props, nextState: State) {
+    console.log('game componentWillUpdate ', nextProps, nextState);
+  }
+  UNSAFE_componentWillUpdate(nextProps: Props, nextState: State) {
+    console.log('game UNSAFE_componentWillUpdate ', nextProps, nextState);
+  }
+  componentWillReceiveProps() {
+    console.log('game componentWillReceiveProps');
+  }
+  componentWillUnmount() {
+    console.log('game componentWillUnmount');
+  }
+  updateMethodMenuIndex = (index: number) => {
+    this.setState({curMenuIndex: index});
+  }
+  updateMethodIds = (method: GameMethodMenu) => {
+    this.setState({methodIds: method.ids, subMethods: method.subMethods || []});
+  }
+  updateSubMethods = (method: GameSubMethodMenu) => {
+    this.setState({methodIds: method.ids});
   }
   render() {
     this.id = parseInt(this.props.match.params.id || '1', 10);
     this.gameType = getGameTypeByGameId(this.id);
-    console.log('id=', this.id)
+    console.log('render id=', this.id);
     return (
       <article className="game-view">
         <GameHeader 
@@ -77,8 +107,9 @@ class Game extends Component<Props, object> {
           numCss={this.state.numCss}
         />
         <section className="game-main">
-          <MethodMenu gameType={this.gameType} updateMethodIds={this.updateMethodIds} />
-          <Play methodIds={this.state.methodIds} />
+          <MethodMenu gameType={this.gameType} curMenuIndex={this.state.curMenuIndex} updateMethodIds={this.updateMethodIds} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
+          {this.state.subMethods.length > 0 && <SubMethodMenu gameType={this.gameType} subMethods={this.state.subMethods} updateSubMethods={this.updateSubMethods} />}
+          <Play methodIds={this.state.methodIds} gameType={this.gameType} />
         </section>
         <section className="recent-open"></section>
       </article>
