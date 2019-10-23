@@ -38,7 +38,7 @@ class CoinSet extends Component<Props, object> {
     return (
       <section className="coin-set-view">
         <ul className="flex ai-c">
-          {this.state.coins.map((coin) => (<li className={`coin-item ${coin.class}`} onClick={this.onCoinHandler.bind(this, coin)}>{coin.name}</li>)) }
+          {this.state.coins.map((coin: Coin, i: number) => (<li key={i} className={`coin-item ${coin.class}`} onClick={this.onCoinHandler.bind(this, coin)}>{coin.name}</li>)) }
         </ul>
       </section>
     )

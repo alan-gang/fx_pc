@@ -1,4 +1,4 @@
-import React, { Component, ChangeEvent } from 'react';
+import React, { Component, ChangeEvent, FocusEvent } from 'react';
 import { inject, observer } from 'mobx-react';
 import methodItems from '../../game/methodItems';
 import { Row, Col, Input } from 'antd';
@@ -9,6 +9,7 @@ interface Props {
   store?: any;
   gameType: string;
   curGameMethodItems: any[];
+  defaultInitMethodItemAmount: number;
   updateMethdItem(i: number, j: number, k: number, selected?: boolean | undefined, value?: string | undefined): void;
 }
 
@@ -18,11 +19,28 @@ class Play extends Component<Props, object> {
   methodItems: any = methodItems;
   onMethodItemHandler = (i: number, j: number, k: number, selected: boolean) => {
     console.log(i, j, k, selected);
-    this.props.updateMethdItem(i, j, k, !selected);
+    let amount = selected ? '' : String(this.props.defaultInitMethodItemAmount);
+    this.props.updateMethdItem(i, j, k, !selected, amount);
   }
+  onFocusMethodItem = (i: number, j: number, k: number, event: FocusEvent<HTMLInputElement>) => {
+    event.stopPropagation();
+    event.preventDefault();
+    console.log('onFocusMethodItem');
+    let { value } = event.target;
+    let selected = this.props.curGameMethodItems[i].rows[j].vs[k].s;
+    if (selected && !value.trim()) {
+      this.props.updateMethdItem(i, j, k, this.props.curGameMethodItems[i].rows[j].vs[k].s, String(this.props.defaultInitMethodItemAmount));
+    }
+  }
+
   onMethodItemValueChanged = (i: number, j: number, k: number, event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    console.log(i, j, k, event, value);
+    event.stopPropagation();
+    event.preventDefault();
+    let { value } = event.target;
+    if (!/^\d*$/g.test(value)) {
+      value = this.props.curGameMethodItems[i].rows[j].vs[k].val;
+    }
+    console.log(i, j, k, event, value, this.props.curGameMethodItems[i].rows[j].vs[k].val);
     this.props.updateMethdItem(i, j, k, undefined, value); // 
   }
   componentWillReceiveProps(nextProps: Props) {
@@ -45,8 +63,11 @@ class Play extends Component<Props, object> {
                         {vsItem.class === 'icon' && vsItem.icons && vsItem.icons.map((iconNum: number, m: number) => (<span className={`icon-item icon-item-${iconNum}`} key={m}></span>))}
                         {vsItem.class !== 'icon' && vsItem.n}
                       </span>
-                      {row.noodd !== true && <span className={`odd`}>1.98</span>}
-                      {row.noInput !== true && <span className={`bet-amount`}><Input value={vsItem.val} onChange={(e: any) => this.onMethodItemValueChanged(i, j, k, e)} /></span>}
+                      {row.noodd !== true && <span className={`odd`}>{vsItem.odd || ''}</span>}
+                      {row.noInput !== true && 
+                        <span className={`bet-amount`}>
+                          <Input value={vsItem.val} onFocus={(e: FocusEvent<HTMLInputElement>) => this.onFocusMethodItem(i, j, k, e)} onBlur={(e: FocusEvent<HTMLInputElement>) => this.onFocusMethodItem(i, j, k, e)} onChange={(e: ChangeEvent<HTMLInputElement>) => this.onMethodItemValueChanged(i, j, k, e)} />
+                        </span>}
                     </Col>
                   ))}
               </Row>

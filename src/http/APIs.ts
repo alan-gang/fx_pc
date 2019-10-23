@@ -45,7 +45,7 @@ export function myNewPoint(params: object = {}) {
  * 下注
  * @param params 
  */
-export function kqbooking(params: object = {}) {
+export function bet(params: object = {}) {
   return http.post('/game/fastBet.do?method=doBet', params);
 }
 export function getCfgInfo(args: object = {}) {
@@ -115,7 +115,9 @@ export default {
   signIn,
   getUserBalance,
   getCfgInfo,
+  bet,
   historyIssueByDate,
+  myNewPoint,
   sysNotices,
   getUserPrefence,
   lottSets

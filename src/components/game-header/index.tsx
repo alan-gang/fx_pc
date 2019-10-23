@@ -7,8 +7,8 @@ interface Props {
   store?: any;
   gameType?: string;
   gameId?: number;
-  curIssue?: number;
-  lastIssue?: number;
+  curIssue?: string;
+  lastIssue?: string;
   curTime?: number;
   openNumbers: string[];
   numCss: string;

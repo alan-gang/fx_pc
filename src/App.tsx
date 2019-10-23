@@ -9,6 +9,7 @@ import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import moment from 'moment';
 import APIs from './http/APIs';
+import { getUrlParams } from './utils/common';
 import 'moment/locale/zh-cn';
 import 'antd/dist/antd.less';
 import './assets/style/common/common.styl';
@@ -21,17 +22,17 @@ class App extends Component<Props, object> {
     super(props);
   }
   componentWillMount() {
-    // let sessionData: any = sessionStorage.getItem('sessionData');
-    // let agentCode = this.$route.query.agentCode;
-    // let param = this.$route.query.param;
-    // let data = {
-    //   agentCode,
-    //   param
-    // };
-    // if (!agentCode && !param && sessionData) {
-    //   data = JSON.parse(sessionData);
-    // }
-    this.autoLogin({});
+    let sessionData: any = sessionStorage.getItem('sessionData');
+    let agentCode = getUrlParams('agentCode');
+    let param = getUrlParams('param');
+    let data = {
+      agentCode,
+      param
+    };
+    if (!agentCode && !param && sessionData) {
+      data = JSON.parse(sessionData);
+    }
+    this.autoLogin(data);
     this.getCfgInfo();
   }
   autoLogin(params: object) {

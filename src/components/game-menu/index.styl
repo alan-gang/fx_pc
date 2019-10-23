@@ -3,6 +3,7 @@
   top 1.4rem
   position fixed
   left 1rem
+  z-index 2
   .game-menu-header {
     height 0.5rem
     line-height 0.5rem
@@ -118,9 +119,11 @@
   .ant-menu-submenu-selected {
     color $theme-txt-color-2
   }
-  .ant-menu-item a:hover {
-    // color $game-menu-item-hover-txt-color
-    color $theme-txt-color-4
+  .ant-menu-item {
+    a:hover {
+      color $game-menu-item-hover-txt-color
+      // color $theme-txt-color-4
+    }
   }
   .ant-menu-submenu-title:hover {
     color $theme-txt-color
