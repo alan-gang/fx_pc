@@ -5,8 +5,8 @@ import RollingNumbers from './rollingNumbers';
 import './index.styl';
 interface Props {
   store?: any;
-  gameType?: string;
-  gameId?: number;
+  gameType: string;
+  gameId: number;
   curIssue?: string;
   lastIssue?: string;
   curTime?: number;

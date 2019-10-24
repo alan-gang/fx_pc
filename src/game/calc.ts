@@ -10,6 +10,9 @@ export default {
   '1251:1'({nsl}: Params) {
     return A(nsl)
   },
+  '1252:1'({nsl}: Params) {
+    return A(nsl)
+  },
   '1253:1'({nsl}: Params) {
     return A(nsl)
   },
@@ -28,9 +31,19 @@ export default {
   '1259:1'({nsl}: Params) {
     return A(nsl)
   },
+  '1260:1'({nsl}: Params) {
+    return A(nsl)
+  },
+  '1261:1'({nsl}: Params) {
+    return A(nsl)
+  },
+  '1262:1'({nsl}: Params) {
+    return A(nsl)
+  },
   '1273:1'({nsl}: Params) {
     return A(nsl)
   },
+
   '2050:1'({nsl}: Params) {
     return A(nsl)
   },
@@ -44,6 +57,9 @@ export default {
     return A(nsl)
   },
   '2053:1'({nsl}: Params) {
+    return A(nsl)
+  },
+  '2053:2'({nsl}: Params) {
     return A(nsl)
   },
   '2054:1:1'({nsl}: Params) {
@@ -87,13 +103,19 @@ export default {
   '4050:1'({nsl}: Params) {
     return A(nsl)
   },
-  '4050:1:1'({nsl}: Params) {
+  '4051:1'({nsl}: Params) {
     return A(nsl)
   },
   '4052:1'({nsl}: Params) {
     return A(nsl)
   },
   '4053:1'({nsl}: Params) {
+    return A(nsl)
+  },
+  '4053:2'({nsl}: Params) {
+    return A(nsl)
+  },
+  '4054:1'({nsl}: Params) {
     return A(nsl)
   },
   '4055:1:1'({nsl}: Params) {

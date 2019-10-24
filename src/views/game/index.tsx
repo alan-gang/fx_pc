@@ -39,7 +39,7 @@ interface State {
   totalBetAmount: number; // 总投注金额
 }
 
-interface DataMethodList {
+interface DataMethodItem {
   id: string;
   rows: any[];
 }
@@ -58,6 +58,7 @@ class Game extends Component<Props, object> {
   state: State;
   methodItems: any = methodItems;
   curGameOdds: any;
+  calc: any = calc;
   constructor(props: Props) {
     super(props);
     let menus: GameMethodMenu[] = getMethodsConfigByType(this.gameType);
@@ -79,6 +80,15 @@ class Game extends Component<Props, object> {
       totalBetAmount: 0
     }
     this.updateOddsOfMethod();
+    this.id = parseInt(this.props.match.params.id || '1', 10);
+    this.gameType = getGameTypeByGameId(this.id);
+    this.init();
+    console.log('game constructor id=', this.id, this.gameType);
+  }
+  init() {
+    this.getCurIssue(this.id);
+    this.getUserPoint(this.id);
+    this.getHistoryIssue(this.id);
   }
   componentWillMount() {
 
@@ -86,17 +96,15 @@ class Game extends Component<Props, object> {
   componentWillReceiveProps(nextProps: Props, nextState: State) {
     this.id = parseInt(nextProps.match.params.id || '1', 10);
     this.gameType = getGameTypeByGameId(this.id);
-    console.log('render id=', this.id, this.gameType);
-    console.log('game componentWillReceiveProps', nextProps, nextState);
+    console.log('game componentWillReceiveProps id=', this.id, this.gameType);
+    // console.log('game componentWillReceiveProps', nextProps, nextState);
     if (this.props.match.params.id !== nextProps.match.params.id) {
       let menus: GameMethodMenu[] = getMethodsConfigByType(this.gameType);
       this.setState({
         curMenuIndex: 0, 
         curGameMethodItems: this.getMethodItemsByIds((menus && menus[0].ids) || [])
       });
-      this.getCurIssue(this.id);
-      this.getUserPoint(this.id);
-      this.getHistoryIssue(this.id);
+      this.init();
     }
   }
   getMethodItemsByIds(ids: string[]) {
@@ -139,7 +147,7 @@ class Game extends Component<Props, object> {
       methodItems[i].rows[j].vs[k].s = selected;
     }
     if (value !== undefined) {
-      methodItems[i].rows[j].vs[k].val = value;
+      methodItems[i].rows[j].vs[k].amt = value;
     }
     this.setState({
       curGameMethodItems: methodItems
@@ -175,38 +183,74 @@ class Game extends Component<Props, object> {
     this.setState({defaultInitMethodItemAmount: amount});
   }
   calcBet() {
-    let methodList: DataMethodList[] = [];
+    let methodList: DataMethodItem[] = [];
     let method: any;
     let rowItems: any[];
-    this.state.curGameMethodItems.forEach((methodItem: any) => {
+    let betCount: number = 0;
+    let totalAmount: number = 0;
+    console.log('total count s=', Date.now());
+    let count = 0;
+    // 构造选择的号码集合，金额集合
+    let curGameMethodItems = this.state.curGameMethodItems;
+    curGameMethodItems = curGameMethodItems.map((methodItem: any) => {
+      methodItem.rows = methodItem.rows.map((row: any) => {
+        row.nc = [];
+        row.amtc = [];
+        row.tmc = 0;
+        row.vs = row.vs.map((vsItem: any) => {
+          count++;
+          if (vsItem.s) {
+            row.nc.push(vsItem.n);
+            row.amtc.push(vsItem.amt);
+            row.tmc += parseInt(vsItem.amt || '0', 10);
+          }
+          return vsItem;
+        });
+        // 总金额
+        totalAmount += row.tmc;
+        return row;
+      });
+      return methodItem;
+    });
+    console.log('curGameMethodItems=', curGameMethodItems);
+
+    curGameMethodItems.forEach((methodItem: DataMethodItem) => {
       method = {id: methodItem.id, rows: []};
       methodItem.rows.forEach((row: any) => {
-        rowItems = [];
-        row.vs.forEach((vsItem: any) => {
-          if (vsItem.s) {
-            rowItems.push(vsItem.val);
-            // amountList.push(vsItem.val);
-          }
-        });
-        method.rows.push(rowItems);
-      })
+        method.rows.push(row.nc);
+      });
       methodList.push(method);
     });
-    let betCount: number = 0;
-
-    methodList = methodList.map((methodItem: any) => {
+    
+    methodList = methodList.map((methodItem: DataMethodItem) => {
       methodItem.rows = methodItem.rows.map((row: any) => {
         return row.length;
       })
       return methodItem;
     })
-    
-    // let id: string = '';
-    methodList.forEach((methodItem: DataMethodList) => {
-      // id = String(methodItem.id);
-      // betCount += calc[methodItem.id]({nsl: methodItem.rows});
+
+    // 总注数
+    methodList.forEach((methodItem: DataMethodItem) => {
+      betCount += this.calc[methodItem.id]({nsl: methodItem.rows});
     })
-    // this.setState({totalBetCount: amountList.length})
+
+    this.setState({totalBetCount: betCount, totalBetAmount: totalAmount});
+  }
+  // 重置所有选中玩法项
+  resetSelectedOfAllMethodItem = () => {
+    let curGameMethodItems = this.state.curGameMethodItems;
+    curGameMethodItems = curGameMethodItems.map((methodItem: any) => {
+      methodItem.rows = methodItem.rows.map((row: any) => {
+        row.vs = row.vs.map((vsItem: any) => { vsItem.s = false; vsItem.amt = ''; return vsItem; }); return row;
+      });
+      return methodItem;
+    });
+    this.setState({curGameMethodItems});
+  }
+  orderFinishCB = (status: boolean) => {
+    if (status) {
+      this.resetSelectedOfAllMethodItem();
+    }
   }
   getCurIssue(gameid: number) {
     APIs.curIssue({gameid}).then((data: any) => {
@@ -245,7 +289,7 @@ class Game extends Component<Props, object> {
   render() {
     this.id = parseInt(this.props.match.params.id || '1', 10);
     this.gameType = getGameTypeByGameId(this.id);
-    console.log('render id=', this.id);
+    console.log('game render id=', this.id);
     return (
       <article className="game-view">
         <GameHeader 
@@ -266,7 +310,17 @@ class Game extends Component<Props, object> {
             defaultInitMethodItemAmount={this.state.defaultInitMethodItemAmount}
             updateMethdItem={this.updateMethdItem} 
           />
-          <OrderBar betCount={this.state.totalBetCount} amount={2} updateDefaultInitMethodItemAmount={this.updateDefaultInitMethodItemAmount}/>
+          <OrderBar 
+            gameId={this.id} 
+            curIssue={this.state.curIssue} 
+            betCount={this.state.totalBetCount} 
+            amount={this.state.totalBetAmount} 
+            curGameMethodItems={this.state.curGameMethodItems} 
+            defaultInitMethodItemAmount={this.state.defaultInitMethodItemAmount}
+            updateDefaultInitMethodItemAmount={this.updateDefaultInitMethodItemAmount} 
+            orderFinishCB={this.orderFinishCB}
+            resetSelectedOfAllMethodItem={this.resetSelectedOfAllMethodItem}
+          />
         </section>
         <section className="recent-open"></section>
       </article>

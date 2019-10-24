@@ -9,7 +9,7 @@ export let methodsConfig: MethodsConfig = {
     {
       name: '整合',
       ename: 'zhenghe',
-      ids: ['1251:1', '1250:1','1251:2', '1260:1', '1261:1', '1262:1']
+      ids: ['1251:1', '1250:1','1252:1', '1260:1', '1261:1', '1262:1']
     },
     {
       name: '定位',
@@ -96,7 +96,7 @@ export let methodsConfig: MethodsConfig = {
     {
       name: '冠亚组合',
       ename: 'gyhz',
-      ids: ['4050:1:1', '4052:1']
+      ids: ['4050:1', '4051:1', '4052:1']
     }
   ],
   [LOTTERY_TYPES.K3]: [

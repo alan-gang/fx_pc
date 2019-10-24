@@ -5,7 +5,7 @@ import './index.styl';
 
 interface Props {
   store?: any;
-  coinChooiced(value: number): void;
+  coinChoosed(value: number): void;
 }
 
 interface Coin {
@@ -32,7 +32,7 @@ class CoinSet extends Component<Props, object> {
     ]
   }
   onCoinHandler = (coin: Coin) => {
-    this.props.coinChooiced(coin.value);
+    this.props.coinChoosed(coin.value);
   }
   render() {
     return (

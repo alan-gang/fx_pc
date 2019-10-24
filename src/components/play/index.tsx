@@ -38,13 +38,13 @@ class Play extends Component<Props, object> {
     event.preventDefault();
     let { value } = event.target;
     if (!/^\d*$/g.test(value)) {
-      value = this.props.curGameMethodItems[i].rows[j].vs[k].val;
+      value = this.props.curGameMethodItems[i].rows[j].vs[k].amt;
     }
-    console.log(i, j, k, event, value, this.props.curGameMethodItems[i].rows[j].vs[k].val);
+    console.log(i, j, k, event, value, this.props.curGameMethodItems[i].rows[j].vs[k].amt);
     this.props.updateMethdItem(i, j, k, undefined, value); // 
   }
   componentWillReceiveProps(nextProps: Props) {
-    console.log('play componentWillReceiveProps=', nextProps, this.props);
+    // console.log('play componentWillReceiveProps=', nextProps, this.props);
     this.forceUpdate();
   }
   render() {
@@ -66,7 +66,7 @@ class Play extends Component<Props, object> {
                       {row.noodd !== true && <span className={`odd`}>{vsItem.odd || ''}</span>}
                       {row.noInput !== true && 
                         <span className={`bet-amount`}>
-                          <Input value={vsItem.val} onFocus={(e: FocusEvent<HTMLInputElement>) => this.onFocusMethodItem(i, j, k, e)} onBlur={(e: FocusEvent<HTMLInputElement>) => this.onFocusMethodItem(i, j, k, e)} onChange={(e: ChangeEvent<HTMLInputElement>) => this.onMethodItemValueChanged(i, j, k, e)} />
+                          <Input value={vsItem.amt} onFocus={(e: FocusEvent<HTMLInputElement>) => this.onFocusMethodItem(i, j, k, e)} onBlur={(e: FocusEvent<HTMLInputElement>) => this.onFocusMethodItem(i, j, k, e)} onChange={(e: ChangeEvent<HTMLInputElement>) => this.onMethodItemValueChanged(i, j, k, e)} />
                         </span>}
                     </Col>
                   ))}

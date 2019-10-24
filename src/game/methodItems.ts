@@ -12,7 +12,11 @@ let commonRow = {
   // 所选的号的名n集
   nc: [],
   // 所选的号的行名n集
-  rnc: []
+  rnc: [],
+  // 所选号码金额集合
+  amtc: [],
+  // 金额汇总
+  tmc: 0
 }
 
 
@@ -52,11 +56,11 @@ export default {
     return {
       layout: 'row',
       rows: [
-        getCommonRow({n: '总和', nonasv: true, col: 24, vs: [{s: false, n: '大', oddIndex: 2, col: 6}, {s: false, n: '小', oddIndex: 2, col: 6}, {s: false, n: '单', oddIndex: 2, col: 6}, {s: false, n: '双', oddIndex: 2, col: 6}]})
+        getCommonRow({n: '总和', nonasv: true, col: 24, vs: [{s: false, n: '大', pv: '总大', oddIndex: 2, col: 6}, {s: false, n: '小', pv: '总小', oddIndex: 2, col: 6}, {s: false, n: '单', pv: '总单', oddIndex: 2, col: 6}, {s: false, n: '双', pv: '总双', oddIndex: 2, col: 6}]})
       ]
     }
   },
-  '1251:2' () {
+  '1252:1' () {
     // ssc 数字
     return {
       layout: 'col',
@@ -190,7 +194,7 @@ export default {
     return {
       layout: 'row',
       rows: [
-        getCommonRow({n: '总和', nonasv: true, col: 24, vs: [{s: false, n: '大', oddIndex: 1, col: 6}, {s: false, n: '小', oddIndex: 1, col: 6}, {s: false, n: '单', oddIndex: 2, col: 6}, {s: false, n: '双',  oddIndex: 0, col: 6}]}),
+        getCommonRow({n: '总和', nonasv: true, col: 24, vs: [{s: false, n: '大', pv: '总大', oddIndex: 1, col: 6}, {s: false, n: '小', pv: '总小', oddIndex: 1, col: 6}, {s: false, n: '单', pv: '总单', oddIndex: 2, col: 6}, {s: false, n: '双', pv: '总双',  oddIndex: 0, col: 6}]})
       ]
     }
   },
@@ -200,7 +204,7 @@ export default {
     return {
       class: 'layout-c-2 left',
       rows: [
-        getCommonRow({n: '总和尾', nonasv: true, vs: [{s: false, n: '大', oddIndex: 1, col: 12, pn: ''}, {s: false, n: '小', oddIndex: 1, col: 12, pn: ''}]}),
+        getCommonRow({n: '总和尾', nonasv: true, vs: [{s: false, n: '大', pv: '总大', oddIndex: 1, col: 12, pn: ''}, {s: false, n: '小', pv: '总小', oddIndex: 1, col: 12, pn: ''}]}),
       ]
     }
   },
@@ -239,7 +243,7 @@ export default {
       layout: 'row',
       class: 'mi-pl-50 m-lh no-bd-b-pos-label',
       rows: [
-        getCommonRow({n: '一位VS二位', nstyle: 'lh_1v2', oddIndex: 0, col: 6, vs: cpArr(vs)}),
+        getCommonRow({n: '一位VS二位', oddIndex: 0, col: 6, vs: cpArr(vs)}),
         getCommonRow({n: '一位VS三位', nstyle: 'lh_1v3', oddIndex: 0, col: 6, vs: cpArr(vs)}),
         getCommonRow({n: '一位VS四位', nstyle: 'lh_1v4', oddIndex: 0, col: 6, vs: cpArr(vs)}),
         getCommonRow({n: '一位VS五位', nstyle: 'lh_1v5', oddIndex: 0, col: 6, vs: cpArr(vs)}),
@@ -259,7 +263,7 @@ export default {
     return {
       class: 'layout-c-2',
       rows: [
-        getCommonRow({n: '一位VS二位', nstyle: 'lh_1v2', oddIndex: 0, vs: cpArr(vs)})
+        getCommonRow({n: '一位VS二位', oddIndex: 0, vs: cpArr(vs)})
       ]
     }
   },
@@ -417,17 +421,19 @@ export default {
     // 冠亚和大, 冠亚和小， 冠亚和单，冠亚和双
     return {
       layout: 'row',
+      class: 'no-t-b no-b-m',
       rows: [
-        getCommonRow({n: '冠亚和', nonasv: true, col: 24, vs: [{s: false, n: '大', pv: '总大', oddIndex: 0, col: 6}, {s: false, n: '小', pv: '总小', oddIndex: 1, col: 6}, {s: false, n: '单', pv: '总单', oddIndex: 1, col: 6}, {s: false, n: '双', pv: '总双', oddIndex: 0, col: 6}]}),
+        getCommonRow({n: '冠亚和值', nonasv: true, col: 24, vs: [{s: false, n: '大', pv: '总大', oddIndex: 0, col: 6}, {s: false, n: '小', pv: '总小', oddIndex: 1, col: 6}, {s: false, n: '单', pv: '总单', oddIndex: 1, col: 6}, {s: false, n: '双', pv: '总双', oddIndex: 0, col: 6}]}),
       ]
     }
   },
-  '4050:1:1' () {
+  '4051:1' () {
     // PK10
     // 冠亚和大, 冠亚和小， 冠亚和单，冠亚和双 nstyle: 'gyhdxds', 
     return {
+      class: 'no-b-m no-t-b',
       rows: [
-        getCommonRow({nonasv: true, vs: [{s: false, n: '大', oddIndex: 0, col: 12}, {s: false, n: '小', oddIndex: 1, col: 12}, {s: false, n: '单', oddIndex: 1, col: 12}, {s: false, n: '双', oddIndex: 0, col: 12}]}),
+        getCommonRow({nonasv: true, hidePos: true, vs: [{s: false, n: '大单', oddIndex: 0, col: 6}, {s: false, n: '大双', oddIndex: 1, col: 6}, {s: false, n: '小单', oddIndex: 1, col: 6}, {s: false, n: '小双', oddIndex: 0, col: 6}]}),
       ]
     }
   },
@@ -436,8 +442,9 @@ export default {
     let c = {s: false, col: 6, dis: false}
     let vs = [cp({n: '03', pv: '3', oddIndex: 0}, c), cp({n: '04', pv: '4', oddIndex: 0}, c), cp({n: '05', pv: '5', oddIndex: 1}, c), cp({n: '06', pv: '6', oddIndex: 1}, c), cp({n: '07', pv: '7', oddIndex: 2}, c), cp({n: '08', pv: '8', oddIndex: 2}, c), cp({n: '09', pv: '9', oddIndex: 3}, c), cp({n: '10', pv: '10', oddIndex: 3}, c), cp({n: '11', pv: '11', oddIndex: 4}, c), cp({n: '12', pv: '12', oddIndex: 3}, c), cp({n: '13', pv: '13', oddIndex: 3}, c), cp({n: '14', pv: '14', oddIndex: 2}, c), cp({n: '15', pv: '15', oddIndex: 2}, c), cp({n: '16', pv: '16', oddIndex: 1}, c), cp({n: '17', pv: '17', oddIndex: 1}, c), cp({n: '18', pv: '18', oddIndex: 0}, c), cp({n: '19', pv: '19', oddIndex: 0}, c)];
     return {
+      class: 'no-t-b',
       rows: [
-        getCommonRow({n: '', vs: cpArr(vs)})
+        getCommonRow({n: '', hidePos: true, vs: cpArr(vs)})
       ]
     }
   },
@@ -466,6 +473,21 @@ export default {
         getCommonRow({n: '第八名',  vs: cpArr(vs)}),
         getCommonRow({n: '第九名', vs: cpArr(vs)}),
         getCommonRow({n: '第十名', vs: cpArr(vs)})
+      ]
+    }
+  },
+  '4054:1' () {
+    // PK10 龙，虎
+    let vs = [{s: false, n: '龙', col: 8}, {s: false, n: '虎', col: 8}];
+    return {
+      layout: 'row',
+      class: 'mi-pl-50 m-lh no-bd-b-pos-label',
+      rows: [
+        getCommonRow({n: '冠军VS第十名', oddIndex: 0, col: 6, vs: cpArr(vs)}),
+        getCommonRow({n: '亚军VS第九名', oddIndex: 0, col: 6, vs: cpArr(vs)}),
+        getCommonRow({n: '季军VS第八名', oddIndex: 0, col: 6, vs: cpArr(vs)}),
+        getCommonRow({n: '第四名VS第七名', oddIndex: 0, col: 6, vs: cpArr(vs)}),
+        getCommonRow({n: '第五名VS第六名', oddIndex: 0, col: 6, vs: cpArr(vs)})
       ]
     }
   },
@@ -555,7 +577,7 @@ export default {
   },
   '5055:1' () {
     // K3 短牌
-    let vs = [{s: false, n: '1', col: 8, class: 'icon', icons: [1,1], pv: '11'}, {s: false, n: '2', col: 8, class: 'icon', icons: [2,2], pv: '22'}, {s: false, n: '3', col: 8, class: 'icon', icons: [3,3], pv: '33'}, {s: false, n: '4', col: 8, class: 'icon', icons: [4,4], pv: '44'}, {s: false, n: '5', col: 8, class: 'icon', icons: [5,5], pv: '55'}, {s: false, n: '6', col: 8, class: 'icon', icons: [6,6], pv: '66'}];
+    let vs = [{s: false, n: '1', col: 8, class: 'icon', icons: [1,1], pv: '1'}, {s: false, n: '2', col: 8, class: 'icon', icons: [2,2], pv: '2'}, {s: false, n: '3', col: 8, class: 'icon', icons: [3,3], pv: '3'}, {s: false, n: '4', col: 8, class: 'icon', icons: [4,4], pv: '4'}, {s: false, n: '5', col: 8, class: 'icon', icons: [5,5], pv: '5'}, {s: false, n: '6', col: 8, class: 'icon', icons: [6,6], pv: '6'}];
     return {
       rows: [
         getCommonRow({nonasv: true, n: '短牌', vs: cpArr(vs)}),
