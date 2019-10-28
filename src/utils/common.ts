@@ -58,10 +58,3 @@ export function getLHH(num1: number, num2: number) {
 export function getCharOfPosition(txt: string, pos: number): string {
   return txt[pos] || '';
 }
-
-export function removeRepeat(data: any[]) {
-  data.reverse();
-  for (let i = 0; i < data.length; i++) {
-    
-  }
-}

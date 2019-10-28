@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, ChangeEvent } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Row, Col, Input, Button, message, Modal } from 'antd';
 import CoinSet from '../coin-set';
 import APIs from '../../http/APIs';
 import calc from '../../game/calc';
+import { removeRepeat2DArray } from '../../utils/game';
 
 import './index.styl';
 
@@ -23,6 +24,7 @@ interface Props {
 interface DataMethodItem {
   id: string;
   rows: any[];
+  methodTypeName?: string;
 }
 
 interface State {
@@ -66,12 +68,13 @@ class OrderBar extends Component<Props, object> {
       return false;
     } else if(!params.betList || params.betList.length <= 0) {
       return false;
+    } else if (params.errorMsg) {
+      message.warning(params.errorMsg);
+      return false;
     }
     return true;
   }
   getParams(): object {
-    // betData: {"lotteryId":1,"issue":"191024036","totProjs":4,"totMoney":80,"isusefree":0,"betList":[{"methodId":"1251","projs":1,"money":"20","content":"总大"},{"methodId":"1251","projs":1,"money":"20","content":"总小"},{"methodId":"1251","projs":1,"money":"20","content":"总单"},{"methodId":"1251","projs":1,"money":"20","content":"总双"}],"isFastBet":2,"limitLevel":2}
-    // betData: {"lotteryId":29,"issue":"","totProjs":4,"totMoney":200,"isusefree":0,"betList":[{"methodId":"1251","projs":1,"money":"50","content":"总大"},{"methodId":"1251","projs":1,"money":"50","content":"总小"},{"methodId":"1251","projs":1,"money":"50","content":"总单"},{"methodId":"1251","projs":1,"money":"50","content":"总双"}],"isFastBet":1,"limitLevel":2}
     let props = this.props;
     let curGameMethodItems = props.curGameMethodItems;
     let params: any = {
@@ -95,18 +98,49 @@ class OrderBar extends Component<Props, object> {
         content = methodItem.rows[0].nc.join(',');
         params.betList.push({methodId: methodItem.id.split(':')[0], projs: 1, money: params.totMoney, content});
         params.totProjs = params.betList.length;
+        if (content.split(',').length > 8) {
+          params.errorMsg = '该玩法一个方案最多投注量：';
+        }
       } else if (['zux_q2', 'zux_q3'].includes(methodItem.methodTypeName)) {
         // 组选
+        let nc = methodItem.rows.map((row: any) => {
+          return row.nc;
+        })[0];
+        let contents: any[] = [];
+        let param = {
+          methodId: methodItem.id.split(':')[0],
+          projs: 1,
+          money: this.state.amount
+        }
+        for (let i = 0; i <= nc.length - 1; i++) {
+          for (let j = i + 1; j <= nc.length - 1; j++) {
+            if (['zux_q2'].includes(methodItem.methodTypeName)) {
+              contents.push(Object.assign({
+                content: `${nc[i]},${nc[j]}`
+              }, param));
+            }
+            if (['zux_q3'].includes(methodItem.methodTypeName)) {
+              for (let k = i + 2; k <= nc.length - 1; k++) {
+                if (nc[j] >= nc[k]) continue;
+                contents.push(Object.assign({
+                  content: `${nc[i]},${nc[j]},${nc[k]}`
+                }, param));
+              }
+            }
+          }
+        }
         betCount = this.calcBet();
         params.totMoney = this.state.amount * betCount;
-        content = methodItem.rows[0].nc.join(',');
-        params.betList.push({methodId: methodItem.id.split(':')[0], projs: 1, money: params.totMoney, content});
+        // content = methodItem.rows[0].nc.join(',');
+        params.betList = contents;
+        // params.betList.push({methodId: methodItem.id.split(':')[0], projs: 1, money: params.totMoney, content});
         params.totProjs = params.betList.length;
       } else if (['zx_q2', 'zx_q3'].includes(methodItem.methodTypeName)) {
         // 直选 前二、三
         let nc = methodItem.rows.map((row: any) => {
           return row.nc;
         });
+        nc = removeRepeat2DArray(nc);
         let contents: any[] = [];
         let param = {
           methodId: methodItem.id.split(':')[0],
@@ -160,7 +194,9 @@ class OrderBar extends Component<Props, object> {
     let betCount: number = 0;
 
     // 构造注数计算格式
+    let methodTypeName: string = '';
     curGameMethodItems.forEach((methodItem: DataMethodItem) => {
+      methodTypeName = methodItem.methodTypeName || '';
       method = {id: methodItem.id, rows: []};
       methodItem.rows.forEach((row: any) => {
         method.rows.push(row.nc);
@@ -168,6 +204,14 @@ class OrderBar extends Component<Props, object> {
       methodList.push(method);
     });
     
+    // 去重
+    if (['zx_q2', 'zx_q3'].includes(methodTypeName)) {
+      methodList = methodList.map((methodItem: DataMethodItem) => {
+        methodItem.rows = removeRepeat2DArray(methodItem.rows);
+        return methodItem;
+      });
+    }
+
     methodList = methodList.map((methodItem: DataMethodItem) => {
       methodItem.rows = methodItem.rows.map((row: any) => {
         return row.length;
@@ -207,6 +251,14 @@ class OrderBar extends Component<Props, object> {
       }
     });
   }
+  onAmountChanged = (event: ChangeEvent<HTMLInputElement>) => {
+    let value = event.target.value
+    if (!/^\d*$/g.test(value)) {
+      value = String(this.props.defaultInitMethodItemAmount);
+    }
+    this.setState({amount: value});
+    this.props.updateDefaultInitMethodItemAmount(parseInt(value, 10));
+  }
   render() {
     return (
       <section className="order-bar-view">
@@ -214,7 +266,7 @@ class OrderBar extends Component<Props, object> {
           <Col span={4}>
             <div className="flex ai-c fast-amount-wp">
               <span className="flex ai-c jc-c">快速金额</span>
-              <Input className="fast-amount" value={this.state.amount} />
+              <Input className="fast-amount" value={this.state.amount} onChange={this.onAmountChanged} />
             </div>  
           </Col>
           <Col span={10}><CoinSet coinChoosed={this.coinChoosed} /></Col>

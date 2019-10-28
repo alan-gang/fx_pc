@@ -35,15 +35,15 @@ function factorial(n: number): number {
 }
 
 // repeat a string s t times
-let repeat = (s: string, t: number) => {
-  if (typeof s.repeat === 'function') return s.repeat(t)
-  let r = ''
-  while (t > 0) {
-    r += s
-    t--
-  }
-  return r
-}
+// let repeat = (s: string, t: number) => {
+//   if (typeof s.repeat === 'function') return s.repeat(t)
+//   let r = ''
+//   while (t > 0) {
+//     r += s
+//     t--
+//   }
+//   return r
+// }
 
 // remove duplicate in a string by split by i
 // @params o 重复号的判断加入是否排序后比较相等
@@ -55,14 +55,14 @@ let removeDuplicate = (s: string, i: string, join: string, o: string, l: string)
   }).join(join || ' '), has: has }
 }
 
-let padStart = (s: string, l: number, w: string) => {
-  s += ''
-  while (s.length < l) {
-    s = w + s
-  }
-  if (s.length > l) s = s.slice(s.length - l)
-  return s
-}
+// let padStart = (s: string, l: number, w: string) => {
+//   s += ''
+//   while (s.length < l) {
+//     s = w + s
+//   }
+//   if (s.length > l) s = s.slice(s.length - l)
+//   return s
+// }
 
 let isPrime = (n: number) => {
   if (n <= 3) { return n > 1 }

@@ -12,7 +12,7 @@ import { getMethodsConfigByType } from '../../game/gameMethods';
 import { GameMethodMenu, GameSubMethodMenu } from '../../typings/games';
 import methodItems from '../../game/methodItems';
 import APIs from '../../http/APIs';
-
+import { removeRepeat2DArray } from '../../utils/game';
 import './index.styl';
 import { methods } from 'src/utils/ludanMethods';
 
@@ -64,6 +64,8 @@ class Game extends Component<Props, object> {
   calc: any = calc;
   constructor(props: Props) {
     super(props);
+    this.id = parseInt(this.props.match.params.id || '1', 10);
+    this.gameType = getGameTypeByGameId(this.id);
     let menus: GameMethodMenu[] = getMethodsConfigByType(this.gameType);
     this.state = {
       id: 1,
@@ -85,8 +87,6 @@ class Game extends Component<Props, object> {
       totalBetCount: 0,
       totalBetAmount: 0
     }
-    this.id = parseInt(this.props.match.params.id || '1', 10);
-    this.gameType = getGameTypeByGameId(this.id);
     this.init();
     console.log('game constructor id=', this.id, this.gameType);
   }
@@ -230,11 +230,20 @@ class Game extends Component<Props, object> {
     curGameMethodItems.forEach((methodItem: DataMethodItem) => {
       method = {id: methodItem.id, rows: []};
       methodItem.rows.forEach((row: any) => {
-        method.rows.push(row.nc);
+        method.rows.push(row.nc.slice(0));
       });
       methodList.push(method);
     });
+
+    // 去重
+    if (['zx_q2', 'zx_q3'].includes(methodTypeName)) {
+      methodList = methodList.map((methodItem: DataMethodItem) => {
+        methodItem.rows = removeRepeat2DArray(methodItem.rows.slice(0));
+        return methodItem;
+      });
+    }
     
+    // 构造注数计算格式
     methodList = methodList.map((methodItem: DataMethodItem) => {
       methodItem.rows = methodItem.rows.map((row: any) => {
         return row.length;
@@ -306,8 +315,8 @@ class Game extends Component<Props, object> {
     });
   }
   render() {
-    this.id = parseInt(this.props.match.params.id || '1', 10);
-    this.gameType = getGameTypeByGameId(this.id);
+    // this.id = parseInt(this.props.match.params.id || '1', 10);
+    // this.gameType = getGameTypeByGameId(this.id);
     console.log('game render id=', this.id);
     return (
       <article className="game-view">

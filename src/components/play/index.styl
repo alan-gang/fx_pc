@@ -154,9 +154,15 @@
   }
   .method-item.selected {
     .method-item-name {
-      background-color $play-method-name-selected-bg-color
+      background $play-method-name-selected-bg-color
       color $theme-txt-color-4
       border-color $play-method-name-selected-bg-color
+    }
+  }
+  .method-item.icon.selected {
+    .method-item-name {
+      background-color transparent
+      border-color transparent
     }
   }
   &.k3 {
