@@ -8,10 +8,13 @@
     background-color $sub-method-menu-item-bg-color
     border-right solid 0.01rem $theme-bd-color-3
     cursor pointer
-    &:last-child {
+    &.no-bd-r {
       border-right none
     }
-    .selected {
+    // &:last-child {
+    //   border-right none
+    // }
+    &.selected {
       background-color $sub-method-menu-item-selected-bg-color
       .method-name {
         color $theme-txt-color-4

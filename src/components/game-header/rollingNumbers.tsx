@@ -56,7 +56,7 @@ class RollingNumbers extends Component<Props, object> {
     }
   }
   render() {
-    console.log('displayNumbers=', this.displayNumbers())
+    // console.log('displayNumbers=', this.displayNumbers())
     return (
       <div className="rolling-numbers pos-r">
         {this.props.gameType !== 'k3' && this.props.numbers.map((n, i) => (

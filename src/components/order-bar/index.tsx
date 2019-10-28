@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Row, Col, Input, Button, message, Modal } from 'antd';
 import CoinSet from '../coin-set';
 import APIs from '../../http/APIs';
+import calc from '../../game/calc';
 
 import './index.styl';
 
@@ -19,6 +20,11 @@ interface Props {
   resetSelectedOfAllMethodItem(): void;
 }
 
+interface DataMethodItem {
+  id: string;
+  rows: any[];
+}
+
 interface State {
   amount: number;
 }
@@ -28,6 +34,7 @@ interface State {
 class OrderBar extends Component<Props, object> {
   showLoading: boolean = false;
   state: State;
+  calc: any = calc;
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -66,6 +73,7 @@ class OrderBar extends Component<Props, object> {
     // betData: {"lotteryId":1,"issue":"191024036","totProjs":4,"totMoney":80,"isusefree":0,"betList":[{"methodId":"1251","projs":1,"money":"20","content":"总大"},{"methodId":"1251","projs":1,"money":"20","content":"总小"},{"methodId":"1251","projs":1,"money":"20","content":"总单"},{"methodId":"1251","projs":1,"money":"20","content":"总双"}],"isFastBet":2,"limitLevel":2}
     // betData: {"lotteryId":29,"issue":"","totProjs":4,"totMoney":200,"isusefree":0,"betList":[{"methodId":"1251","projs":1,"money":"50","content":"总大"},{"methodId":"1251","projs":1,"money":"50","content":"总小"},{"methodId":"1251","projs":1,"money":"50","content":"总单"},{"methodId":"1251","projs":1,"money":"50","content":"总双"}],"isFastBet":1,"limitLevel":2}
     let props = this.props;
+    let curGameMethodItems = props.curGameMethodItems;
     let params: any = {
       lotteryId: props.gameId,
       issue: props.curIssue,
@@ -79,21 +87,100 @@ class OrderBar extends Component<Props, object> {
     let pos: string = '';
     let val: string = '';
     let content: string = '';
-    props.curGameMethodItems.forEach((methodItem: any) => {
-      methodItem.rows.forEach((row: any) => {
-        row.vs.forEach((vsItem: any) => {
-          if (vsItem.s) {
-            params.totMoney += parseInt(vsItem.amt, 10);
-            params.totProjs++;
-            pos = row.nonasv ? '' : row.p || row.n;
-            val = vsItem.p ? (vsItem.p + '-' + (vsItem.pv || vsItem.n)) : (vsItem.pv || vsItem.n)
-            content = pos ? pos + '-' + val : val;
-            params.betList.push({methodId: methodItem.id.split(':')[0], projs: 1, money: vsItem.amt, content});
-          }
+    let betCount: number = 0;
+    curGameMethodItems.forEach((methodItem: any) => {
+      if (['rx_nzn'].includes(methodItem.methodTypeName)) {
+        betCount = this.calcBet();
+        params.totMoney = this.state.amount * betCount;
+        content = methodItem.rows[0].nc.join(',');
+        params.betList.push({methodId: methodItem.id.split(':')[0], projs: 1, money: params.totMoney, content});
+        params.totProjs = params.betList.length;
+      } else if (['zux_q2', 'zux_q3'].includes(methodItem.methodTypeName)) {
+        // 组选
+        betCount = this.calcBet();
+        params.totMoney = this.state.amount * betCount;
+        content = methodItem.rows[0].nc.join(',');
+        params.betList.push({methodId: methodItem.id.split(':')[0], projs: 1, money: params.totMoney, content});
+        params.totProjs = params.betList.length;
+      } else if (['zx_q2', 'zx_q3'].includes(methodItem.methodTypeName)) {
+        // 直选 前二、三
+        let nc = methodItem.rows.map((row: any) => {
+          return row.nc;
         });
-      })
+        let contents: any[] = [];
+        let param = {
+          methodId: methodItem.id.split(':')[0],
+          projs: 1,
+          money: this.state.amount
+        }
+        for (let i = 0; i < nc.length; i++) {
+          for (let j = 0; j < nc[i].length; j++) {
+            if (!nc[i + 1]) { continue; }
+            for (let k = 0; k < nc[i + 1].length; k++) {
+              if (nc.length >= 3) {
+                if (!nc[i + 2]) { continue; }
+                for (let m = 0; m < nc[i + 2].length; m++) {
+                  contents.push(Object.assign({
+                    content: `${nc[i][j]},${nc[i + 1][k]},${nc[i + 2][m]}`
+                  }, param));
+                }
+              } else {
+                contents.push(Object.assign({
+                  content: `${nc[i][j]},${nc[i + 1][k]}`
+                }, param));
+              }
+            }
+          }
+        }
+        betCount = this.calcBet();
+        params.totMoney = this.state.amount * betCount;
+        params.betList = contents;
+        params.totProjs = params.betList.length;
+      } else {
+        methodItem.rows.forEach((row: any) => {
+          row.vs.forEach((vsItem: any) => {
+            if (vsItem.s) {
+              params.totMoney += parseInt(vsItem.amt, 10);
+              params.totProjs++;
+              pos = row.nonasv ? '' : row.p || row.n;
+              val = vsItem.p ? (vsItem.p + '-' + (vsItem.pv || vsItem.n)) : (vsItem.pv || vsItem.n)
+              content = pos ? pos + '-' + val : val;
+              params.betList.push({methodId: methodItem.id.split(':')[0], projs: 1, money: vsItem.amt, content});
+            }
+          });
+        });
+      }
     });
     return params;
+  }
+  calcBet() {
+    let curGameMethodItems = this.props.curGameMethodItems;
+    let methodList: DataMethodItem[] = [];
+    let method: any;
+    let betCount: number = 0;
+
+    // 构造注数计算格式
+    curGameMethodItems.forEach((methodItem: DataMethodItem) => {
+      method = {id: methodItem.id, rows: []};
+      methodItem.rows.forEach((row: any) => {
+        method.rows.push(row.nc);
+      });
+      methodList.push(method);
+    });
+    
+    methodList = methodList.map((methodItem: DataMethodItem) => {
+      methodItem.rows = methodItem.rows.map((row: any) => {
+        return row.length;
+      })
+      return methodItem;
+    });
+
+    // 总注数
+    methodList.forEach((methodItem: DataMethodItem) => {
+      betCount += this.calc[methodItem.id]({nsl: methodItem.rows});
+    });
+
+    return betCount;
   }
   order() {
     let params = this.getParams();

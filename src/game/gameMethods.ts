@@ -55,7 +55,7 @@ export let methodsConfig: MethodsConfig = {
         {s: false, name: '五中五', v: '5z5', oddIndex: 0, class: 'layout-ud w110 h60  pd-t-12', mid: '2054', odd: '', ids: ['2054:1:5']},
         {s: false, name: '六中五', v: '6z5', oddIndex: 1, class: 'layout-ud w110 h60  pd-t-12', mid: '2054', odd: '', ids: ['2054:1:6']},
         {s: false, name: '七中五', v: '7z5', oddIndex: 3, class: 'layout-ud w110 h60  pd-t-12', mid: '2054', odd: '', ids: ['2054:1:7']},
-        {s: false, name: '八中五', v: '8z5', oddIndex: 5, class: 'layout-ud w110 h60  pd-t-12', mid: '2054', odd: '', ids: ['2054:1:8']}
+        {s: false, name: '八中五', v: '8z5', oddIndex: 5, class: 'layout-ud w110 h60  pd-t-12 no-bd-r', mid: '2054', odd: '', ids: ['2054:1:8']}
       ]
     },
     {
@@ -63,8 +63,8 @@ export let methodsConfig: MethodsConfig = {
       ename: 'zux',
       ids: ['2055:1'],
       subMethods: [
-        {s: true, name: '前二直选',  oddIndex: 0, class: 'layout-lr w180 h40 flex ai-c jc-c odd-pd-l-5', mid: '2055', odd: '', ids: ['2055:1']},
-        {s: false, name: '前三直选',  oddIndex: 0, class: 'layout-lr  w180 h40 flex ai-c jc-c odd-pd-l-5', mid: '2056', odd: '', ids: ['2056:1']}
+        {s: true, name: '前二组选',  oddIndex: 0, class: 'layout-lr w180 h40 flex ai-c jc-c odd-pd-l-5', mid: '2055', odd: '', ids: ['2055:1']},
+        {s: false, name: '前三组选',  oddIndex: 0, class: 'layout-lr  w180 h40 flex ai-c jc-c odd-pd-l-5', mid: '2056', odd: '', ids: ['2056:1']}
       ]
     },
     {

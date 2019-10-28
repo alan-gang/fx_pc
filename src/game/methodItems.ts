@@ -204,7 +204,7 @@ export default {
     return {
       class: 'layout-c-2 left',
       rows: [
-        getCommonRow({n: '总和尾', nonasv: true, vs: [{s: false, n: '大', pv: '总大', oddIndex: 1, col: 12, pn: ''}, {s: false, n: '小', pv: '总小', oddIndex: 1, col: 12, pn: ''}]}),
+        getCommonRow({n: '总和尾', nonasv: true, vs: [{s: false, n: '大', pv: '和尾大', oddIndex: 1, col: 12, pn: ''}, {s: false, n: '小', pv: '和尾小', oddIndex: 1, col: 12, pn: ''}]}),
       ]
     }
   },
@@ -363,7 +363,7 @@ export default {
       methodTypeName: 'zux_q2',
       class: 'one-line-balls',
       rows: [
-        getCommonRow({n: '前二组选', noodd: true, noInput: true, col: 3, class: 'col-txt', vs: cpArr(vs)}),
+        getCommonRow({n: '前二组选', nonasv: true, noodd: true, noInput: true, col: 3, class: 'col-txt', vs: cpArr(vs)}),
       ]
     }
   },
@@ -375,7 +375,7 @@ export default {
       methodTypeName: 'zux_q3',
       class: 'one-line-balls',
       rows: [
-        getCommonRow({n: '前三组选', noodd: true, noInput: true, col: 3, class: 'col-txt', vs: cpArr(vs)})
+        getCommonRow({n: '前三组选', nonasv: true, noodd: true, noInput: true, col: 3, class: 'col-txt', vs: cpArr(vs)})
       ]
     }
   },
@@ -392,8 +392,8 @@ export default {
       choiceNoRepeat: true,
       class: 'one-line-balls',
       rows: [
-        getCommonRow({n: '第一位', noodd: true, noInput: true, col: 2, vs: cpArr(vs)}),
-        getCommonRow({n: '第二位', noodd: true, noInput: true, col: 2, vs: cpArr(vs)})
+        getCommonRow({n: '第一位', nonasv: true, noodd: true, noInput: true, col: 2, vs: cpArr(vs)}),
+        getCommonRow({n: '第二位', nonasv: true, noodd: true, noInput: true, col: 2, vs: cpArr(vs)})
       ]
     }
   },
@@ -409,9 +409,9 @@ export default {
       choiceNoRepeat: true,
       class: 'one-line-balls',
       rows: [
-        getCommonRow({n: '第一位', noodd: true, noInput: true, col: 2, vs: cpArr(vs)}),
-        getCommonRow({n: '第二位', noodd: true, noInput: true, col: 2, vs: cpArr(vs)}),
-        getCommonRow({n: '第三位', noodd: true, noInput: true, col: 2, vs: cpArr(vs)})
+        getCommonRow({n: '第一位', nonasv: true, noodd: true, noInput: true, col: 2, vs: cpArr(vs)}),
+        getCommonRow({n: '第二位', nonasv: true, noodd: true, noInput: true, col: 2, vs: cpArr(vs)}),
+        getCommonRow({n: '第三位', nonasv: true, noodd: true, noInput: true, col: 2, vs: cpArr(vs)})
       ]
     }
   },
@@ -429,7 +429,7 @@ export default {
   },
   '4051:1' () {
     // PK10
-    // 冠亚和大, 冠亚和小， 冠亚和单，冠亚和双 nstyle: 'gyhdxds', 
+    // 冠亚和大, 冠亚和小， 冠亚和单，冠亚和双 
     return {
       class: 'no-b-m no-t-b',
       rows: [

@@ -31,8 +31,11 @@ interface State {
   openNumbers: string[];
   numCss: string;
   curMenuIndex: number;
+  curSubMenuIndex: number;
   subMethods: GameSubMethodMenu[];
   curGameMethodItems: any[];
+  odds: any;
+  // methodItems: any;
   issueList: any[];
   defaultInitMethodItemAmount: number; // 默认初始投注金额
   totalBetCount: number;  // 总注数
@@ -57,7 +60,7 @@ class Game extends Component<Props, object> {
   gameType: string = 'ssc';
   state: State;
   methodItems: any = methodItems;
-  curGameOdds: any;
+  // odds: any;
   calc: any = calc;
   constructor(props: Props) {
     super(props);
@@ -72,14 +75,16 @@ class Game extends Component<Props, object> {
       openNumbers: [],
       numCss: '',
       curMenuIndex: 0,
+      curSubMenuIndex: 0,
       subMethods: [],
       curGameMethodItems: this.getMethodItemsByIds((menus && menus[0].ids) || []),
+      odds: {},
+      // methodItems: {},
       issueList: [],
       defaultInitMethodItemAmount: 2,
       totalBetCount: 0,
       totalBetAmount: 0
     }
-    this.updateOddsOfMethod();
     this.id = parseInt(this.props.match.params.id || '1', 10);
     this.gameType = getGameTypeByGameId(this.id);
     this.init();
@@ -102,11 +107,13 @@ class Game extends Component<Props, object> {
       let menus: GameMethodMenu[] = getMethodsConfigByType(this.gameType);
       this.setState({
         curMenuIndex: 0, 
-        curGameMethodItems: this.getMethodItemsByIds((menus && menus[0].ids) || [])
+        curGameMethodItems: this.getMethodItemsByIds((menus && menus[0].ids) || []),
+        subMethods: (menus && menus[0].subMethods) || []
       });
       this.init();
     }
   }
+  // 获取当前玩法下面的子玩法列表
   getMethodItemsByIds(ids: string[]) {
     let mItems: any[] = [];
     ids.forEach((id: string) => {
@@ -127,11 +134,18 @@ class Game extends Component<Props, object> {
   updateMethodMenuIndex = (index: number) => {
     this.setState({curMenuIndex: index});
   }
-  updateMethodIds = (method: GameMethodMenu) => {
+  // 更新玩法菜单选中的index
+  updateSubMethodMenuIndex = (index: number) => {
+    this.setState({curSubMenuIndex: index});
+  }
+  methodMenuChangedCB = (method: GameMethodMenu) => {
     let curGameMethodItems = this.getMethodItemsByIds(method.ids || [])
     this.setState({
       subMethods: method.subMethods || [],
-      curGameMethodItems
+      curGameMethodItems,
+      totalBetCount: 0,
+      totalBetAmount: 0,
+      curSubMenuIndex: 0,
     }, this.updateOddsOfMethod);
   }
   updateSubMethods = (method: GameSubMethodMenu) => {
@@ -185,20 +199,19 @@ class Game extends Component<Props, object> {
   calcBet() {
     let methodList: DataMethodItem[] = [];
     let method: any;
-    let rowItems: any[];
     let betCount: number = 0;
     let totalAmount: number = 0;
-    console.log('total count s=', Date.now());
-    let count = 0;
+
     // 构造选择的号码集合，金额集合
     let curGameMethodItems = this.state.curGameMethodItems;
+    let methodTypeName: string = '';
     curGameMethodItems = curGameMethodItems.map((methodItem: any) => {
+      methodTypeName = methodItem.methodTypeName;
       methodItem.rows = methodItem.rows.map((row: any) => {
         row.nc = [];
         row.amtc = [];
         row.tmc = 0;
         row.vs = row.vs.map((vsItem: any) => {
-          count++;
           if (vsItem.s) {
             row.nc.push(vsItem.n);
             row.amtc.push(vsItem.amt);
@@ -212,8 +225,8 @@ class Game extends Component<Props, object> {
       });
       return methodItem;
     });
-    console.log('curGameMethodItems=', curGameMethodItems);
 
+    // 构造注数计算格式
     curGameMethodItems.forEach((methodItem: DataMethodItem) => {
       method = {id: methodItem.id, rows: []};
       methodItem.rows.forEach((row: any) => {
@@ -227,12 +240,17 @@ class Game extends Component<Props, object> {
         return row.length;
       })
       return methodItem;
-    })
+    });
 
     // 总注数
     methodList.forEach((methodItem: DataMethodItem) => {
       betCount += this.calc[methodItem.id]({nsl: methodItem.rows});
-    })
+    });
+
+    // 任选，组选，直选金额计算
+    if (['rx_nzn', 'zux_q2', 'zux_q3', 'zx_q2', 'zx_q3'].includes(methodTypeName)) {
+      totalAmount = betCount * this.state.defaultInitMethodItemAmount;
+    }
 
     this.setState({totalBetCount: betCount, totalBetAmount: totalAmount});
   }
@@ -245,7 +263,7 @@ class Game extends Component<Props, object> {
       });
       return methodItem;
     });
-    this.setState({curGameMethodItems});
+    this.setState({curGameMethodItems, totalBetCount: 0, totalBetAmount: 0});
   }
   orderFinishCB = (status: boolean) => {
     if (status) {
@@ -279,10 +297,11 @@ class Game extends Component<Props, object> {
     });
   }
   getUserPoint(gameid: number) {
+    console.log('getUserPoint=', gameid);
     APIs.myNewPoint({gameid}).then((data: any) => {
       if (data.success === 1) {
-        this.curGameOdds = data.items;
-        this.updateOddsOfMethod(this.curGameOdds);
+        this.setState({odds: data.items})
+        this.updateOddsOfMethod(data.items);
       }
     });
   }
@@ -302,8 +321,8 @@ class Game extends Component<Props, object> {
           numCss={this.state.numCss}
         />
         <section className="game-main">
-          <MethodMenu gameType={this.gameType} curMenuIndex={this.state.curMenuIndex} updateMethodIds={this.updateMethodIds} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
-          {this.state.subMethods.length > 0 && <SubMethodMenu gameType={this.gameType} subMethods={this.state.subMethods} updateSubMethods={this.updateSubMethods} />}
+          <MethodMenu gameType={this.gameType} curMenuIndex={this.state.curMenuIndex} methodMenuChangedCB={this.methodMenuChangedCB} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
+          {this.state.subMethods.length > 0 && <SubMethodMenu gameType={this.gameType} curSubMenuIndex={this.state.curSubMenuIndex} subMethods={this.state.subMethods} odds={this.state.odds} updateSubMethods={this.updateSubMethods} updateSubMethodMenuIndex={this.updateSubMethodMenuIndex} />}
           <Play 
             curGameMethodItems={this.state.curGameMethodItems} 
             gameType={this.gameType} 

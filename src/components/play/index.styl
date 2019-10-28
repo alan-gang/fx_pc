@@ -78,12 +78,23 @@
     &.one-line-balls {
       padding 0.2rem 0
       .pos-lebel {
+        height 0.66rem
+        line-height 0.66rem
         background-color $theme-txt-color-4
         border-bottom none
       }
       .method-item {
+        height 0.66rem
         float left
         padding-left 0.08rem
+        &.selected {
+          background-color transparent
+        }
+      }
+      .method-item-name {
+        width 0.46rem
+        height 0.46rem
+        font-size 0.24rem
       }
     }
     .icon {
@@ -124,6 +135,7 @@
     }
   }
   .odd {
+    min-width 0.5rem
     color $theme-txt-color-6
     padding 0 0.04rem
   }
@@ -139,6 +151,13 @@
     display flex
     align-items center
     justify-content center
+  }
+  .method-item.selected {
+    .method-item-name {
+      background-color $play-method-name-selected-bg-color
+      color $theme-txt-color-4
+      border-color $play-method-name-selected-bg-color
+    }
   }
   &.k3 {
     dice() {
