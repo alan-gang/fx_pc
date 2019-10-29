@@ -31,19 +31,19 @@ export default {
   '1259:1'({nsl}: Params) {
     return A(nsl)
   },
-  '1260:1'({nsl}: Params) {
-    return A(nsl)
-  },
-  '1261:1'({nsl}: Params) {
-    return A(nsl)
-  },
-  '1262:1'({nsl}: Params) {
-    return A(nsl)
-  },
   '1273:1'({nsl}: Params) {
     return A(nsl)
   },
-
+  '1274:1'({nsl}: Params) {
+    return A(nsl)
+  },
+  '1275:1'({nsl}: Params) {
+    return A(nsl)
+  },
+  '1276:1'({nsl}: Params) {
+    return A(nsl)
+  },
+  
   // 11x5
   '2050:1'({nsl}: Params) {
     return A(nsl)

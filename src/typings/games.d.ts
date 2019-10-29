@@ -25,6 +25,7 @@ export interface Game {
   new?: boolean;
   favourite?: boolean;
   methods?: GameMethodMenu[];
+  [prop: string]: any;
 }
 
 export interface GameCategory {

@@ -107,6 +107,11 @@ export function getUserPrefence() {
   return http.get('/home/userMenus.do?method=getUserPrefence');
 }
 
+// 获取游戏列表
+export function getLotterys() {
+  return http.get('/report/OrderReport.do?method=getLotterys');
+}
+
 export default {
   curIssue,
   historyIssue,
@@ -120,5 +125,6 @@ export default {
   myNewPoint,
   sysNotices,
   getUserPrefence,
-  lottSets
+  lottSets,
+  getLotterys
 };

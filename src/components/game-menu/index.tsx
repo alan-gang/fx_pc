@@ -5,23 +5,34 @@ import games, { getGameById } from '../../game/games';
 import { Menu } from 'antd';
 // import { ClickParam } from 'antd/lib/menu/index';
 import { GameCategory, Game } from '../../typings/games';
+import { LOTTERY_TYPES } from '../../utils/config';
+import { getGameTypeByGameId } from '../../game/games';
+import Timer from '../../utils/timer';
+import { timeFormat } from '../../utils/date';
+import APIs from '../../http/APIs';
 
 import './index.styl';
 
 interface State {
   offsetLeft: number;
   openKeys: string[];
+  defaultSelectedKeys: string[]; 
   navData: GameCategory[];
 }
 
 @inject("store")
 @observer
 class GameMenu extends Component<Props, object> {
-  rootSubmenuKeys = ['box', 'ssc', '11x5', 'pk10', 'k3'];
+  rootSubmenuKeys = ['box', LOTTERY_TYPES.SSC, LOTTERY_TYPES.G11X5, LOTTERY_TYPES.PK10, LOTTERY_TYPES.K3];
   MAIN_WIDTH: number = 1200;
   MENU_WIDTH: number = 200;
+  DEFAULT_GAME_TYPE: string = LOTTERY_TYPES.SSC;
   menuGames: GameCategory[] = games;
+  id: number;
+  gameType: string;
+
   state: State;
+
   constructor(props: Props) {
     super(props);
 
@@ -32,11 +43,100 @@ class GameMenu extends Component<Props, object> {
       items: this.props.store.game.favourites || []
     });
 
+    this.id = parseInt(this.getGameIdFromUrl() || '1', 10);
+    this.gameType = getGameTypeByGameId(this.id) || this.DEFAULT_GAME_TYPE;
+
     this.state = {
       offsetLeft: 30,
-      openKeys: ['box', 'ssc'],
+      openKeys: ['box', this.gameType],
+      defaultSelectedKeys: [String(this.id)],
       navData
     };
+
+    this.init();
+  }
+
+  init() {
+    // this.clearAllTimer();
+    let games = this.state.navData;
+    games.forEach((gameCategory: GameCategory) => {
+      if (gameCategory.type === this.gameType) {
+        gameCategory.items.forEach((game: Game) => {
+          this.getIssueByGameId(game.id);
+        });
+      }
+    });
+  }
+
+  updateCurGameIssue(id: number, issue: any): void {
+    let navData = this.state.navData;
+    for (let i = 0; i < navData.length; i++) {
+      for (let j = 0; j < navData[i].items.length; j++) {
+        if (id === navData[i].items[j].id) {
+          navData[i].items[j].issue = issue;
+          break;
+        }
+      }  
+    }
+    this.setState({navData});
+  }
+
+  getGameById(id: number): Game | null {
+    let navData = this.state.navData;
+    for (let i = 0; i < navData.length; i++) {
+      for (let j = 0; j < navData[i].items.length; j++) {
+        if (id === navData[i].items[j].id) {
+          return navData[i].items[j];
+        }
+      }  
+    }
+    return null;
+  }
+
+  getIssueByGameId(id: number) {
+    APIs.curIssue({gameid: id}).then((data: any) => {
+      if (data.success > 0) {
+        data.remainTime = data.saleend - data.current;
+        data.timeStr = timeFormat(data.remainTime);
+        this.updateCurGameIssue(id, data);
+        this.initCountDown(id);
+      }
+    });
+  }
+
+  initCountDown(id: number): void {
+    let game = this.getGameById(id);
+    let issue = game && game.issue;
+    if (issue) {
+      if (issue.timer) {
+        issue.timer.close();
+      }
+      issue.timer = new Timer(Math.floor(issue.remainTime / 1000), (t: number): void => {
+        if (t <= 0) {
+          this.getIssueByGameId(id);
+        }
+        issue.remainTime = Math.floor(t * 1000);
+        issue.timeStr = timeFormat(t * 1000);
+        this.updateCurGameIssue(id, issue);
+      });
+    }
+  }
+
+  clearAllTimer(): void {
+    let navData = this.state.navData;
+    let box = navData.shift();
+    navData = games.map((gameCategory: GameCategory) => {
+      gameCategory.items = gameCategory.items.map((game: Game) => {
+        if (game.issue && game.issue.timer) {
+          game.issue.timer.close();
+          game.issue.timer = null;
+        }
+        return game;
+      });
+      return gameCategory;
+    })
+    if (box) navData.unshift(box);
+    this.setState({navData});
   }
 
   componentDidMount() {
@@ -53,6 +153,7 @@ class GameMenu extends Component<Props, object> {
   }
 
   onOpenChange = (openKeys: string[]) => {
+    this.clearAllTimer();
     const latestOpenKey: string = openKeys.find(key => this.state.openKeys.indexOf(key) === -1) || '';
     if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
       this.setState({ openKeys });
@@ -61,6 +162,8 @@ class GameMenu extends Component<Props, object> {
         openKeys: latestOpenKey ? [latestOpenKey] : [],
       });
     }
+    this.gameType = latestOpenKey;
+    this.init();
   };
 
   // onMenuItemHandler = ({ item, key, keyPath, domEvent }: ClickParam) => {
@@ -101,6 +204,15 @@ class GameMenu extends Component<Props, object> {
     return this.menuGames;
   }
 
+  getGameIdFromUrl() {
+    let hash: string = window.location.hash;
+    let pos: number = hash.indexOf('?');
+    if (pos >= 0) {
+      hash.substring(0, pos);
+    }
+    return hash.substring(hash.lastIndexOf('/') + 1, hash.length);
+  }
+
   render() {
     return (
       <nav className="game-menu-view" style={{left: `${this.state.offsetLeft}px`}}>
@@ -108,6 +220,7 @@ class GameMenu extends Component<Props, object> {
         <Menu
           mode="inline"
           openKeys={this.state.openKeys}
+          defaultSelectedKeys={this.state.defaultSelectedKeys}
           onOpenChange={this.onOpenChange}
           // onClick={this.onMenuItemHandler}
           style={{ width: 200 }}
@@ -128,7 +241,7 @@ class GameMenu extends Component<Props, object> {
               {gameCate.items.map((game) => (
                 <Menu.Item key={game.id} className="game-menu-item">
                   <span className="nav-link-wp">
-                    <NavLink to={`/game/${game.id}`}><span>{game.name}</span><span className="game-timer">00:15:36</span></NavLink>
+                    <NavLink to={`/game/${game.id}`}><span>{game.name}</span><span className="game-timer">{game.issue && game.issue.timeStr}</span></NavLink>
                   </span>
                   <span className={`favourite ${game.favourite ? 'selected' : ''}`} onClick={(e: any) => this.onAddFavourite(game.id, gameCate.type, e)}></span>
                 </Menu.Item>

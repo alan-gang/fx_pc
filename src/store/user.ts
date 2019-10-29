@@ -1,5 +1,5 @@
 import { observable, action } from "mobx";
-
+import APIs from '../http/APIs';
 class User {
   @observable name?: string = '';
   @observable nickName?: string;
@@ -18,6 +18,18 @@ class User {
   @action
   setBalance(balance: string) {
     this.balance = balance;
+  }
+
+  @action
+  updateBalance() {
+    APIs.getUserBalance().then((data: any) => {
+      if (data.success === 1) {
+        this.balance = data.availableBalance;
+        this.freeAvaiable = data.freeAvaiable;
+        this.rewardPoint = data.rewardPoint;
+        this.specialBalance = data.specialBalance;
+      }
+    });
   }
   
 }

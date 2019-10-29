@@ -1,9 +1,19 @@
-import React, { Component, ChangeEvent, FocusEvent } from 'react';
+import React, { Component, MouseEvent, ChangeEvent, FocusEvent } from 'react';
 import { inject, observer } from 'mobx-react';
 import methodItems from '../../game/methodItems';
 import { Row, Col, Input } from 'antd';
 
 import './index.styl';
+
+interface DsEventTarget extends EventTarget {
+  nodeName: string;
+  type: string;
+  value: string;
+}
+
+interface DsMouseEvent extends MouseEvent<HTMLElement> {
+  target: DsEventTarget
+}
 
 interface Props {
   store?: any;
@@ -17,23 +27,16 @@ interface Props {
 @observer
 class Play extends Component<Props, object> {
   methodItems: any = methodItems;
-  onMethodItemHandler = (i: number, j: number, k: number, selected: boolean, methodTypeName: string) => {
-    console.log(i, j, k, selected);
+  onMethodItemHandler = (i: number, j: number, k: number, selected: boolean, methodTypeName: string, event: MouseEvent<HTMLElement>) => {
+    console.log(i, j, k, selected, event);
+    let myevent: DsMouseEvent = event as DsMouseEvent;
+    let { nodeName } = myevent.target;
+    if (nodeName === 'INPUT' && myevent.target.value) return;
     let amount = selected ? '' : String(this.props.defaultInitMethodItemAmount);
     amount = ['rx_nzn', 'zux_q2', 'zux_q3', 'zx_q2', 'zx_q3'].includes(methodTypeName) ? '0' : amount;
     this.props.updateMethdItem(i, j, k, !selected, amount);
   }
-  onFocusMethodItem = (i: number, j: number, k: number, event: FocusEvent<HTMLInputElement>) => {
-    event.stopPropagation();
-    event.preventDefault();
-    console.log('onFocusMethodItem');
-    let { value } = event.target;
-    let selected = this.props.curGameMethodItems[i].rows[j].vs[k].s;
-    if (selected && !value.trim()) {
-      this.props.updateMethdItem(i, j, k, this.props.curGameMethodItems[i].rows[j].vs[k].s, String(this.props.defaultInitMethodItemAmount));
-    }
-  }
-
+  
   onMethodItemValueChanged = (i: number, j: number, k: number, event: ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
     event.preventDefault();
@@ -42,10 +45,9 @@ class Play extends Component<Props, object> {
       value = this.props.curGameMethodItems[i].rows[j].vs[k].amt;
     }
     console.log(i, j, k, event, value, this.props.curGameMethodItems[i].rows[j].vs[k].amt);
-    this.props.updateMethdItem(i, j, k, undefined, value); // 
+    this.props.updateMethdItem(i, j, k, undefined, value);
   }
   componentWillReceiveProps(nextProps: Props) {
-    // console.log('play componentWillReceiveProps=', nextProps, this.props); , methodItem.methodTypeName
     this.forceUpdate();
   }
   render() {
@@ -59,7 +61,7 @@ class Play extends Component<Props, object> {
               <Row key={j}>
                   <Col span={row.col} className={`pos-lebel ${row.hidePos ? 'hide' : ''}`} >{row.n}</Col>
                   {row.vs.map((vsItem: any, k: number) => (
-                    <Col span={vsItem.col} key={k} className={`method-item ${row.class || ''} ${vsItem.class || ''} ${vsItem.s ? 'selected' : ''}`} onClick={() => this.onMethodItemHandler(i, j, k, vsItem.s, methodItem.methodTypeName)}>
+                    <Col span={vsItem.col} key={k} className={`method-item ${row.class || ''} ${vsItem.class || ''} ${vsItem.s ? 'selected' : ''}`} onClick={(e: MouseEvent<HTMLElement>) => this.onMethodItemHandler(i, j, k, vsItem.s, methodItem.methodTypeName, e)}>
                       <span className={`method-item-name`} n={vsItem.n}>
                         {vsItem.class === 'icon' && vsItem.icons && vsItem.icons.map((iconNum: number, m: number) => (<span className={`icon-item icon-item-${iconNum}`} key={m}></span>))}
                         {vsItem.class !== 'icon' && vsItem.n}
@@ -67,7 +69,7 @@ class Play extends Component<Props, object> {
                       {row.noodd !== true && <span className={`odd`}>{vsItem.odd || ''}</span>}
                       {row.noInput !== true && 
                         <span className={`bet-amount`}>
-                          <Input value={vsItem.amt} onFocus={(e: FocusEvent<HTMLInputElement>) => this.onFocusMethodItem(i, j, k, e)} onBlur={(e: FocusEvent<HTMLInputElement>) => this.onFocusMethodItem(i, j, k, e)} onChange={(e: ChangeEvent<HTMLInputElement>) => this.onMethodItemValueChanged(i, j, k, e)} />
+                          <Input value={vsItem.amt} onChange={(e: ChangeEvent<HTMLInputElement>) => this.onMethodItemValueChanged(i, j, k, e)} />
                         </span>}
                     </Col>
                   ))}

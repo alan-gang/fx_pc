@@ -94,17 +94,33 @@ export default {
       ]
     }
   },
-  '1254:1' () {
-    // ssc 牌型
-    let vs = [{s: false, n: '豹子', oddIndex: 1, col: 7}, {s: false, n: '顺子', oddIndex: 1, col: 7}, {s: false, n: '对子', oddIndex: 0, col: 7}, {s: false, n: '半顺', oddIndex: 0, col: 7}, {s: false, n: '杂六', oddIndex: 0, col: 7}];
-    return {
-      rows: [
-        getCommonRow({n: '前三', col: 3, vs: cpArr(vs)}),
-        getCommonRow({n: '中三', col: 3, vs: cpArr(vs)}),
-        getCommonRow({n: '后三', col: 3, vs: cpArr(vs)})
-      ]
-    }
-  },
+  // '1274:1' () {
+  //   // ssc 牌型
+  //   let vs = [{s: false, n: '豹子', oddIndex: 0, col: 7}, {s: false, n: '顺子', oddIndex: 1, col: 7}, {s: false, n: '对子', oddIndex: 0, col: 2}, {s: false, n: '半顺', oddIndex: 4, col: 7}, {s: false, n: '杂六', oddIndex: 3, col: 7}];
+  //   return {
+  //     rows: [
+  //       getCommonRow({n: '前三', col: 3, vs: cpArr(vs)})
+  //     ]
+  //   }
+  // },
+  // '1275:1' () {
+  //   // ssc 牌型
+  //   let vs = [{s: false, n: '豹子', oddIndex: 0, col: 7}, {s: false, n: '顺子', oddIndex: 1, col: 7}, {s: false, n: '对子', oddIndex: 0, col: 2}, {s: false, n: '半顺', oddIndex: 4, col: 7}, {s: false, n: '杂六', oddIndex: 3, col: 7}];
+  //   return {
+  //     rows: [
+  //       getCommonRow({n: '中三', col: 3, vs: cpArr(vs)})
+  //     ]
+  //   }
+  // },
+  // '1276:1' () {
+  //   // ssc 牌型
+  //   let vs = [{s: false, n: '豹子', oddIndex: 0, col: 7}, {s: false, n: '顺子', oddIndex: 1, col: 7}, {s: false, n: '对子', oddIndex: 0, col: 2}, {s: false, n: '半顺', oddIndex: 4, col: 7}, {s: false, n: '杂六', oddIndex: 3, col: 7}];
+  //   return {
+  //     rows: [
+  //       getCommonRow({n: '后三', col: 3, vs: cpArr(vs)})
+  //     ]
+  //   }
+  // },
   '1253:1' () {
     // ssc 定位
     let vs = [{s: false, n: '0'}, {s: false, n: '1'}, {s: false, n: '2'}, {s: false, n: '3'}, {s: false, n: '4'}, {s: false, n: '5'}, {s: false, n: '6'}, {s: false, n: '7'}, {s: false, n: '8'}, {s: false, n: '9'}];
@@ -159,31 +175,31 @@ export default {
       ]
     }
   },
-  '1260:1' () {
+  '1274:1' () {
     // ssc 二字组合 前三一字
     return {
       layout: 'col',
       class: 'min-auto-w',
       rows: [
-        getCommonRow({n: '前三', nonasv: true, col: 24, oddIndex: 0, class: 'col5', vs: [{s: false, n: '豹子', oddIndex: 1}, {s: false, n: '顺子', oddIndex: 1}, {s: false, n: '对子', oddIndex: 0}, {s: false, n: '半顺', oddIndex: 0}, {s: false, n: '杂六', oddIndex: 0}]}),
+        getCommonRow({n: '前三', nonasv: true, col: 24, oddIndex: 0, class: 'col5', vs: [{s: false, n: '豹子', oddIndex: 0}, {s: false, n: '顺子', oddIndex: 1}, {s: false, n: '对子', oddIndex: 2}, {s: false, n: '半顺', oddIndex: 4}, {s: false, n: '杂六', oddIndex: 3}]})
       ]
     }
   },
-  '1261:1' () {
+  '1275:1' () {
     // ssc 二字组合 中三一字
     return {
       class: 'min-auto-w',
       rows: [
-        getCommonRow({n: '中三', nonasv: true, col: 24, oddIndex: 0, class: 'col5', vs: [{s: false, n: '豹子', oddIndex: 1}, {s: false, n: '顺子', oddIndex: 1}, {s: false, n: '对子', oddIndex: 0}, {s: false, n: '半顺', oddIndex: 0}, {s: false, n: '杂六', oddIndex: 0}]}),
+        getCommonRow({n: '中三', nonasv: true, col: 24, oddIndex: 0, class: 'col5', vs: [{s: false, n: '豹子', oddIndex: 0}, {s: false, n: '顺子', oddIndex: 1}, {s: false, n: '对子', oddIndex: 2}, {s: false, n: '半顺', oddIndex: 4}, {s: false, n: '杂六', oddIndex: 3}]})
       ]
     }
   },
-  '1262:1' () {
+  '1276:1' () {
     // ssc 二字组合 后三一字
     return {
       class: 'min-auto-w',
       rows: [
-        getCommonRow({n: '后三', nonasv: true, col: 24, oddIndex: 0, class: 'col5', vs: [{s: false, n: '豹子', oddIndex: 1}, {s: false, n: '顺子', oddIndex: 1}, {s: false, n: '对子', oddIndex: 0}, {s: false, n: '半顺', oddIndex: 0}, {s: false, n: '杂六', oddIndex: 0}]}),
+      getCommonRow({n: '后三', nonasv: true, col: 24, oddIndex: 0, class: 'col5', vs: [{s: false, n: '豹子', oddIndex: 0}, {s: false, n: '顺子', oddIndex: 1}, {s: false, n: '对子', oddIndex: 2}, {s: false, n: '半顺', oddIndex: 4}, {s: false, n: '杂六', oddIndex: 3}]})
       ]
     }
   },

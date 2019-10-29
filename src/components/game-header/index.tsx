@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import RollingNumbers from './rollingNumbers';
 
+
 import './index.styl';
 interface Props {
   store?: any;
@@ -17,9 +18,12 @@ interface Props {
 @inject("store")
 @observer
 class GameHeader extends Component<Props, object> {
+  constructor(props: Props) {
+    super(props);
+  }
   render() {
     return (
-      <section className="game-header-view flex ai-c">
+      <section className={`game-header-view flex ai-c ${this.props.gameType}`}>
         <div className={`game-logo game-header-logo-${this.props.gameId}`}>
           <span className="volumn-switch close"></span>
         </div>
@@ -55,3 +59,4 @@ class GameHeader extends Component<Props, object> {
 }
 
 export default GameHeader;
+

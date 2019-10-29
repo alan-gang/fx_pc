@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { getAnimalOfNumber } from '../../utils/num';
+import { GameCommonDataContext } from '../../context/gameContext';
 
 import './rollingNumbers.styl';
 
@@ -15,6 +16,8 @@ interface Props {
 @inject("store")
 @observer
 class RollingNumbers extends Component<Props, object> {
+  static contextType = GameCommonDataContext;
+  context!: React.ContextType<typeof GameCommonDataContext>;
   type: number = 1;
   displayNumbers() {
     return this.props.numbers.map(n => {
@@ -58,7 +61,7 @@ class RollingNumbers extends Component<Props, object> {
   render() {
     // console.log('displayNumbers=', this.displayNumbers())
     return (
-      <div className="rolling-numbers pos-r">
+      <div className={`rolling-numbers pos-r ${this.props.gameType}`}>
         {this.props.gameType !== 'k3' && this.props.numbers.map((n, i) => (
           <div className="number-box" key={i} >
             <div className={`number ${this.setPosColor(i) ? this.props.hl : ''}`}>
@@ -85,9 +88,17 @@ class RollingNumbers extends Component<Props, object> {
         </div>
         }
         {this.props.gameType === 'k3' && this.props.numbers.slice(0, 3).map((num, i) => (
-            <div className="dice-box inlb" key={i}>{num}</div>
-          )
-        )}
+          (() => {
+            let items = [];
+            for (let i = 0; i < 6; i++) {
+              items.push(<div className={`dice-box inlb icon-item-${num}`} key={i}></div>)
+            }
+            return items;
+          })()
+          // {[1,2,3,4,5,6].map(() => (
+          //   <div className={`dice-box inlb icon-item-${num}`} key={i}></div>
+          // ))}
+        ))}
       </div>
     )
   }

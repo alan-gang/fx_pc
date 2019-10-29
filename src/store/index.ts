@@ -9,7 +9,7 @@ spy((event) => {
   }
 });
 
-let store: object = {
+let store = {
   user,
   common,
   game

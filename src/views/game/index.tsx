@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createContext } from 'react';
 import { inject, observer } from 'mobx-react';
 import GameHeader from 'comp/game-header';
 import MethodMenu from 'comp/method-menu';
@@ -13,8 +13,11 @@ import { GameMethodMenu, GameSubMethodMenu } from '../../typings/games';
 import methodItems from '../../game/methodItems';
 import APIs from '../../http/APIs';
 import { removeRepeat2DArray } from '../../utils/game';
+import { GameCommonDataContext } from '../../context/gameContext';
+// import { methods } from 'src/utils/ludanMethods';
+
 import './index.styl';
-import { methods } from 'src/utils/ludanMethods';
+
 
 interface IProps {
   store?: any;
@@ -52,6 +55,13 @@ interface MatchParams {
 }
 
 type Props = IProps & RouteComponentProps<MatchParams>;
+
+// interface GameCommonDataType {
+//   gameId: number;
+//   gameType: string;
+// }
+
+// const GameCommonDataContext = createContext<GameCommonDataType | null>(null);
 
 @inject("store")
 @observer
@@ -315,42 +325,44 @@ class Game extends Component<Props, object> {
     });
   }
   render() {
-    // this.id = parseInt(this.props.match.params.id || '1', 10);
+    // this.id = parseInt(this.props.match.params.id || '1', 10); value={gameId: this.id, gameType: this.gameType}
     // this.gameType = getGameTypeByGameId(this.id);
     console.log('game render id=', this.id);
     return (
       <article className="game-view">
-        <GameHeader 
-          gameId={this.id}
-          gameType={this.gameType}
-          curIssue={this.state.curIssue}
-          lastIssue={this.state.lastIssue}
-          curTime={this.state.curTime}
-          openNumbers={this.state.openNumbers}
-          numCss={this.state.numCss}
-        />
-        <section className="game-main">
-          <MethodMenu gameType={this.gameType} curMenuIndex={this.state.curMenuIndex} methodMenuChangedCB={this.methodMenuChangedCB} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
-          {this.state.subMethods.length > 0 && <SubMethodMenu gameType={this.gameType} curSubMenuIndex={this.state.curSubMenuIndex} subMethods={this.state.subMethods} odds={this.state.odds} updateSubMethods={this.updateSubMethods} updateSubMethodMenuIndex={this.updateSubMethodMenuIndex} />}
-          <Play 
-            curGameMethodItems={this.state.curGameMethodItems} 
-            gameType={this.gameType} 
-            defaultInitMethodItemAmount={this.state.defaultInitMethodItemAmount}
-            updateMethdItem={this.updateMethdItem} 
+        <GameCommonDataContext.Provider value={{gameId: this.id, gameType: this.gameType}} >
+          <GameHeader 
+            gameId={this.id}
+            gameType={this.gameType}
+            curIssue={this.state.curIssue}
+            lastIssue={this.state.lastIssue}
+            curTime={this.state.curTime}
+            openNumbers={this.state.openNumbers}
+            numCss={this.state.numCss}
           />
-          <OrderBar 
-            gameId={this.id} 
-            curIssue={this.state.curIssue} 
-            betCount={this.state.totalBetCount} 
-            amount={this.state.totalBetAmount} 
-            curGameMethodItems={this.state.curGameMethodItems} 
-            defaultInitMethodItemAmount={this.state.defaultInitMethodItemAmount}
-            updateDefaultInitMethodItemAmount={this.updateDefaultInitMethodItemAmount} 
-            orderFinishCB={this.orderFinishCB}
-            resetSelectedOfAllMethodItem={this.resetSelectedOfAllMethodItem}
-          />
-        </section>
-        <section className="recent-open"></section>
+          <section className="game-main">
+            <MethodMenu gameType={this.gameType} curMenuIndex={this.state.curMenuIndex} methodMenuChangedCB={this.methodMenuChangedCB} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
+            {this.state.subMethods.length > 0 && <SubMethodMenu gameType={this.gameType} curSubMenuIndex={this.state.curSubMenuIndex} subMethods={this.state.subMethods} odds={this.state.odds} updateSubMethods={this.updateSubMethods} updateSubMethodMenuIndex={this.updateSubMethodMenuIndex} />}
+            <Play 
+              curGameMethodItems={this.state.curGameMethodItems} 
+              gameType={this.gameType} 
+              defaultInitMethodItemAmount={this.state.defaultInitMethodItemAmount}
+              updateMethdItem={this.updateMethdItem} 
+            />
+            <OrderBar 
+              gameId={this.id} 
+              curIssue={this.state.curIssue} 
+              betCount={this.state.totalBetCount} 
+              amount={this.state.totalBetAmount} 
+              curGameMethodItems={this.state.curGameMethodItems} 
+              defaultInitMethodItemAmount={this.state.defaultInitMethodItemAmount}
+              updateDefaultInitMethodItemAmount={this.updateDefaultInitMethodItemAmount} 
+              orderFinishCB={this.orderFinishCB}
+              resetSelectedOfAllMethodItem={this.resetSelectedOfAllMethodItem}
+            />
+          </section>
+          <section className="recent-open"></section>
+        </GameCommonDataContext.Provider>
       </article>
     );
   }

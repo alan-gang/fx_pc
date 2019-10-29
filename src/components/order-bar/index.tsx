@@ -99,7 +99,7 @@ class OrderBar extends Component<Props, object> {
         params.betList.push({methodId: methodItem.id.split(':')[0], projs: 1, money: params.totMoney, content});
         params.totProjs = params.betList.length;
         if (content.split(',').length > 8) {
-          params.errorMsg = '该玩法一个方案最多投注量：';
+          params.errorMsg = '该玩法一个方案最多选择8个号码！';
         }
       } else if (['zux_q2', 'zux_q3'].includes(methodItem.methodTypeName)) {
         // 组选
@@ -131,9 +131,7 @@ class OrderBar extends Component<Props, object> {
         }
         betCount = this.calcBet();
         params.totMoney = this.state.amount * betCount;
-        // content = methodItem.rows[0].nc.join(',');
         params.betList = contents;
-        // params.betList.push({methodId: methodItem.id.split(':')[0], projs: 1, money: params.totMoney, content});
         params.totProjs = params.betList.length;
       } else if (['zx_q2', 'zx_q3'].includes(methodItem.methodTypeName)) {
         // 直选 前二、三
@@ -234,7 +232,7 @@ class OrderBar extends Component<Props, object> {
     APIs.bet({betData: JSON.stringify(params)}).then(({success, msg}: any) => {
       this.showLoading = false;
       if (success === 1) {
-        // this.updateBalance();
+        this.props.store.user.updateBalance();
         Modal.success({
           centered: true,
           title: '投注成功',
@@ -274,7 +272,7 @@ class OrderBar extends Component<Props, object> {
             已选 <span className="txt-red">{this.props.betCount}</span> 注 共 <span className="txt-red"> {this.props.amount} </span>元
           </Col>
           <Col span={5} className="flex ai-c jc-e btns-wp">
-            <Button type="primary" className="btn-reset" onClick={this.onResetHandler}>重置</Button>
+            <Button type="primary" className="btn-reset" disabled={this.props.betCount <= 0} onClick={this.onResetHandler}>重置</Button>
             <Button type="danger" className="btn-order" disabled={this.props.betCount <= 0} onClick={this.onOrderHandler}>一键下单</Button>
           </Col>
         </Row>

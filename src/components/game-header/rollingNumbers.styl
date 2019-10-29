@@ -18,7 +18,7 @@ W4 = .52rem
     font-size F1
     position relative
     display inline-block
-    margin 0 .04rem
+    margin 0 .03rem
     
   .number
     width W1
@@ -43,7 +43,7 @@ W4 = .52rem
       color #fff
       border none
 
-.rolling-numbers.PK10
+.rolling-numbers.pk10
   .number
   .number-box
     width W3
@@ -69,7 +69,7 @@ W4 = .52rem
     line-height W3
     font-size F3
 
-.rolling-numbers.K3
+.rolling-numbers.k3
   
   .dice-box
     position relative
@@ -78,10 +78,29 @@ W4 = .52rem
     overflow hidden
     margin 0 .04rem
     vertical-align middle
-    
+    dice() {
+      display inline-block
+      width 0.5rem
+      height 0.5rem
+      background-size 0.5rem
+      margin-right 0.04rem
+    }
+    for num in 1 2 3 4 5 6 {
+      &.icon-item-{num} {
+        background url("../../assets/images/default/dice-" + num + ".png") center no-repeat
+        dice()
+      }
+      &.select.icon-item-{num} {
+        background url("../../assets/images/default/dice-red-" + num + ".png") center no-repeat
+        dice()
+      }
+    }
+
   .dice
     position relative
     box-shadow none
+  
+    
 
 .rolling-numbers.PCDD
   position relative
