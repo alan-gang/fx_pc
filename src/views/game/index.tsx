@@ -32,7 +32,6 @@ interface State {
   curTime: number;
   remainTime: number;
   openNumbers: string[];
-  numCss: string;
   curMenuIndex: number;
   curSubMenuIndex: number;
   subMethods: GameSubMethodMenu[];
@@ -83,9 +82,8 @@ class Game extends Component<Props, object> {
       curIssue: '',
       lastIssue: '',
       curTime: 0,
-      remainTime: 60 * 10 * 1000,
+      remainTime: 0,
       openNumbers: [],
-      numCss: '',
       curMenuIndex: 0,
       curSubMenuIndex: 0,
       subMethods: [],
@@ -104,9 +102,6 @@ class Game extends Component<Props, object> {
     this.getCurIssue(this.id);
     this.getUserPoint(this.id);
     this.getHistoryIssue(this.id);
-  }
-  componentWillMount() {
-
   }
   componentWillReceiveProps(nextProps: Props, nextState: State) {
     this.id = parseInt(nextProps.match.params.id || '1', 10);
@@ -316,7 +311,6 @@ class Game extends Component<Props, object> {
     });
   }
   getUserPoint(gameid: number) {
-    console.log('getUserPoint=', gameid);
     APIs.myNewPoint({gameid}).then((data: any) => {
       if (data.success === 1) {
         this.setState({odds: data.items})
@@ -325,8 +319,6 @@ class Game extends Component<Props, object> {
     });
   }
   render() {
-    // this.id = parseInt(this.props.match.params.id || '1', 10); value={gameId: this.id, gameType: this.gameType}
-    // this.gameType = getGameTypeByGameId(this.id);
     console.log('game render id=', this.id);
     return (
       <article className="game-view">
@@ -337,8 +329,8 @@ class Game extends Component<Props, object> {
             curIssue={this.state.curIssue}
             lastIssue={this.state.lastIssue}
             curTime={this.state.curTime}
+            remainTime={this.state.remainTime}
             openNumbers={this.state.openNumbers}
-            numCss={this.state.numCss}
           />
           <section className="game-main">
             <MethodMenu gameType={this.gameType} curMenuIndex={this.state.curMenuIndex} methodMenuChangedCB={this.methodMenuChangedCB} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
