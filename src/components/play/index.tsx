@@ -52,7 +52,7 @@ class Play extends Component<Props, object> {
   }
   render() {
     let curGameMethodItems = this.props.curGameMethodItems;
-    console.log('paly render');
+    // console.log('paly render');
     return (
       <article className={`play-view ${this.props.gameType}`}>
         {curGameMethodItems.map((methodItem: any, i: number) => (

@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import RollingNumbers from './rollingNumbers';
 import Timer from '../../utils/timer';
 import { timeFormat } from '../../utils/date';
+import { Select } from 'antd';
 
 import './index.styl';
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
   curTime?: number;
   remainTime: number;
   openNumbers: string[];
+  getNewestIssue(gameid: number): void;
 }
 
 interface State {
@@ -23,6 +25,8 @@ interface State {
   minutes: string;
   seconds: string;
 }
+
+const { Option } = Select;
 
 @inject("store")
 @observer
@@ -37,13 +41,13 @@ class GameHeader extends Component<Props, object> {
       minutes: '00',
       seconds: '00'
     }
-    console.log('game header constructor ', this.props.remainTime);
+    // console.log('game header constructor ', this.props.remainTime);
   }
   componentDidMount() {
     this.initTimer(this.props.remainTime);
   }
   componentWillReceiveProps(nextProps: Props) {
-    console.log('game header componentWillReceiveProps ', nextProps)
+    // console.log('game header componentWillReceiveProps ', nextProps)
     if (nextProps.remainTime !== this.state.remainTime) {
       this.setState({remainTime: nextProps.remainTime});
       this.initTimer(nextProps.remainTime);
@@ -60,7 +64,7 @@ class GameHeader extends Component<Props, object> {
     }
     timer = new Timer(Math.floor(remainTime), (t: number): void => {
       if (t <= 0) {
-        
+        this.props.getNewestIssue(this.props.gameId);
       }
       timeStr = timeFormat(t * 1000);
       times = timeStr.split(':');
@@ -68,7 +72,11 @@ class GameHeader extends Component<Props, object> {
     });
     this.setState({timer});
   }
+  onLimitLevelChanged = (value: any) => {
+    this.props.store.game.setLimitLevel(parseInt(value, 10));
+  }
   render() {
+    let store = this.props.store;
     return (
       <section className={`game-header-view flex ai-c ${this.props.gameType}`}>
         <div className={`game-logo game-header-logo-${this.props.gameId}`}>
@@ -94,11 +102,19 @@ class GameHeader extends Component<Props, object> {
           </div>
         </div>
         <div className="limit-set-wp">
-          <div>
-            <span>限红设置</span>
-            <span></span>
+          <div className="limit-set-inner-wp">
+            <span>限红设置:</span>
+            <span>
+            {store.game.limitLevelList && store.game.limitLevelList.length > 0 && 
+              <Select defaultValue={store.game.limitLevel} style={{ width: 80 }} onChange={this.onLimitLevelChanged}>
+                {store.game.limitLevelList.map((limitLevelItem: LimitLevelItem, i: number) => (
+                  <Option value={limitLevelItem.level} key={i}>{`${limitLevelItem.minAmt}-${limitLevelItem.maxAmt}`}</Option>
+                ))}
+              </Select>
+            }
+            </span>
           </div>
-          <div className="limit-explain">限红说明</div>
+          <div className="limit-explain">限红说明:</div>
         </div>
       </section>
     );

@@ -14,6 +14,8 @@ import methodItems from '../../game/methodItems';
 import APIs from '../../http/APIs';
 import { removeRepeat2DArray } from '../../utils/game';
 import { GameCommonDataContext } from '../../context/gameContext';
+import Ludan from 'comp/ludan';
+
 // import { methods } from 'src/utils/ludanMethods';
 
 import './index.styl';
@@ -32,7 +34,8 @@ interface State {
   curTime: number;
   remainTime: number;
   openNumbers: string[];
-  curMenuIndex: number;
+  curMenuIndex: number; // 玩法菜单选中玩法的index
+  curMenuEname: string; // 玩法菜单选中玩法的英语名
   curSubMenuIndex: number;
   subMethods: GameSubMethodMenu[];
   curGameMethodItems: any[];
@@ -42,6 +45,8 @@ interface State {
   defaultInitMethodItemAmount: number; // 默认初始投注金额
   totalBetCount: number;  // 总注数
   totalBetAmount: number; // 总投注金额
+  maxColumns: number;
+  maxRows: number;
 }
 
 interface DataMethodItem {
@@ -85,6 +90,7 @@ class Game extends Component<Props, object> {
       remainTime: 0,
       openNumbers: [],
       curMenuIndex: 0,
+      curMenuEname: (menus && menus[0]).ename,
       curSubMenuIndex: 0,
       subMethods: [],
       curGameMethodItems: this.getMethodItemsByIds((menus && menus[0].ids) || []),
@@ -93,25 +99,29 @@ class Game extends Component<Props, object> {
       issueList: [],
       defaultInitMethodItemAmount: 2,
       totalBetCount: 0,
-      totalBetAmount: 0
+      totalBetAmount: 0,
+      maxColumns: 30,
+      maxRows: 6
     }
     this.init();
-    console.log('game constructor id=', this.id, this.gameType);
+    // console.log('game constructor id=', this.id, this.gameType);
   }
   init() {
     this.getCurIssue(this.id);
     this.getUserPoint(this.id);
     this.getHistoryIssue(this.id);
+    this.getLimitData(this.id);
   }
   componentWillReceiveProps(nextProps: Props, nextState: State) {
     this.id = parseInt(nextProps.match.params.id || '1', 10);
     this.gameType = getGameTypeByGameId(this.id);
-    console.log('game componentWillReceiveProps id=', this.id, this.gameType);
+    // console.log('game componentWillReceiveProps id=', this.id, this.gameType);
     // console.log('game componentWillReceiveProps', nextProps, nextState);
     if (this.props.match.params.id !== nextProps.match.params.id) {
       let menus: GameMethodMenu[] = getMethodsConfigByType(this.gameType);
       this.setState({
-        curMenuIndex: 0, 
+        curMenuIndex: 0,
+        curMenuEname: menus && menus[0].ename,
         curGameMethodItems: this.getMethodItemsByIds((menus && menus[0].ids) || []),
         subMethods: (menus && menus[0].subMethods) || []
       });
@@ -151,6 +161,7 @@ class Game extends Component<Props, object> {
       totalBetCount: 0,
       totalBetAmount: 0,
       curSubMenuIndex: 0,
+      curMenuEname: method.ename
     }, this.updateOddsOfMethod);
   }
   updateSubMethods = (method: GameSubMethodMenu) => {
@@ -284,7 +295,7 @@ class Game extends Component<Props, object> {
       this.resetSelectedOfAllMethodItem();
     }
   }
-  getCurIssue(gameid: number) {
+  getCurIssue = (gameid: number) => {
     APIs.curIssue({gameid}).then((data: any) => {
       if (data.success > 0) {
         this.setState({
@@ -318,8 +329,19 @@ class Game extends Component<Props, object> {
       }
     });
   }
+  getLimitData(id: number) {
+    APIs.lottSets({lotteryIds: id}).then((data: any) => {
+      if (data.success === 1) {
+        // Object.keys(data.data).forEach((key: string) => {
+        //   this.props.store.game.setLimitList([Object.assign({id: parseInt(key, 10)}, data.data[key])]);
+        // });
+        this.props.store.game.setLimitList([Object.assign({id}, data.data[id])]);
+        this.props.store.game.setLimitLevelList(data.data[id].kqPrizeLimit);
+      }
+    });
+  }
   render() {
-    console.log('game render id=', this.id);
+    // console.log('game render id=', this.id);
     return (
       <article className="game-view">
         <GameCommonDataContext.Provider value={{gameId: this.id, gameType: this.gameType}} >
@@ -331,6 +353,7 @@ class Game extends Component<Props, object> {
             curTime={this.state.curTime}
             remainTime={this.state.remainTime}
             openNumbers={this.state.openNumbers}
+            getNewestIssue={this.getCurIssue}
           />
           <section className="game-main">
             <MethodMenu gameType={this.gameType} curMenuIndex={this.state.curMenuIndex} methodMenuChangedCB={this.methodMenuChangedCB} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
@@ -352,6 +375,7 @@ class Game extends Component<Props, object> {
               orderFinishCB={this.orderFinishCB}
               resetSelectedOfAllMethodItem={this.resetSelectedOfAllMethodItem}
             />
+            {this.state.issueList && this.state.issueList.length > 0 && <Ludan gameId={this.id} gameType={this.gameType} maxColumns={this.state.maxColumns} maxRows={this.state.maxRows} issueList={this.state.issueList} methodMenuName={this.state.curMenuEname} />}
           </section>
           <section className="recent-open"></section>
         </GameCommonDataContext.Provider>

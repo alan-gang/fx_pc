@@ -62,14 +62,6 @@ class App extends Component<Props, object> {
       }
     });
   }
-  getLimitData() {
-    // APIs.lottSets({lotteryIds: ids.join(',')})
-    //   .then((data: any) => {
-    //     if (data.success === 1) {
-        
-    //     }
-    // });
-  }
   render() {
     return (
       <ConfigProvider locale={zhCN}>

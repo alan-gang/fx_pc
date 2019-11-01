@@ -3,41 +3,115 @@ import { methods } from './ludanMethods';
 
 const subM: object[] = [{name: 'dx', title: '大小'}, {name: 'ds', title: '单双'}];
 export const methodTabs: any = {
-  ssc: [
-    {title: '总和', name: 'zh', subM},
-    {title: '万个龙', name: 'wg_lhh', subM: []},
-    {title: '万位', name: 'ww', subM},
-    {title: '千位', name: 'qw', subM},
-    {title: '百位', name: 'bw', subM},
-    {title: '十位', name: 'sw', subM},
-    {title: '个位', name: 'gw', subM}
-  ],
-  '11x5': [
-    {title: '总和', name: 'zh', subM},
-    {title: '总和尾', name: 'zhw', subM: [{name: 'wsdx', title: '大小'}, {name: 'wsds', title: '单双'}]},
-    {title: '龙虎', name: 'wg_lhh', subM: []},
-    {title: '第一位', name: 'ww', subM},
-    {title: '第二位', name: 'qw', subM},
-    {title: '第三位', name: 'bw', subM},
-    {title: '第四位', name: 'sw', subM},
-    {title: '第五位', name: 'gw', subM}
-  ],
-  pk10: [
-    {title: '冠亚和', name: 'zh', subM},
-    {title: '冠军', name: 'ww', subM},
-    {title: '亚军', name: 'qw', subM},
-    {title: '季军', name: 'bw', subM},
-    {title: '第四位', name: 'sw', subM},
-    {title: '第五位', name: 'gw', subM}
-  ],
-  k3: [
-    {title: '大小', name: 'zh_dx', subM: []},
-    {title: '单双', name: 'zh_ds', subM: []}
-  ]
+  ssc: {
+    zhenghe: [
+      {title: '总和', name: 'zh', subM},
+      {title: '万位', name: 'ww', subM},
+      {title: '千位', name: 'qw', subM},
+      {title: '百位', name: 'bw', subM},
+      {title: '十位', name: 'sw', subM},
+      {title: '个位', name: 'gw', subM}
+    ],
+    dw: [
+      {title: '万位', name: 'ww', subM},
+      {title: '千位', name: 'qw', subM},
+      {title: '百位', name: 'bw', subM},
+      {title: '十位', name: 'sw', subM},
+      {title: '个位', name: 'gw', subM}
+    ],
+    lhh: [
+      {title: '万千', name: 'wq_lhh', subM: []},
+      {title: '万百', name: 'wb_lhh', subM: []},
+      {title: '万十', name: 'ws_lhh', subM: []},
+      {title: '万个', name: 'wg_lhh', subM: []},
+      {title: '千百', name: 'qb_lhh', subM: []},
+      {title: '千十', name: 'qs_lhh', subM: []},
+      {title: '千个', name: 'qg_lhh', subM: []},
+      {title: '百十', name: 'bs_lhh', subM: []},
+      {title: '百个', name: 'bg_lhh', subM: []},
+      {title: '个位', name: 'gw_lhh', subM: []}
+    ],
+    yzzh: []
+  },
+  '11x5': {
+    zhenghe: [
+      {title: '总和', name: 'zh', subM},
+      {title: '总和尾', name: 'zhw', subM},
+      {title: '第一位', name: 'ww', subM},
+      {title: '第二位', name: 'qw', subM},
+      {title: '第三位', name: 'bw', subM},
+      {title: '第四位', name: 'sw', subM},
+      {title: '第五位', name: 'gw', subM},
+      {title: '龙虎', name: 'lh_1v2', subM: []}
+    ],
+    dw: [
+      {title: '总和', name: 'zh', subM},
+      {title: '总和尾', name: 'zhw', subM},
+      {title: '第一位', name: 'ww', subM},
+      {title: '第二位', name: 'qw', subM},
+      {title: '第三位', name: 'bw', subM},
+      {title: '第四位', name: 'sw', subM},
+      {title: '第五位', name: 'gw', subM},
+      {title: '龙虎', name: 'lh_1v2', subM: []}
+    ],
+    lh: [
+      {title: '一位VS二位', name: 'lh_1v2', subM: []},
+      {title: '一位VS三位', name: 'lh_1v3', subM: []},
+      {title: '一位VS四位', name: 'lh_1v4', subM: []},
+      {title: '一位VS五位', name: 'lh_1v5', subM: []},
+      {title: '二位VS三位', name: 'lh_2v3', subM: []},
+      {title: '二位VS四位', name: 'lh_2v4', subM: []},
+      {title: '二位VS五位', name: 'lh_2v5', subM: []},
+      {title: '三位VS四位', name: 'lh_3v4', subM: []},
+      {title: '三位VS五位', name: 'lh_3v5', subM: []},
+      {title: '四位VS五位', name: 'lh_4v5', subM: []}
+    ],
+    rx: [],
+    zux: [],
+    zx: []
+  },
+  pk10: {
+    zhenghe: [
+      {title: '冠亚和值', name: 'zh', subM},
+      {title: '冠军', name: 'd1w', subM},
+      {title: '亚军', name: 'd2w', subM},
+      {title: '季军', name: 'd3w', subM},
+      {title: '第四位', name: 'd4w', subM},
+      {title: '第五位', name: 'd5w', subM},
+      {title: '第六位', name: 'd6w', subM},
+      {title: '第七位', name: 'd7w', subM},
+      {title: '第八位', name: 'd8w', subM},
+      {title: '第九位', name: 'd9w', subM},
+      {title: '第十位', name: 'd10w', subM}
+    ],
+    lh: [
+      {title: '冠军VS第十名', name: 'hl_1v10', subM: []},
+      {title: '亚军VS第九名', name: 'hl_2v9', subM: []},
+      {title: '季军VS第八名', name: 'hl_3v8', subM: []},
+      {title: '第四名VS第七名', name: 'hl_4v7', subM: []},
+      {title: '第五名VS第六名', name: 'h1_5v6', subM: []}
+    ],
+    dwgy: [],
+    gyhz: [
+      {title: '冠亚和大小', name: 'gy_dx', subM: []},
+      {title: '冠亚和单双', name: 'gy_ds', subM: []}
+    ]
+  },
+  k3: {
+    diansu: [
+      {title: '总和大小', name: 'zh_dx', subM: []},
+      {title: '总和单双', name: 'zh_ds', subM: []}
+    ],
+    shanjun: [],
+    wqshai: [],
+    changpai: [],
+    duanpai: [],
+    yskd: []
+  }
 }
 
-export function getTabsByType(type: string): any[] {
-  return methodTabs[type];
+export function getTabsByType(type: string, methodName: string): any[] {
+  return methodTabs[type][methodName];
 }
 
 export function getSubTabByType(type: string, tabName: string): any {
@@ -79,7 +153,7 @@ export function getMethodDataByName(name: string): LudanMethod | undefined {
 }
 
 export const MAX_ROWS: number = 6;
-export const MAX_COLUMNS: number = 24;
+export const MAX_COLUMNS: number = 30;
 
 /**
  * 根据玩法获取对应的路单
@@ -100,6 +174,7 @@ export function getLuDanListByMethod(issueList: any[], type: string, name: strin
   let item: string = '';
   let ludanList: any = [];
   let codeStyles: any[];
+  let temp: any;
   issueList.forEach((issue: any, i: number) => {
     codeStyles = JSON.parse(issue.codeStyle || '[]');
     codeStyles.forEach((cs: any, j: number) => {
@@ -124,7 +199,46 @@ export function getLuDanListByMethod(issueList: any[], type: string, name: strin
           case 'sw_ds':
           case 'gw_dx':
           case 'gw_ds':
+
+          case 'd1w_dx':
+          case 'd1w_ds':
+          case 'd2w_dx':
+          case 'd2w_ds':
+          case 'd3w_dx':
+          case 'd3w_ds':
+          case 'd4w_dx':
+          case 'd4w_ds':  
+          case 'd5w_dx':
+          case 'd5w_ds':
+          case 'd6w_dx':
+          case 'd6w_ds':
+          case 'd7w_dx':  
+          case 'd7w_ds':  
+          case 'd8w_dx':  
+          case 'd8w_ds':  
+          case 'd9w_dx':  
+          case 'd9w_ds':  
+          case 'd10w_dx':  
+          case 'd10w_ds':  
             item = cs.value[mObj.pos][mObj.method.split('_')[1]];
+            break;
+          case '1v2':
+          case '1v3':
+          case '1v4':
+          case '1v5':
+          case '1v10':  
+          case '2v3':
+          case '2v4':
+          case '2v5':
+          case '2v9':  
+          case '3v4':
+          case '3v5':
+          case '3v8':
+          case '4v5':
+          case '4v7':
+          case '5v6':
+            temp = cs.data && cs.data.find((item: any) => mObj.method === item.pos);
+            item = temp && temp.val || '';
             break;
           default:
             break;
