@@ -104,6 +104,9 @@ for x in -100 -80 -50  -44 -40 -30 -20 -10 -5 -3 -2 0 1 2 3 5 10 15 20 25 30 34 
 .jc-e {
   justify-content flex-end
 }
+.jc-s-b {
+  justify-content space-between  
+}
 .ai-c {
   align-items center
 }
@@ -140,6 +143,15 @@ for x in -100 -80 -50  -44 -40 -30 -20 -10 -5 -3 -2 0 1 2 3 5 10 15 20 25 30 34 
 .txt-r {
   text-align right
 }
+
+.t-yellow {
+  color $text-yellow!important
+}
+.f-14 {
+  font-size .14rem
+}
+.m-r-10
+  margin-right .1rem
 
 cntEl() {
   content ' '
@@ -181,21 +193,40 @@ cntEl() {
   cursor pointer
 }
 
-// .code-bg {
-//   &.bgc-r {
-//     background $ludan-open-item-bg-color-red
-//   }
-//   &.bgc-g {
-//     background $ludan-open-item-bg-color-green
-//   }
-//   &.bgc-b {
-//     background $ludan-open-item-bg-color-blue
-//   }
-//   &.bgc-y {
-//     background $ludan-open-item-bg-color-yellow
-//     color #000
-//   }
-// }
+.code-bg {
+  &.bgc-r {
+    background #f42f3f
+    color #fff
+  }
+  &.bgc-g {
+    background #64cda7
+    color #fff
+  }
+  &.bgc-b {
+    background #51a0ef
+    color #fff
+  }
+  &.bgc-y {
+    background $text-orange
+    color #fff
+  }
+}
+.code-bg,
+.status-b {
+  min-width 0.6rem
+  height 0.25rem
+  line-height 0.25rem
+  color $fc
+  padding 0 0.1rem
+  border-radius: 2px
+  box-sizing: border-box
+}
+.text-green
+  color $text-green
+.text-r
+  color $text-red
+.text-gray
+  color $text-gray
 
 .no-data {
   color $no-data-txt-color
@@ -214,3 +245,58 @@ cntEl() {
     border-color #ff7875
   }
 }
+
+.clearfix:after
+  visibility hidden
+  display block
+  font-size 0
+  content ""
+  clear both
+  height 0
+
+.inline-item
+  display inline-block
+
+
+.self-scroll ::-webkit-scrollbar {
+  width:4px;
+}
+/* 滚动槽 */
+
+.self-scroll ::-webkit-scrollbar-track {
+  -webkit-box-shadow:inset006pxrgba(0,0,0,0.3);
+  border-radius:10px;
+}
+/* 滚动条滑块 */
+
+.self-scroll ::-webkit-scrollbar-thumb {
+  border-radius:10px;
+  background:rgba(255,255,255,0.8);
+  -webkit-box-shadow:inset006pxrgba(0,0,0,0.5);
+}
+
+.self-scroll ::-webkit-scrollbar-thumb:window-inactive {
+  background:rgba(0,0,0,0.4);
+}
+
+.page-title
+  display inline-block
+  border-top 3px solid $text-orange
+  color $text-orange
+  line-height .42rem
+  box-sizing border-box
+  padding 0 .2rem
+  background linear-gradient(to bottom, #fff, #e7e7e7)
+
+.bg-orange
+  background-color $text-orange
+  color #fff
+.self-btn
+  display inline-block
+  border-radius 3px
+  text-align center
+  line-height .3rem
+  cursor pointer
+  transition: .2s ease
+  &:hover
+    opacity .85

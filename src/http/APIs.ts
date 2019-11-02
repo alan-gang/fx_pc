@@ -112,6 +112,11 @@ export function getLotterys() {
   return http.get('/report/OrderReport.do?method=getLotterys');
 }
 
+// 获取投注提醒数据
+export function getBetRemind() {
+  return http.get('/userpoint.do?method=getBetNotifyData');
+}
+
 export default {
   curIssue,
   historyIssue,
@@ -126,5 +131,6 @@ export default {
   sysNotices,
   getUserPrefence,
   lottSets,
-  getLotterys
+  getLotterys,
+  getBetRemind
 };

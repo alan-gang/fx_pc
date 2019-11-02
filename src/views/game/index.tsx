@@ -14,6 +14,9 @@ import methodItems from '../../game/methodItems';
 import APIs from '../../http/APIs';
 import { removeRepeat2DArray } from '../../utils/game';
 import { GameCommonDataContext } from '../../context/gameContext';
+import { Icon } from 'antd'
+import RecentOpen from '../../components/recent-open/RecentOpen'
+import BetRemind from '../../components/bet-remind/BetRemind'
 // import { methods } from 'src/utils/ludanMethods';
 
 import './index.styl';
@@ -43,6 +46,7 @@ interface State {
   defaultInitMethodItemAmount: number; // 默认初始投注金额
   totalBetCount: number;  // 总注数
   totalBetAmount: number; // 总投注金额
+  tabIndex: number; //  
 }
 
 interface DataMethodItem {
@@ -95,7 +99,8 @@ class Game extends Component<Props, object> {
       issueList: [],
       defaultInitMethodItemAmount: 2,
       totalBetCount: 0,
-      totalBetAmount: 0
+      totalBetAmount: 0,
+      tabIndex: 0
     }
     this.init();
     console.log('game constructor id=', this.id, this.gameType);
@@ -106,7 +111,7 @@ class Game extends Component<Props, object> {
     this.getHistoryIssue(this.id);
   }
   componentWillMount() {
-
+    
   }
   componentWillReceiveProps(nextProps: Props, nextState: State) {
     this.id = parseInt(nextProps.match.params.id || '1', 10);
@@ -324,6 +329,13 @@ class Game extends Component<Props, object> {
       }
     });
   }
+
+  changeTabIndex = (idx: number) => {
+    this.setState({
+      tabIndex: idx
+    })
+  }
+
   render() {
     // this.id = parseInt(this.props.match.params.id || '1', 10); value={gameId: this.id, gameType: this.gameType}
     // this.gameType = getGameTypeByGameId(this.id);
@@ -361,7 +373,15 @@ class Game extends Component<Props, object> {
               resetSelectedOfAllMethodItem={this.resetSelectedOfAllMethodItem}
             />
           </section>
-          <section className="recent-open"></section>
+          <div className="recent-open">
+            <div className="tabs">
+              <span className={ `tab ${ this.state.tabIndex === 0 ? 'active' : '' }` } onClick={ () => this.changeTabIndex(0) }>近期开奖</span>
+              <span className={ `tab ${ this.state.tabIndex === 1 ? 'active' : '' }` } onClick={ () => this.changeTabIndex(1) }>投注提醒 <Icon theme="filled" type="setting" /></span>
+            </div>
+            {
+              this.state.tabIndex === 0 ? <RecentOpen gameId={this.state.id} /> : <BetRemind />
+            }
+          </div>
         </GameCommonDataContext.Provider>
       </article>
     );

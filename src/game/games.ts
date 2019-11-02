@@ -83,4 +83,12 @@ export function getGameTypeByGameId(id: number): string {
   return '';
 }
 
+export function getAllGames() {
+  let arr:any = []
+  for (let i = 0; i < games.length; i++) {
+    arr = arr.concat(games[i].items)
+  }
+  return arr
+}
+
 export default games;

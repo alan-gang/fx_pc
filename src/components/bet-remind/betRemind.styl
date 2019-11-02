@@ -1,0 +1,75 @@
+.bet-remind-list
+  padding-top .1rem
+  flex 1
+  overflow-y scroll
+  .bet-remind
+    padding-bottom .12rem
+    &-header
+      background $recent-open-header-bg-color
+      height .32rem
+      line-height .32rem
+      border-top 1px solid $border-color
+      padding-left 8px
+      color $fc
+      .tigger
+        display inline-block
+        padding 0 8px
+        line-height .32rem
+        cursor pointer
+        transition .2s ease
+        &.open
+          transform rotate(180deg)
+    &-ludan
+      height 1.55rem
+      background-color #ccc
+    &-play
+      padding 0 8px
+      .lottery
+        line-height .3rem
+        overflow hidden
+        span
+          display inline-block
+          width 50%
+          float left
+          &.issue
+            color $fc
+      .bet-list
+        .bet-item
+          line-height .25rem
+          display flex
+          align-items center
+          margin-bottom 10px
+          .bet-ball
+            display inline-block
+            height .25rem
+            width .25rem
+            line-height .25rem
+            text-align center
+            background-color #f7f7f8
+            color $fc2
+            border-radius 50%
+            border 1px solid #d8d8d8
+          .odd
+            color $colors.yellow
+            margin-left 5px
+            margin-right 10px
+          input
+            border 1px solid $border-color
+            outline none
+            box-sizing border-box
+            width .6rem
+            padding 0 6px
+            line-height .22rem
+        .bet-now
+          width .84rem
+          line-height .28rem
+          text-align center
+          color #fff
+          border-radius 3px
+          background linear-gradient(to right bottom, #e97a00, #f5531a)
+          cursor pointer
+
+
+
+
+        

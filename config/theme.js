@@ -8,7 +8,9 @@ const themeFiles = {
 
 // 默认主题
 const defaultFiles = [
-  '../src/assets/style/theme/default.styl'
+  '../src/assets/style/theme/default.styl',
+  // 函数
+  '../src/assets/style/common/functions.styl'
 ]
 
 // 全局样式文件
