@@ -230,7 +230,7 @@ class BetRecords extends Component<Props, object> {
         {
           title: '投注内容',
           dataIndex: 'code',
-          render: (code: string) => <span className={`inlb txt-c code-bg ${ this.getStyle(code) }`}>{code}</span>
+          render: (code: string, record: any) => <div><span className={`inlb txt-c code-bg ${ this.getStyle(code) }`}>{code}</span><span className="odd text-orange">{ (record.dyPointDec.split('-')[0] / 100).toFixed(2) }</span></div>
         },
         {
           title: '期号',
@@ -285,6 +285,20 @@ class BetRecords extends Component<Props, object> {
     return record.projectId
   }
 
+  goSearch = () => {
+    this.setState({
+      currentPage: 1
+    }, () => {
+      this.getOrderList()
+    })
+  }
+
+  handleInputChange = (e: any) => {
+    this.setState({
+      id: e.target.value
+    })
+  }
+
   render() {
     return (
       <article className="bet-records-view">
@@ -311,10 +325,10 @@ class BetRecords extends Component<Props, object> {
             </label>
             <label>
               <span>编号</span>
-              <Input className="number-input" value={this.state.id} type="text" placeholder="请输入编号" />
+              <Input className="number-input" onChange={this.handleInputChange} value={this.state.id} type="text" placeholder="请输入编号" />
             </label>
             <label>
-              <span className="self-btn bg-orange" onClick={this.getOrderList}>查询</span>
+              <span className="self-btn bg-orange" onClick={this.goSearch}>查询</span>
             </label>
           </div>
           <Table rowKey={this.getRowKey} pagination={{onChange: this.onCurrentPageChange, onShowSizeChange: this.onShowSizeChange,showSizeChanger: true, pageSizeOptions: ['20', '50', '100'], defaultPageSize: this.state.pageSize, current: this.state.currentPage, total: this.state.totalSize}} columns={this.getcols()} dataSource={this.state.orderList} />
