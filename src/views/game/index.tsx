@@ -375,7 +375,7 @@ class Game extends Component<Props, object> {
               orderFinishCB={this.orderFinishCB}
               resetSelectedOfAllMethodItem={this.resetSelectedOfAllMethodItem}
             />
-            {this.state.issueList && this.state.issueList.length > 0 && <Ludan gameId={this.id} gameType={this.gameType} maxColumns={this.state.maxColumns} maxRows={this.state.maxRows} issueList={this.state.issueList} methodMenuName={this.state.curMenuEname} />}
+            {this.state.issueList && this.state.issueList.length > 0 && <Ludan gameId={this.id} gameType={this.gameType} maxColumns={this.state.maxColumns} maxRows={this.state.maxRows} issueList={this.state.issueList.reverse()} methodMenuName={this.state.curMenuEname} />}
           </section>
           <section className="recent-open"></section>
         </GameCommonDataContext.Provider>

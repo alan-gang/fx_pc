@@ -24,19 +24,19 @@ class LundanMenu extends Component<Props, object> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      subMenus: this.getSubMenusOfMenu(this.props.selectedMenu)
+      subMenus: this.getSubMenusByName(this.props.menus, this.props.selectedMenu)
     }
   }
-  getMenuByName(name: string = '') {
-    return this.props.menus.find((menu: any) => name === menu.name);
+  getMenuByName(menus: any[] = [], name: string = '') {
+    return menus.find((menu: any) => name === menu.name);
   }
-  getSubMenusOfMenu(selectedMenu: string = ''): any[] {
-    let menu = this.getMenuByName(selectedMenu);
+  getSubMenusByName(menus: any[], selectedMenu: string = ''): any[] {
+    let menu = this.getMenuByName(menus, selectedMenu);
     return menu && menu.subM || [];
   }
   componentWillReceiveProps(nextProps: Props, nextState: State) {
     if (this.props.selectedMenu !== nextProps.selectedMenu || this.props.selectedSubMenu !== nextProps.selectedSubMenu) {
-      this.setState({subMenus: this.getSubMenusOfMenu(nextProps.selectedMenu)})
+      this.setState({subMenus: this.getSubMenusByName(nextProps.menus, nextProps.selectedMenu)})
     }
   }
   render() {

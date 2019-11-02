@@ -46,7 +46,7 @@ class Ludan extends Component<Props, object> {
     }
   }
   getMenuByMenuName(menus: any[], menuName: string): any {
-    return menus.find((menu) => menuName === menu.name) || {};
+    return menus.find((menu) => menuName === menu.name);
   }
   updateMenu = (menu: any) => {
     this.setState({
