@@ -302,7 +302,7 @@ class BetRecords extends Component<Props, object> {
   render() {
     return (
       <article className="bet-records-view">
-        <div className="page-title active">投注提醒</div>
+        <div className="page-title active">投注记录</div>
         <div className="container">
           <div className="search">
             <div className="time-group">
