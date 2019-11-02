@@ -12,7 +12,7 @@ export const routes = [
       title: '大厅',
       exact: true,
       path: '/',
-      component: lazy(() => import('../views/hobby'))
+      component: lazy(() => import('../views/lobby'))
     },
     {
       title: '游戏',
