@@ -211,6 +211,31 @@ cntEl() {
     color #fff
   }
 }
+
+.ld-item {
+  width 0.20rem
+  height 0.20rem
+  line-height 0.20rem
+  &.txt-r {
+    color #f42f3f // $ludan-open-item-bg-color-red
+  }
+  &.txt-g {
+    color #1aaf1a // $ludan-open-item-bg-color-green
+  }
+  &.txt-b {
+    color #009bc7 // $ludan-open-item-bg-color-blue
+  }
+  &.txt-y {
+    color #fbff00 // $ludan-open-item-bg-color-yellow
+  }
+  // &.icon-cur {
+  //   bg($ludan-open-item-icon-cur)
+  // }
+  // &.icon-qs {
+  //   bg($ludan-open-item-icon-qs)
+  // }
+}
+
 .code-bg,
 .status-b {
   min-width 0.6rem
@@ -293,6 +318,9 @@ cntEl() {
 .bg-orange
   background-color $text-orange
   color #fff
+.bg-white {
+  background-color $theme-bg-color
+}
 .self-btn
   display inline-block
   border-radius 3px
@@ -302,3 +330,12 @@ cntEl() {
   transition: .2s ease
   &:hover
     opacity .85
+
+
+.modal-root-c {
+  position fixed
+  left 0
+  top 0
+  width 100%
+  height 100%
+}

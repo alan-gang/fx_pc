@@ -33,8 +33,8 @@ class Lobby extends Component<Props, object> {
       curGames
     }
   }
-  gotoHandler = () => {
-    // this.props.history.push('/game?id=1')
+  goto = (path: string) => {
+    this.props.history.push(path)
   }
   onMenuChanged = (type: string) => {
     this.setState({curGames: type === this.DEFAULT_GAME_TYPE ? getAllGames() : getGamesByType(type)})
@@ -46,7 +46,7 @@ class Lobby extends Component<Props, object> {
         <LobbyMenu onMenuChanged={this.onMenuChanged} />
         <section className="flex lobby-game-ls">
           {this.state.curGames.map((game: Game) => (
-            <LobbyGame key={game.id} gameType={this.state.curGameType} gameId={game.id} curIssue={'12345677'}/>
+            <LobbyGame key={game.id} gameType={this.state.curGameType} gameId={game.id} goto={this.goto}/>
           ))}
         </section>
       </article>

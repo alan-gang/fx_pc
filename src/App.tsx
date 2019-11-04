@@ -11,6 +11,7 @@ import zhCN from 'antd/es/locale/zh_CN';
 import moment from 'moment';
 import APIs from './http/APIs';
 import { getUrlParams } from './utils/common';
+import { getAllGameIds } from './game/games';
 
 import 'moment/locale/zh-cn';
 import 'antd/dist/antd.less';
@@ -23,8 +24,9 @@ moment.locale('zh-cn');
 class App extends Component<Props, object> {
   constructor(props: Props) {
     super(props);
+    this.init();
   }
-  componentWillMount() {
+  init() {
     let sessionData: any = sessionStorage.getItem('sessionData');
     let agentCode = getUrlParams('agentCode');
     let param = getUrlParams('param');
@@ -36,6 +38,10 @@ class App extends Component<Props, object> {
       data = JSON.parse(sessionData);
     }
     this.autoLogin(data);
+    this.getLimitData(getAllGameIds());
+  }
+  componentWillMount() {
+    
     this.getCfgInfo();
   }
   autoLogin(params: object) {
@@ -60,6 +66,17 @@ class App extends Component<Props, object> {
     APIs.getUserPrefence().then((data: any) => {
       if (data.success === 1) {
         // this.setMenuList(data.menuList);
+      }
+    });
+  }
+  getLimitData(ids: number[]) {
+    APIs.lottSets({lotteryIds: ids.join(',')}).then((data: any) => {
+      if (data.success === 1) {
+        Object.keys(data.data).forEach((key: string) => {
+          store.game.setLimitList([Object.assign({id: parseInt(key, 10)}, data.data[key])]);
+        });
+        // this.props.store.game.setLimitList([Object.assign({id}, data.data[id])]);
+        // this.props.store.game.setLimitLevelList(data.data[id].kqPrizeLimit);
       }
     });
   }
