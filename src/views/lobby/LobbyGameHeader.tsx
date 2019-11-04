@@ -66,6 +66,17 @@ class LobbyGameHeader extends Component<Props, object> {
     });
     this.setState({timer});
   }
+  clearTimer(): void {
+    if (this.state.timer && this.state.timer.close) {
+      console.log('LobbyGameHeader clearTimer')
+      this.state.timer.close();
+      this.state.timer = null;
+    }
+  }
+  componentWillUnmount() {
+    console.log('LobbyGameHeader componentWillUnmount');
+    this.clearTimer();
+  }
   render() {
     return (
       <section className="flex ai-c lobby-game-header-view">

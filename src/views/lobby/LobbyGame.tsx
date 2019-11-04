@@ -52,10 +52,12 @@ class LobbyGame extends Component<Props, object> {
     return (
       <section className="lobby-game-view">
         <LobbyGameHeader gameType={this.props.gameType} gameId={this.props.gameId} curIssue={this.props.curIssue} remainTime={1234} getNewestIssue={this.getNewestIssue} />
-        {this.state.issueList && this.state.issueList.length > 0 && <Ludan gameId={this.state.id} gameType={this.state.gameType} maxColumns={this.state.maxColumns} maxRows={this.state.maxRows} issueList={this.state.issueList.reverse()} methodMenuName={'zhenghe'} />}
-        <Row>
+        <div className="ludan-wp">
+          {this.state.issueList && this.state.issueList.length > 0 && <Ludan gameId={this.state.id} gameType={this.state.gameType} maxColumns={this.state.maxColumns} maxRows={this.state.maxRows} issueList={this.state.issueList.reverse()} methodMenuName={'zhenghe'} />}
+        </div>
+        <Row className="footer-bar">
           <Col span={12}>xxxx</Col>
-          <Col span={12}>
+          <Col span={12} className="txt-r">
             <Button type="danger" className="btn-into-game" onClick={this.onIntoGame}>进入游戏</Button>
           </Col>
         </Row>
