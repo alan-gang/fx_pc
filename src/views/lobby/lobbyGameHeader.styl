@@ -1,0 +1,60 @@
+.lobby-game-header-view {
+  height 0.66rem
+  padding 0 0.2rem
+  .game-logo {
+    width 1.9rem
+    height 100%
+    background-position left center
+    background-repeat no-repeat
+    background-size 1.8rem 0.5rem
+    position relative
+    for n, i in $game-ids {
+      &.game-header-logo-{n} {
+          background-image url('../../assets/images/default/gameheader/ng/' + n + '.png');
+      }
+      &.game-header-ds-icon-game-wbwfc {
+          background-size 1.85rem
+      }
+    }
+  }
+  .flex1 {
+    flex 1
+  }
+  .cur-issue-wp {
+    padding-right 0.1rem
+    >div {
+      span:first-child {
+        color $theme-txt-color-7
+      }
+      span:last-child {
+        color $theme-txt-color-8
+      }
+    }
+  }
+  .time-wp {
+    // width 2rem
+    height 0.26rem
+    border-radius 0.05rem
+    font-size $lobby-game-header-time-font-size
+    .hour-wp,
+    .minute-wp,
+    .second-wp {
+      font-weight bold
+    }
+    .colon {
+      width 0.2rem
+      text-align center
+      color $theme-txt-color-9
+    }
+    .time-item {
+      width 0.2rem
+      line-height 0.26rem
+      text-align center
+      background-color $lobby-game-header-time-item-bg-color
+      border-radius 0.04rem
+    }
+    .mg-r-3 {
+      margin-right 0.03rem
+    }
+  }
+}

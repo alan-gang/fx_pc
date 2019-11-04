@@ -85,7 +85,7 @@ class OrderBar extends Component<Props, object> {
       isusefree: 0,
       betList: [],
       isFastBet: 1,
-      limitLevel: 2
+      limitLevel: this.props.store.game.limitLevel
     };
     let pos: string = '';
     let val: string = '';

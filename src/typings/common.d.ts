@@ -4,3 +4,12 @@ interface LimitLevelItem {
   minAmt: number;
   maxAmt: number;
 }
+
+interface LimitListItem {
+  id: number;
+  bestLudan: any;
+  dtMaxPrize: string;
+  dzMaxPrize: string;
+  kqPrizeLimit: LimitLevelItem[];
+  [prop: string]: any;
+}

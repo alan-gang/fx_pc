@@ -1,5 +1,6 @@
 
 import { GameCategory, Game } from '../typings/games';
+import game from 'src/store/game';
 
 let games: GameCategory[] = [
   {
@@ -83,12 +84,17 @@ export function getGameTypeByGameId(id: number): string {
   return '';
 }
 
+export function getGamesByType(type: string): Game[] {
+  let gameCategory = games.find((gameCategory: GameCategory) => gameCategory.type === type);
+  return gameCategory && gameCategory.items || [];
+}
+
 export function getAllGames() {
-  let arr:any = []
-  for (let i = 0; i < games.length; i++) {
-    arr = arr.concat(games[i].items)
-  }
-  return arr
+  let allGames: Game[] = [];
+  games.forEach((gameCategory: GameCategory) => {
+    allGames = allGames.concat(gameCategory.items);
+  });
+  return allGames;
 }
 
 export default games;
