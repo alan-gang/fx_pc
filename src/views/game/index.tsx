@@ -14,8 +14,10 @@ import methodItems from '../../game/methodItems';
 import APIs from '../../http/APIs';
 import { removeRepeat2DArray } from '../../utils/game';
 import { GameCommonDataContext } from '../../context/gameContext';
+import { Icon } from 'antd'
+import RecentOpen from '../../components/recent-open/RecentOpen'
+import BetRemind from '../../components/bet-remind/BetRemind'
 import Ludan from 'comp/ludan';
-
 // import { methods } from 'src/utils/ludanMethods';
 
 import './index.styl';
@@ -45,6 +47,7 @@ interface State {
   defaultInitMethodItemAmount: number; // 默认初始投注金额
   totalBetCount: number;  // 总注数
   totalBetAmount: number; // 总投注金额
+  tabIndex: number; //  
   maxColumns: number;
   maxRows: number;
 }
@@ -100,6 +103,7 @@ class Game extends Component<Props, object> {
       defaultInitMethodItemAmount: 2,
       totalBetCount: 0,
       totalBetAmount: 0,
+      tabIndex: 0,
       maxColumns: 30,
       maxRows: 6
     }
@@ -329,6 +333,13 @@ class Game extends Component<Props, object> {
       }
     });
   }
+
+  changeTabIndex = (idx: number) => {
+    this.setState({
+      tabIndex: idx
+    })
+  }
+
   getLimitData(id: number) {
     APIs.lottSets({lotteryIds: id}).then((data: any) => {
       if (data.success === 1) {
@@ -377,7 +388,15 @@ class Game extends Component<Props, object> {
             />
             {this.state.issueList && this.state.issueList.length > 0 && <Ludan gameId={this.id} gameType={this.gameType} maxColumns={this.state.maxColumns} maxRows={this.state.maxRows} issueList={this.state.issueList.reverse()} methodMenuName={this.state.curMenuEname} />}
           </section>
-          <section className="recent-open"></section>
+          <div className="recent-open">
+            <div className="tabs">
+              <span className={ `tab ${ this.state.tabIndex === 0 ? 'active' : '' }` } onClick={ () => this.changeTabIndex(0) }>近期开奖</span>
+              <span className={ `tab ${ this.state.tabIndex === 1 ? 'active' : '' }` } onClick={ () => this.changeTabIndex(1) }>投注提醒 <Icon theme="filled" type="setting" /></span>
+            </div>
+            {
+              this.state.tabIndex === 0 ? <RecentOpen gameId={this.state.id} /> : <BetRemind />
+            }
+          </div>
         </GameCommonDataContext.Provider>
       </article>
     );

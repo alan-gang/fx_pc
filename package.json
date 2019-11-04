@@ -13,6 +13,7 @@
     "@types/qs": "^6.5.3",
     "@types/react": "16.9.5",
     "@types/react-dom": "16.9.1",
+    "@types/react-infinite-scroll-component": "^4.2.5",
     "@types/react-router-dom": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "^2.2.0",
     "@typescript-eslint/parser": "^2.2.0",

@@ -1,0 +1,70 @@
+  .recent-open
+    width 2.9rem
+    height calc(100% - .8rem)
+    border 1px solid $border-color
+    border-top none
+    position absolute
+    right 6px
+    top .8rem
+    display flex
+    flex-direction column
+
+    .recent-open-comp
+      font-size 12px
+      flex 1
+      display flex
+      flex-direction column
+      .recent-list
+        overflow-y auto
+        flex 1
+        padding 0 .12rem
+        .recent-item
+          border-bottom 1px dashed $border-color
+          > div
+            padding 0!important
+      .recent-item
+        display flex  
+        justify-content space-around
+        line-height .3rem
+        text-align center
+        box-sizing border-box
+        > div:first-child
+          width 30%
+          padding-left .12rem
+        > div:nth-child(3)
+          width 30%
+          padding-right .12rem
+        > div:nth-child(2)
+          flex 1
+      .recent-open-header
+        color $fc3
+        line-height .36rem
+        border-bottom 1px solid $border-color
+    .tabs
+      line-height .38rem
+      .tab
+        display inline-block
+        width 50%
+        box-sizing border-box
+        text-align: center
+        color #333
+        font-size 12px
+        font-weight bold
+        background-color $recent-open-header-bg-color
+        border 1px solid $border-color
+        transition .2s ease
+        vertical-align: top
+        cursor pointer
+        &:nth-child(1)
+          border-left none
+        &:nth-child(2)
+          border-right none
+        i.anticon-setting
+          font-size 16px
+          transform translateY(1px)
+          margin-left 4px
+        &.active
+          color $theme-txt-color-6
+          background-color #fff
+          border none
+          border-top 2px solid $theme-txt-color-6

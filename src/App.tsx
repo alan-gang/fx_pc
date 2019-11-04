@@ -40,6 +40,7 @@ class App extends Component<Props, object> {
   }
   autoLogin(params: object) {
     APIs.signIn(params).then((data: any) => {
+      store.user.setName(data.userName);
       this.getUserPrefence();
       this.updateBalance();
     })

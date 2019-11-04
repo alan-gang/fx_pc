@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Row, Col } from 'antd';
+import { Icon } from 'antd';
+import { useHistory, NavLink } from 'react-router-dom'
+
 import './index.styl';
 @inject("store")
 @observer
@@ -34,28 +36,36 @@ class Header extends Component<Props, object> {
     super(props);
   }
   render() {
-    console.log(this.props.store.user.name);
     return (
       <section className="header-view flex ai-c">
-        <div className="icon-logo"></div>
-        <div></div>
-        <Row className="flex ai-c">
-          <Col className="username-wp flex ai-c r-cir jc-e pos-r mgr-30">
-            <i className="icon-avatar pos-r">
-              <img src={this.imgSrc} />
-            </i>
-            <i className="txt-c"></i>
-          </Col>
-          <Col className="flex ai-c r-cir jc-e balance-wp pos-r">
-            <i className="inlb icon-money"></i>
-            <span>
-              <i className="inlb fs-18">{}</i>
-              <i className="inlb">元</i>
-            </span>
-          </Col>
-        </Row>
+        <div className="wrap">
+          <div className="icon-logo"></div>
+          <div className="inline-item">
+            会员账号：<span className="username t-yellow f-14">{ this.props.store.user.name }</span>
+          </div>
+          <div className="inline-item bg-icon-money">
+            <Icon className="m-r-10" type="pay-circle" />账户余额：{ this.props.store.user.balance }
+          </div>
+          <div className="navs flt-r">
+            { this.getNavList() }
+          </div>
+        </div>
       </section>
     )
+  }
+
+  public getNavList() {
+    return this.menus.map((nav) => {
+      return (
+        <NavLink 
+          className="nav-item"
+          key={nav.id}
+          to={nav.route}
+        >
+          {nav.name}
+        </NavLink>
+      )
+    })
   }
 }
 

@@ -1,0 +1,51 @@
+.bet-records-view
+  min-height 8.26rem
+  background #e7e7e7
+  box-sizing border-box
+  padding 0 .1rem .4rem
+  .code-bg
+    margin-right .1rem
+  .search
+    padding .2rem
+    line-height .3rem
+    display flex
+    justify-content flex-start
+    background-color #fff
+    .time-group
+      .item
+        display inline-block
+        width .8rem
+        border-radius 3px 
+        border 1px solid $border-color
+        text-align: center
+        color $fc
+        margin-left 8px
+        background-color #fbfbfb
+        transition .2s ease
+        cursor pointer
+        &.active
+          background $text-orange
+          border-color $text-orange
+          color #fff
+    .lottery-select
+      width 1.44rem
+    label
+      margin-left .14rem
+      span
+        margin-right 8px
+      .number-input
+        width 1.2rem
+      .self-btn
+        width 1rem
+  .ant-table-thead > tr > th
+    background linear-gradient(to bottom, #ccc, #e6e6e6)
+  .ant-table-tbody > tr > td
+    white-space: nowrap
+    border none
+  .ant-table-tbody > tr:nth-child(odd) > td
+    background #fff
+  .ant-table-tbody > tr:nth-child(even) > td
+    background #fafafa
+  .ant-table-body th
+  .ant-table-body td
+    text-align: center
