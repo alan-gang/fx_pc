@@ -37,7 +37,7 @@ class Ludan extends Component<Props, object> {
     let selectedMenu = this.props.defaultMenu || ((menus && menus.length > 0) ? menus[0].name : '');
     let menuItem = this.getMenuByMenuName(menus, selectedMenu);
     let selectedSubMenu = menuItem && menuItem.subM.length > 0 ? this.props.defaultSubMenu || menuItem.subM[0].name : '';
-    let ludanList = getLuDanListByMethod(this.props.issueList.slice(0), this.props.gameType,  `${selectedMenu}${!!selectedSubMenu ? '_' : ''}${selectedSubMenu}`) || []
+    let ludanList = getLuDanListByMethod(this.props.issueList.slice(0), this.props.gameType,  `${selectedMenu}${!!selectedSubMenu ? '_' : ''}${selectedSubMenu}`, this.props.maxRows, this.props.maxColumns) || []
     this.state = {
       menus,
       selectedMenu,

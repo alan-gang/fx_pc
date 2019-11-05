@@ -124,6 +124,38 @@ export function getSubTabByType(type: string, tabName: string): any {
   return null;
 }
 
+// 根据 codeStyle 反推 methodName
+export function getMethodName(type: string, codeStyle: string) {
+  let tabs = methodTabs[type]
+  let keys = Object.keys(tabs)
+  let methodName = ''
+  keys.some(key => {
+    return tabs[key].some((obj: any) => {
+      if (obj.name === codeStyle || obj.name === codeStyle.split('_')[0]) {
+        methodName = key
+        return true
+      }
+      return false
+    })
+  })
+  return methodName
+}
+
+// 获取没有二级菜单的 methodName
+export function getNoSubMenuMethods(type: string) {
+  let tabs = methodTabs[type]
+  let keys = Object.keys(tabs)
+  let arr: any[] = []
+  keys.forEach(key => {
+    tabs[key].forEach((obj: any) => {
+      if (!obj.subM.length) {
+        arr.push(obj.name)
+      }
+    })
+  })
+  return arr
+}
+
 /**
  * 根据名字获取tab
  * @param type 游戏类别
