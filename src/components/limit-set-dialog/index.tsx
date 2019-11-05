@@ -9,6 +9,7 @@ interface Props {
   isShowMask?: boolean;
   isShow: boolean;
   gameId: number;
+  limitLevelList: LimitLevelItem[]
   onLimitChoiceCB(level: number): void;
   onCloseHandler?: () => void;
 }
@@ -40,9 +41,9 @@ class LimitSetDialog extends Component<Props, object> {
             <section className={`game-logo logo-${this.props.gameId}`}></section>
             <p className="txt-c mgt-35">选择限红进入游戏</p>
             <section className="flex jc-c limit-list">
-              <Button type="danger" className="crs-p btn-limit-amount" onClick={()=>this.onLimitChoiceHandler(1)}>10-2000</Button>
-              <Button type="danger" className="crs-p btn-limit-amount" onClick={()=>this.onLimitChoiceHandler(2)}>10-2000</Button>
-              <Button type="danger" className="crs-p btn-limit-amount" onClick={()=>this.onLimitChoiceHandler(3)}>10-2000</Button>
+              {this.props.limitLevelList.map((item: LimitLevelItem, i: number) => (
+                <Button key={i} type="danger" className="crs-p btn-limit-amount" onClick={()=>this.onLimitChoiceHandler(item.level)}>{item.minAmt}-{item.maxAmt}</Button>
+              ))}
             </section>
           </div>
         </BaseModal>

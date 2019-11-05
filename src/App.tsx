@@ -75,8 +75,6 @@ class App extends Component<Props, object> {
         Object.keys(data.data).forEach((key: string) => {
           store.game.setLimitList([Object.assign({id: parseInt(key, 10)}, data.data[key])]);
         });
-        // this.props.store.game.setLimitList([Object.assign({id}, data.data[id])]);
-        // this.props.store.game.setLimitLevelList(data.data[id].kqPrizeLimit);
       }
     });
   }

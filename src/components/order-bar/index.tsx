@@ -77,6 +77,7 @@ class OrderBar extends Component<Props, object> {
   getParams(): object {
     let props = this.props;
     let curGameMethodItems = props.curGameMethodItems;
+    let curGameLimitLevel = props.store.game.getGameLimitLevelByGameId(props.gameId);
     let params: any = {
       lotteryId: props.gameId,
       issue: props.curIssue,
@@ -85,7 +86,7 @@ class OrderBar extends Component<Props, object> {
       isusefree: 0,
       betList: [],
       isFastBet: 1,
-      limitLevel: this.props.store.game.limitLevel
+      limitLevel: curGameLimitLevel && curGameLimitLevel.level || 1
     };
     let pos: string = '';
     let val: string = '';

@@ -9,6 +9,7 @@ class MyGame {
   @observable limitLevel: number = 1; // 限红级别
   @observable limitLevelList: LimitLevelItem[] = [];
   @observable limitList: LimitListItem[] = []; // 限红
+  @observable setGamesLimitLevel: GameLimitLevel[] = [];
 
   hasGame(id: number): boolean {
     return !!this.favourites.find((game: Game) => game.id === id);
@@ -16,9 +17,7 @@ class MyGame {
 
   @action
   setFavourite(game: Game) {
-    if (this.hasGame(game.id)) {
-      return null;
-    }
+    if (this.hasGame(game.id)) return null;
     this.favourites.push(game);
     local.set(Types.SET_PC_FAVOURITE_GAMES, this.favourites);
   }
@@ -78,6 +77,22 @@ class MyGame {
   @action
   setLimitLevel(level: number) {
     this.limitLevel = level;
+  }
+
+  @action
+  getGameLimitLevelByGameId(gameId: number): GameLimitLevel | undefined {
+    return this.setGamesLimitLevel.find(gll => gll.gameId === gameId);
+  }
+
+  @action
+  updateGamesLimitLevel(gameLimitLevel: GameLimitLevel) {
+    let gll = this.getGameLimitLevelByGameId(gameLimitLevel.gameId);
+    if (gll) {
+      let index = this.setGamesLimitLevel.findIndex(gll => gll.gameId === gameLimitLevel.gameId);
+      this.setGamesLimitLevel.splice(index, 1, gameLimitLevel);
+    } else {
+      this.setGamesLimitLevel.push(gameLimitLevel);
+    }
   }
 }
 

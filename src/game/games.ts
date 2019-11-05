@@ -1,6 +1,5 @@
 
 import { GameCategory, Game } from '../typings/games';
-import game from 'src/store/game';
 
 let games: GameCategory[] = [
   {

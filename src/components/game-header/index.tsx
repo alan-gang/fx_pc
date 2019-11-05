@@ -24,6 +24,8 @@ interface State {
   hours: string;
   minutes: string;
   seconds: string;
+  limitLevelList: LimitLevelItem[];
+  curGameLimitLevel: number;
 }
 
 const { Option } = Select;
@@ -34,12 +36,17 @@ class GameHeader extends Component<Props, object> {
   state: State;
   constructor(props: Props) {
     super(props);
+    let limitItem = props.store.game.getLimitListItemById(props.gameId);
+    let curGameLimitLevel = props.store.game.getGameLimitLevelByGameId(props.gameId);
+    console.log('curGameLimitLevel=', curGameLimitLevel, curGameLimitLevel && curGameLimitLevel.level, limitItem, props.gameId, props.store.game.setGamesLimitLevel);
     this.state = {
       timer: null,
       remainTime: this.props.remainTime,
       hours: '00',
       minutes: '00',
-      seconds: '00'
+      seconds: '00',
+      limitLevelList: limitItem && limitItem.kqPrizeLimit || [],
+      curGameLimitLevel: curGameLimitLevel && curGameLimitLevel.level || 1
     }
     // console.log('game header constructor ', this.props.remainTime);
   }
@@ -73,10 +80,11 @@ class GameHeader extends Component<Props, object> {
     this.setState({timer});
   }
   onLimitLevelChanged = (value: any) => {
-    this.props.store.game.setLimitLevel(parseInt(value, 10));
+    this.props.store.game.updateGamesLimitLevel({gameId: this.props.gameId, level: parseInt(value, 10)});
   }
   render() {
     let store = this.props.store;
+    let state = this.state;
     return (
       <section className={`game-header-view flex ai-c ${this.props.gameType}`}>
         <div className={`game-logo game-header-logo-${this.props.gameId}`}>
@@ -105,9 +113,9 @@ class GameHeader extends Component<Props, object> {
           <div className="limit-set-inner-wp">
             <span>限红设置:</span>
             <span>
-            {store.game.limitLevelList && store.game.limitLevelList.length > 0 && 
-              <Select defaultValue={store.game.limitLevel} style={{ width: 80 }} onChange={this.onLimitLevelChanged}>
-                {store.game.limitLevelList.map((limitLevelItem: LimitLevelItem, i: number) => (
+            {state.limitLevelList && state.limitLevelList.length > 0 && 
+              <Select defaultValue={state.curGameLimitLevel} style={{ width: 80 }} onChange={this.onLimitLevelChanged}>
+                {state.limitLevelList.map((limitLevelItem: LimitLevelItem, i: number) => (
                   <Option value={limitLevelItem.level} key={i}>{`${limitLevelItem.minAmt}-${limitLevelItem.maxAmt}`}</Option>
                 ))}
               </Select>

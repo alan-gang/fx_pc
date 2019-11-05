@@ -47,11 +47,8 @@ class BaseModal extends PureComponent<Props, object> {
         {!this.props.isHideBtnClose && <div className="crs-p icon-cross btn-close" onClick={this.onCloseHandler}></div>}
         {this.props.children}
       </div>
-    </div>)
-    return ReactDOM.createPortal(
-      elements,
-      this.modalContainer
-    );
+    </div>);
+    return ReactDOM.createPortal(elements, this.modalContainer);
   }
 }
 

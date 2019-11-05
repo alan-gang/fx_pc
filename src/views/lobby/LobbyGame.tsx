@@ -5,6 +5,8 @@ import Ludan from 'comp/ludan';
 import { Row, Col, Button } from 'antd';
 import LimitSetDialog from 'comp/limit-set-dialog';
 import APIs from '../../http/APIs';
+import { getGameTypeByGameId } from '../../game/games';
+import { getLunDanTabByName } from '../../utils/ludan';
 
 import './lobbyGame.styl';
 
@@ -25,8 +27,9 @@ interface State {
   maxRows: number;
   isShowLudanMenu: boolean;
   bestLudanConfig: any;
-  bestLudan: string;
+  bestLudanName: string;
   isShowLimitSetDialog: boolean;
+  limitLevelList: LimitLevelItem[]
 }
 
 @inject("store")
@@ -41,7 +44,11 @@ class LobbyGame extends Component<Props, object> {
       'pk10': 'zhenghe',
       'k3': 'diansu'
     };
-    let bestLudan: string = bestLudanConfig[props.gameType];
+    let gameType = getGameTypeByGameId(props.gameId);
+    let item = props.store.game.getLimitListItemById(props.gameId);
+    let bestLudan: BestLudanItem = item && item.bestLudan;
+    // let bestLudan: string = bestLudanConfig[gameType];
+    let ludanTab = getLunDanTabByName(gameType, bestLudan && bestLudan.codeStyle);
     this.state = {
       gameType: 'ssc',
       curIssue: '',
@@ -52,8 +59,9 @@ class LobbyGame extends Component<Props, object> {
       maxRows: 6,
       isShowLudanMenu: false,
       bestLudanConfig,
-      bestLudan,
-      isShowLimitSetDialog: false
+      bestLudanName: ludanTab && ludanTab.name,
+      isShowLimitSetDialog: false,
+      limitLevelList: []
     }
   }
   componentWillMount() {
@@ -89,11 +97,20 @@ class LobbyGame extends Component<Props, object> {
       }
     });
   }
+  gotoGame() {
+    this.props.goto(`/game/${this.props.gameId}`);
+  }
   onIntoGame = () => {
-    this.setState({isShowLimitSetDialog: true});
+    if (this.props.store.game.getGameLimitLevelByGameId(this.props.gameId)) {
+      this.gotoGame();
+    } else {
+      let limitListItem = this.props.store.game.getLimitListItemById(this.props.gameId);
+      this.setState({isShowLimitSetDialog: true, limitLevelList: limitListItem ? limitListItem.kqPrizeLimit : []});
+    }
   }
   onLimitChoiceCB = (level: number) => {
-    this.props.goto(`/game/${this.props.gameId}`);
+    this.props.store.game.updateGamesLimitLevel({gameId: this.props.gameId, level});
+    this.gotoGame();
   }
   onCloseLimitChoiceHandler = () => {
     this.setState({isShowLimitSetDialog: false});
@@ -106,12 +123,12 @@ class LobbyGame extends Component<Props, object> {
           <Ludan isShowLudanMenu={this.state.isShowLudanMenu} gameId={this.props.gameId} gameType={this.state.gameType} maxColumns={this.state.maxColumns} maxRows={this.state.maxRows} issueList={this.state.issueList.reverse()} methodMenuName={this.state.bestLudanConfig[this.state.gameType]} />
         </div>
         <Row className="footer-bar">
-          <Col span={12}>xxxx</Col>
+          <Col span={12}>{this.state.bestLudanName}</Col>
           <Col span={12} className="txt-r">
             <Button type="danger" className="btn-into-game" onClick={this.onIntoGame}>进入游戏</Button>
           </Col>
         </Row>
-        <LimitSetDialog isShow={this.state.isShowLimitSetDialog} gameId={this.props.gameId} onLimitChoiceCB={this.onLimitChoiceCB} onCloseHandler={this.onCloseLimitChoiceHandler} />
+        <LimitSetDialog isShow={this.state.isShowLimitSetDialog} gameId={this.props.gameId} limitLevelList={this.state.limitLevelList} onLimitChoiceCB={this.onLimitChoiceCB} onCloseHandler={this.onCloseLimitChoiceHandler} />
       </section>
     )
   }

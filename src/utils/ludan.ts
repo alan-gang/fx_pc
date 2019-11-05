@@ -42,7 +42,7 @@ export const methodTabs: any = {
       {title: '第三位', name: 'bw', subM},
       {title: '第四位', name: 'sw', subM},
       {title: '第五位', name: 'gw', subM},
-      {title: '龙虎', name: 'lh_1v2', subM: []}
+      {title: '龙虎', name: 'wq_lhh', subM: []}
     ],
     dw: [
       {title: '总和', name: 'zh', subM},
@@ -52,19 +52,19 @@ export const methodTabs: any = {
       {title: '第三位', name: 'bw', subM},
       {title: '第四位', name: 'sw', subM},
       {title: '第五位', name: 'gw', subM},
-      {title: '龙虎', name: 'lh_1v2', subM: []}
+      {title: '龙虎', name: 'wq_lhh', subM: []}
     ],
     lh: [
-      {title: '一位VS二位', name: 'lh_1v2', subM: []},
-      {title: '一位VS三位', name: 'lh_1v3', subM: []},
-      {title: '一位VS四位', name: 'lh_1v4', subM: []},
-      {title: '一位VS五位', name: 'lh_1v5', subM: []},
-      {title: '二位VS三位', name: 'lh_2v3', subM: []},
-      {title: '二位VS四位', name: 'lh_2v4', subM: []},
-      {title: '二位VS五位', name: 'lh_2v5', subM: []},
-      {title: '三位VS四位', name: 'lh_3v4', subM: []},
-      {title: '三位VS五位', name: 'lh_3v5', subM: []},
-      {title: '四位VS五位', name: 'lh_4v5', subM: []}
+      {title: '一位VS二位', name: 'wq_lhh', subM: []},
+      {title: '一位VS三位', name: 'wb_lhh', subM: []},
+      {title: '一位VS四位', name: 'ws_lhh', subM: []},
+      {title: '一位VS五位', name: 'wg_lhh', subM: []},
+      {title: '二位VS三位', name: 'qb_lhh', subM: []},
+      {title: '二位VS四位', name: 'qs_lhh', subM: []},
+      {title: '二位VS五位', name: 'qg_lhh', subM: []},
+      {title: '三位VS四位', name: 'bs_lhh', subM: []},
+      {title: '三位VS五位', name: 'bg_lhh', subM: []},
+      {title: '四位VS五位', name: 'sg_lhh', subM: []}
     ],
     rx: [],
     zux: [],
@@ -73,23 +73,23 @@ export const methodTabs: any = {
   pk10: {
     zhenghe: [
       {title: '冠亚和值', name: 'zh', subM},
-      {title: '冠军', name: 'd1w', subM},
-      {title: '亚军', name: 'd2w', subM},
-      {title: '季军', name: 'd3w', subM},
-      {title: '第四位', name: 'd4w', subM},
-      {title: '第五位', name: 'd5w', subM},
-      {title: '第六位', name: 'd6w', subM},
-      {title: '第七位', name: 'd7w', subM},
-      {title: '第八位', name: 'd8w', subM},
-      {title: '第九位', name: 'd9w', subM},
-      {title: '第十位', name: 'd10w', subM}
+      {title: '冠军', name: '1', subM},
+      {title: '亚军', name: '2', subM},
+      {title: '季军', name: '3', subM},
+      {title: '第四位', name: '4', subM},
+      {title: '第五位', name: '5', subM},
+      {title: '第六位', name: '6', subM},
+      {title: '第七位', name: '7', subM},
+      {title: '第八位', name: '8', subM},
+      {title: '第九位', name: '9', subM},
+      {title: '第十位', name: '10', subM}
     ],
     lh: [
-      {title: '冠军VS第十名', name: 'hl_1v10', subM: []},
-      {title: '亚军VS第九名', name: 'hl_2v9', subM: []},
-      {title: '季军VS第八名', name: 'hl_3v8', subM: []},
-      {title: '第四名VS第七名', name: 'hl_4v7', subM: []},
-      {title: '第五名VS第六名', name: 'h1_5v6', subM: []}
+      {title: '冠军VS第十名', name: '1vs10_lhh', subM: []},
+      {title: '亚军VS第九名', name: '2vs9_lhh', subM: []},
+      {title: '季军VS第八名', name: '3vs8_lhh', subM: []},
+      {title: '第四名VS第七名', name: '4vs7_lhh', subM: []},
+      {title: '第五名VS第六名', name: '5vs6_lhh', subM: []}
     ],
     dwgy: [],
     gyhz: [
@@ -124,6 +124,32 @@ export function getSubTabByType(type: string, tabName: string): any {
   return null;
 }
 
+/**
+ * 根据名字获取tab
+ * @param type 游戏类别
+ * @param name 名字
+ */
+export function getLunDanTabByName(type: string, name: string): any {
+  let types = methodTabs[type];
+  let keys = Object.keys(types);
+  let tabs;
+  for (let i = 0; i < keys.length; i++) {
+    tabs = types[keys[i]];
+    for (let j = 0; j < tabs.length; j++) {
+      if (!tabs[i] || !tabs[i].subM) continue;
+      for (let k = 0; k < tabs[i].subM.length; k++) {
+        if (joinLunDanName(tabs[i].name, tabs[i].subM[k].name) === name) {
+          return tabs[i];
+        }
+      }
+    }
+  }
+  return null;
+}
+
+function joinLunDanName(name: string, subName: string): string {
+  return name + (subName ? '_' : '') + subName;
+}
 
 /**
  * 根据游戏类型获取玩法列表
@@ -199,27 +225,26 @@ export function getLuDanListByMethod(issueList: any[], type: string, name: strin
           case 'sw_ds':
           case 'gw_dx':
           case 'gw_ds':
-
-          case 'd1w_dx':
-          case 'd1w_ds':
-          case 'd2w_dx':
-          case 'd2w_ds':
-          case 'd3w_dx':
-          case 'd3w_ds':
-          case 'd4w_dx':
-          case 'd4w_ds':  
-          case 'd5w_dx':
-          case 'd5w_ds':
-          case 'd6w_dx':
-          case 'd6w_ds':
-          case 'd7w_dx':  
-          case 'd7w_ds':  
-          case 'd8w_dx':  
-          case 'd8w_ds':  
-          case 'd9w_dx':  
-          case 'd9w_ds':  
-          case 'd10w_dx':  
-          case 'd10w_ds':  
+          case '1_dx':
+          case '1_ds':
+          case '2_dx':
+          case '2_ds':
+          case '3_dx':
+          case '3_ds':
+          case '4_dx':
+          case '4_ds':  
+          case '5_dx':
+          case '5_ds':
+          case '6_dx':
+          case '6_ds':
+          case '7_dx':  
+          case '7_ds':  
+          case '8_dx':  
+          case '8_ds':  
+          case '9_dx':  
+          case '9_ds':  
+          case '10_dx':  
+          case '10_ds':  
             item = cs.value[mObj.pos][mObj.method.split('_')[1]];
             break;
           case '1v2':

@@ -1,4 +1,14 @@
 
+
+interface BestLudanItem {
+  codeStyle: string;
+  methodId: number;
+  [prop: string]: any;
+}
+interface GameLimitLevel {
+  gameId: number;
+  level: number;
+}
 interface LimitLevelItem {
   level: number;
   minAmt: number;
@@ -7,7 +17,7 @@ interface LimitLevelItem {
 
 interface LimitListItem {
   id: number;
-  bestLudan: any;
+  bestLudan: BestLudanItem;
   dtMaxPrize: string;
   dzMaxPrize: string;
   kqPrizeLimit: LimitLevelItem[];
