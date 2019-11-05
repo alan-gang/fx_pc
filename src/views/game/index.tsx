@@ -1,4 +1,4 @@
-import React, { Component, createContext } from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import GameHeader from 'comp/game-header';
 import MethodMenu from 'comp/method-menu';

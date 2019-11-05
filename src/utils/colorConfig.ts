@@ -1,3 +1,9 @@
+
+
+interface TextColr {
+  [prop: string]: string;
+}
+
 function getStyle(d: string): string {
   switch (d) {
     case '大':
@@ -24,6 +30,18 @@ function getStyle(d: string): string {
   }
 }
 
+const textColors: TextColr = {
+  'bgc-r': 'txt-r',
+  'bgc-b': 'txt-b',
+  'bgc-g': 'txt-g',
+  'bgc-y': 'txt-y'
+}
+
+function getStyleTxtColor(d: string): string {
+  return textColors[getStyle(d)];
+}
+
 export default {
-  getStyle
+  getStyle,
+  getStyleTxtColor
 };

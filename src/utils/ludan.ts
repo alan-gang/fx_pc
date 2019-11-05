@@ -296,5 +296,5 @@ export function getCellData(ludanList: any[], c: number, r: number, maxRows: num
 export function getCellStyle(ludanList: any[], col: number, row: number, maxRows: number = MAX_ROWS) {
   if (getCellData(ludanList, col, row, maxRows) === 'icon-cur') return 'icon-cur';
   if (getCellData(ludanList, col, row, maxRows) === 'icon-qs') return 'icon-qs';
-  return Colors.getStyle(getCellData(ludanList, col, row, maxRows));
+  return Colors.getStyleTxtColor(getCellData(ludanList, col, row, maxRows));
 }

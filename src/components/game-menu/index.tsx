@@ -58,6 +58,7 @@ class GameMenu extends Component<Props, object> {
 
   init() {
     // this.clearAllTimer();
+    // console.log('game-header init start=', Date.now());
     let games = this.state.navData;
     games.forEach((gameCategory: GameCategory) => {
       if (gameCategory.type === this.gameType) {
@@ -66,6 +67,7 @@ class GameMenu extends Component<Props, object> {
         });
       }
     });
+    // console.log('game-header init end=', Date.now());
   }
 
   updateCurGameIssue(id: number, issue: any): void {
@@ -123,6 +125,7 @@ class GameMenu extends Component<Props, object> {
   }
 
   clearAllTimer(): void {
+    // console.log('game-header clearAllTimer start=', Date.now());
     let navData = this.state.navData;
     let box = navData.shift();
     navData = games.map((gameCategory: GameCategory) => {
@@ -137,6 +140,7 @@ class GameMenu extends Component<Props, object> {
     })
     if (box) navData.unshift(box);
     this.setState({navData});
+    // console.log('game-header clearAllTimer end=', Date.now());
   }
 
   componentDidMount() {
@@ -153,7 +157,6 @@ class GameMenu extends Component<Props, object> {
   }
 
   onOpenChange = (openKeys: string[]) => {
-    this.clearAllTimer();
     const latestOpenKey: string = openKeys.find(key => this.state.openKeys.indexOf(key) === -1) || '';
     if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
       this.setState({ openKeys });
@@ -163,7 +166,10 @@ class GameMenu extends Component<Props, object> {
       });
     }
     this.gameType = latestOpenKey;
-    this.init();
+    setTimeout(() => {
+      this.clearAllTimer();
+      this.init();
+    }, 0);
   };
 
   // onMenuItemHandler = ({ item, key, keyPath, domEvent }: ClickParam) => {
