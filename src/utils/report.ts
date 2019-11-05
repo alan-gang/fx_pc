@@ -70,7 +70,7 @@ function calcSpanOfK3(codes: number[]): number {
  * @param gameType {String}
  * @param type {String}
  */
-export function getTypeValue(codes: number[], gameType: string, type: string): any {
+export function getTypeValue(codes: number[], gameType?: string, type?: string): any {
   if (!codes || codes.length === 0) return null;
   let dx: string = '';
   let ds: string = '';

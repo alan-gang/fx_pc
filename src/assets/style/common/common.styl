@@ -193,7 +193,17 @@ cntEl() {
   cursor pointer
 }
 
-.code-bg {
+.rec
+  display inline-block
+  border-radius 2px
+  box-sizing border-box
+  min-width .54rem
+  text-align center
+  line-height .24rem
+  margin-left 6px
+.code-bg,
+.ball,
+.rec {
   &.bgc-r {
     background #f42f3f
     color #fff
@@ -306,14 +316,6 @@ cntEl() {
   background:rgba(0,0,0,0.4);
 }
 
-.page-title
-  display inline-block
-  border-top 3px solid $text-orange
-  color $text-orange
-  line-height .42rem
-  box-sizing border-box
-  padding 0 .2rem
-  background linear-gradient(to bottom, #fff, #e7e7e7)
 
 .bg-orange
   background-color $text-orange
@@ -328,9 +330,112 @@ cntEl() {
   line-height .3rem
   cursor pointer
   transition: .2s ease
+  width .8rem
+  user-select: none
+  border 1px solid #d9d9d9
+  box-sizing: border-box
+  background-color #fbfbfb
+  color $fc
+  transition .2s ease
+  &.active
+    color #fff
+    background-color $text-orange
+    border-color $text-orange
   &:hover
     opacity .85
 
+// 公用样式
+.ball
+  display inline-block
+  text-align center
+  width .24rem
+  height .24rem
+  line-height .24rem
+  color #fff
+  border-radius 50%
+  margin-right 6px
+  &:last-child
+    margin-right 0
+.m-t-10
+  margin-top .1rem
+.bet-records-view
+.open-issue-history-view
+.play-method-rule-view
+  min-height 8.26rem
+  background #e7e7e7
+  box-sizing border-box
+  padding 0 .1rem .4rem
+  .page-title
+    display inline-block
+    border-top 3px solid #a8a8a8
+    line-height .42rem
+    box-sizing border-box
+    padding 0 .2rem
+    background linear-gradient(to bottom, #fff, #e7e7e7)
+    cursor pointer
+    color $fc3
+    margin-right 1px
+    transition .2s ease
+    &.active
+      border-top-color $text-orange
+      color $text-orange
+  .search
+    padding .2rem
+    line-height .3rem
+    display flex
+    justify-content flex-start
+    background-color #fff
+    .total-group
+      padding 0 .12rem
+      span
+        display inline-block
+        cursor pointer
+        padding 0 .12rem
+        transition .2s ease
+        &.active
+          color $text-orange
+    .time-group
+      .item
+        display inline-block
+        width .8rem
+        border-radius 3px 
+        border 1px solid $border-color
+        text-align: center
+        color $fc
+        margin-left 8px
+        background-color #fbfbfb
+        transition .2s ease
+        cursor pointer
+        &.active
+          background $text-orange
+          border-color $text-orange
+          color #fff
+    .lottery-select
+      width 1.44rem
+    label
+      margin-left .14rem
+      span
+        margin-right 8px
+      .number-input
+        width 1.2rem
+      .self-btn
+        width 1rem
+  .ant-table-thead > tr > th
+    background linear-gradient(to bottom, #ccc, #e6e6e6)
+  .ant-table-tbody > tr > td
+    white-space: nowrap
+    border none
+  .ant-table-tbody > tr:nth-child(odd) > td
+    background #fff
+  .ant-table-tbody > tr:nth-child(even) > td
+    background #fafafa
+  .ant-table-body th
+  .ant-table-body td
+    text-align: center
+  .m-l-0
+    margin-left 0!important
+  .w-1
+    width 1.2rem
 
 .modal-root-c {
   position fixed

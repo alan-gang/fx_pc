@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { orderList } from '../../http/APIs'
 import { numberWithCommas } from '../../utils/num'
-import { dateTimeFormat } from '../../utils/date'
 import { Table, Select, Input } from 'antd'
 import { getAllGames } from '../../game/games'
 
