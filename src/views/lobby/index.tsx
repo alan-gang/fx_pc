@@ -28,6 +28,7 @@ class Lobby extends Component<Props, object> {
   constructor(props: Props) {
     super(props);
     let curGames = getAllGames(); // getGamesByType(this.DEFAULT_GAME_TYPE);
+    // let curGames = getGamesByType(this.DEFAULT_GAME_TYPE);
     this.state = {
       curGameType: this.DEFAULT_GAME_TYPE,
       curGames

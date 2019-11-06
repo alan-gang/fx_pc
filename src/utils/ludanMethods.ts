@@ -40,7 +40,6 @@ methods.set('11x5_sw_dx', {id: '62', title: '第四位大小', methodId: '2051',
 methods.set('11x5_sw_ds', {id: '63', title: '第四位单双', methodId: '2051', method: 'sw_ds', type: LOTTERY_TYPES.G11X5, pos: 3});
 methods.set('11x5_gw_dx', {id: '64', title: '第五位大小', methodId: '2051', method: 'gw_dx', type: LOTTERY_TYPES.G11X5, pos: 4});
 methods.set('11x5_gw_ds', {id: '65', title: '第五位单双', methodId: '2051', method: 'gw_ds', type: LOTTERY_TYPES.G11X5, pos: 4});
-
 methods.set('11x5_wq_lhh', {id: '66', title: '一位VS二位', methodId: '2053', method: '1v2', type: LOTTERY_TYPES.G11X5});
 methods.set('11x5_wb_lhh', {id: '67', title: '一位VS三位', methodId: '2053', method: '1v3', type: LOTTERY_TYPES.G11X5});
 methods.set('11x5_ws_lhh', {id: '68', title: '一位VS四位', methodId: '2053', method: '1v4', type: LOTTERY_TYPES.G11X5});

@@ -37,7 +37,7 @@ class Ludan extends Component<Props, object> {
     let selectedMenu = this.props.defaultMenu || ((menus && menus.length > 0) ? menus[0].name : '');
     let menuItem = this.getMenuByMenuName(menus, selectedMenu);
     let selectedSubMenu = menuItem && menuItem.subM.length > 0 ? this.props.defaultSubMenu || menuItem.subM[0].name : '';
-    let ludanList = getLuDanListByMethod(this.props.issueList.slice(0), this.props.gameType,  `${selectedMenu}${!!selectedSubMenu ? '_' : ''}${selectedSubMenu}`) || []
+    let ludanList = getLuDanListByMethod(this.props.issueList.slice(0), this.props.gameType,  `${selectedMenu}${!!selectedSubMenu ? '_' : ''}${selectedSubMenu}`, this.props.maxRows, this.props.maxColumns) || []
     this.state = {
       menus,
       selectedMenu,
@@ -46,6 +46,7 @@ class Ludan extends Component<Props, object> {
     }
   }
   getMenuByMenuName(menus: any[], menuName: string): any {
+    if (!menus) return;
     return menus.find((menu) => menuName === menu.name);
   }
   updateMenu = (menu: any) => {
@@ -59,32 +60,32 @@ class Ludan extends Component<Props, object> {
   }
   updateLudanList = () => {
     this.setState({
-      ludanList: getLuDanListByMethod(this.props.issueList.slice(0), this.props.gameType,  `${this.state.selectedMenu}${!!this.state.selectedSubMenu ? '_' : ''}${this.state.selectedSubMenu}`) || []
+      ludanList: getLuDanListByMethod(this.props.issueList.slice(0), this.props.gameType,  `${this.state.selectedMenu}${!!this.state.selectedSubMenu ? '_' : ''}${this.state.selectedSubMenu}`, this.props.maxRows, this.props.maxColumns) || []
     });
   }
   componentWillReceiveProps(nextProps: Props) {
-    console.log('componentWillReceiveProps=', nextProps, this.props.methodMenuName);
-    if (this.props.methodMenuName !== nextProps.methodMenuName) {
+    console.log('componentWillReceiveProps ludan=', nextProps, this.props, this.props.methodMenuName);
+    // if (this.props.methodMenuName !== nextProps.methodMenuName || nextProps.issueList.length !== this.props.issueList.length) {
       let menus = getTabsByType(nextProps.gameType, nextProps.methodMenuName);
       let selectedMenu = nextProps.defaultMenu || ((menus && menus.length > 0) ? menus[0].name : '');
       let menuItem = this.getMenuByMenuName(menus, selectedMenu);
       let selectedSubMenu = menuItem && menuItem.subM.length > 0 ? this.props.defaultSubMenu || menuItem.subM[0].name : '';
-      let ludanList = getLuDanListByMethod(nextProps.issueList.slice(0), nextProps.gameType,  `${selectedMenu}${!!selectedSubMenu ? '_' : ''}${selectedSubMenu}`) || []
+      let ludanList = getLuDanListByMethod(nextProps.issueList.slice(0), nextProps.gameType,  `${selectedMenu}${!!selectedSubMenu ? '_' : ''}${selectedSubMenu}`, this.props.maxRows, this.props.maxColumns) || []
       this.setState({
         menus,
         selectedMenu,
         selectedSubMenu,
         ludanList
-      }, this.updateLudanList);
-      return;
-    }
-    this.updateLudanList();
+      });
+    //   return;
+    // }
+    // this.updateLudanList();
   }
   render() {
     return (
       <section className="ludan-view">
         {this.props.isShowLudanMenu !== false && <LudanMenu menus={this.state.menus} selectedMenu={this.state.selectedMenu} selectedSubMenu={this.state.selectedSubMenu} updateMenu={this.updateMenu} updateSubMenu={this.updateSubMenu} />}
-        {this.state.menus && this.state.menus.length > 0 && <LundanTable maxColumns={this.props.maxColumns} maxRows={this.props.maxRows} ludanList={this.state.ludanList} />}
+        <LundanTable maxColumns={this.props.maxColumns} maxRows={this.props.maxRows} ludanList={this.state.ludanList} />
       </section>  
     )
   }

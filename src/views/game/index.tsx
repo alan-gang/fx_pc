@@ -18,6 +18,7 @@ import { Icon } from 'antd'
 import RecentOpen from '../../components/recent-open/RecentOpen'
 import BetRemind from '../../components/bet-remind/BetRemind'
 import Ludan from 'comp/ludan';
+import { getLunDanTabByName } from '../../utils/ludan';
 // import { methods } from 'src/utils/ludanMethods';
 
 import './index.styl';
@@ -50,6 +51,8 @@ interface State {
   tabIndex: number; //  
   maxColumns: number;
   maxRows: number;
+  defaultMenu?: string;
+  defaultSubMenu?: string;
 }
 
 interface DataMethodItem {
@@ -84,6 +87,12 @@ class Game extends Component<Props, object> {
     this.id = parseInt(this.props.match.params.id || '1', 10);
     this.gameType = getGameTypeByGameId(this.id);
     let menus: GameMethodMenu[] = getMethodsConfigByType(this.gameType);
+
+    let gameType = getGameTypeByGameId(this.id);
+    let item = props.store.game.getLimitListItemById(this.id);
+    let bestLudan: BestLudanItem = item && item.bestLudan;
+    // let bestLudan: string = bestLudanConfig[gameType];
+    let ludanTab = getLunDanTabByName(gameType, bestLudan && bestLudan.codeStyle);
     this.state = {
       id: 1,
       gameType: 'ssc',
@@ -105,7 +114,9 @@ class Game extends Component<Props, object> {
       totalBetAmount: 0,
       tabIndex: 0,
       maxColumns: 30,
-      maxRows: 6
+      maxRows: 6,
+      defaultMenu: ludanTab && ludanTab.name || '',
+      defaultSubMenu: (ludanTab && ludanTab.subM && ludanTab.subM.length > 0) ? bestLudan.codeStyle.split('_')[1] : ''
     }
     this.init();
     // console.log('game constructor id=', this.id, this.gameType);
@@ -368,7 +379,16 @@ class Game extends Component<Props, object> {
           />
           <section className="game-main">
             <MethodMenu gameType={this.gameType} curMenuIndex={this.state.curMenuIndex} methodMenuChangedCB={this.methodMenuChangedCB} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
-            {this.state.subMethods.length > 0 && <SubMethodMenu gameType={this.gameType} curSubMenuIndex={this.state.curSubMenuIndex} subMethods={this.state.subMethods} odds={this.state.odds} updateSubMethods={this.updateSubMethods} updateSubMethodMenuIndex={this.updateSubMethodMenuIndex} />}
+            {this.state.subMethods.length > 0 && 
+              <SubMethodMenu 
+                gameType={this.gameType} 
+                curSubMenuIndex={this.state.curSubMenuIndex} 
+                subMethods={this.state.subMethods} 
+                odds={this.state.odds} 
+                updateSubMethods={this.updateSubMethods} 
+                updateSubMethodMenuIndex={this.updateSubMethodMenuIndex}
+              />
+            }
             <Play 
               curGameMethodItems={this.state.curGameMethodItems} 
               gameType={this.gameType} 
@@ -386,7 +406,16 @@ class Game extends Component<Props, object> {
               orderFinishCB={this.orderFinishCB}
               resetSelectedOfAllMethodItem={this.resetSelectedOfAllMethodItem}
             />
-            {this.state.issueList && this.state.issueList.length > 0 && <Ludan gameId={this.id} gameType={this.gameType} maxColumns={this.state.maxColumns} maxRows={this.state.maxRows} issueList={this.state.issueList.reverse()} methodMenuName={this.state.curMenuEname} />}
+            <Ludan 
+              gameId={this.id} 
+              gameType={this.gameType} 
+              maxColumns={this.state.maxColumns} 
+              maxRows={this.state.maxRows} 
+              issueList={this.state.issueList.reverse()} 
+              methodMenuName={this.state.curMenuEname} 
+              defaultMenu={this.state.defaultMenu} 
+              defaultSubMenu={this.state.defaultSubMenu}
+            />
           </section>
           <div className="recent-open">
             <div className="tabs">

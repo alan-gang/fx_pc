@@ -125,7 +125,32 @@ export function getSubTabByType(type: string, tabName: string): any {
 }
 
 /**
- * 根据名字获取tab
+ * 根据游戏类型，名字获取游戏玩法
+ *    如:ssc , wq_ds 对应 “整合”玩法
+ * @param type 游戏类别
+ * @param name 名字
+ */
+export function getMethodENameByLudanName(type: string, name: string): any {
+  let types = methodTabs[type];
+  let keys = Object.keys(types);
+  let tabs;
+  for (let i = 0; i < keys.length; i++) {
+    tabs = types[keys[i]];
+    for (let j = 0; j < tabs.length; j++) {
+      if (!tabs[i] || !tabs[i].subM) continue;
+      for (let k = 0; k < tabs[i].subM.length; k++) {
+        if (joinLunDanName(tabs[i].name, tabs[i].subM[k].name) === name) {
+          return keys[i];
+        }
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * 根据游戏类型，名字获取tab
+ *    如万位
  * @param type 游戏类别
  * @param name 名字
  */
@@ -145,6 +170,24 @@ export function getLunDanTabByName(type: string, name: string): any {
     }
   }
   return null;
+}
+
+/**
+ * 获取拼接的路单名字
+ *  如：总和大小
+ * @param type 游戏类别
+ * @param name 路单名字
+ */
+export function getLunDanFullTitleByName(type: string, name: string): string {
+  let ludanTab = getLunDanTabByName(type, name);
+  if (ludanTab && ludanTab.subM) {
+    for (let k = 0; k < ludanTab.subM.length; k++) {
+      if (joinLunDanName(ludanTab.name, ludanTab.subM[k].name) === name) {
+        return ludanTab.title + ludanTab.subM[k].title;
+      }
+    }
+  }
+  return '';
 }
 
 function joinLunDanName(name: string, subName: string): string {
