@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { getBetRemind } from '../../http/APIs'
 import BetRemindItem from './BetRemindItem'
-import { getGameTypeByGameId } from '../../game/games'
-import InfiniteScroll from 'react-infinite-scroll-component'
+import { getGameTypeByGameId, getGameById } from '../../game/games'
+
 
 import './betRemind.styl'
 
@@ -11,7 +11,7 @@ interface State {
   list: Array<any>
 }
 
-class BetRemind extends Component {
+class BetRemind extends Component<Props, {}> {
   state: State
   constructor(props: Props) {
     super(props)
@@ -32,16 +32,27 @@ class BetRemind extends Component {
       .then((res: any) => {
         if (res.success === 1) {
           this.setState({
-            list: res.data
+            list: this.filterBetRemindList(res.data)
           })
         }
       })
   }
 
-  getShowList = () => {
-    return this.state.list.splice(0, 10).map((game, index) => {
-      let gameType = getGameTypeByGameId(game.lotteryId)
-      return (<BetRemindItem key={game.lotteryId + 'lId' + game.issue + game.pos + game.codeStyle + game.methodId + game.notifyType} open={index === 0} gamedata={game} gameType={gameType} />)
+  filterBetRemindList = (arr: any[]) => {
+    let val = arr.filter(item => {
+      let game = getGameById(item.lotteryId)
+      if (game) {
+        return true
+      }
+      return false
+    })
+    return val
+  }
+
+  getShowList = (): any[] => {
+    return this.state.list.slice(0, 10).map((item, index) => {
+      let gameType = getGameTypeByGameId(item.lotteryId)
+      return <BetRemindItem key={item.codeStyle + item.lotteryId + item.pos + item.notifyType + item.issue} open={index === 0} gamedata={item} gameType={gameType} />
     })
   }
 
