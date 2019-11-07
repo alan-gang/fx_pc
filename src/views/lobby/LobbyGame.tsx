@@ -97,10 +97,12 @@ class LobbyGame extends Component<Props, object> {
     }, true);
   }
   openWinCode(id: number, openHistoryItem: any) {
+    // console.log('LobbyGame openWinCode=', id,  this.props.gameId)
     if (id === this.props.gameId) {
-      console.log('LobbyGame openWinCode=', id,  this.props.gameId, JSON.stringify(openHistoryItem));
       let issueList = this.state.issueList;
+      // console.log('LobbyGame openWinCode 1=', id,  this.props.gameId, issueList);
       issueList.unshift(openHistoryItem);
+      // console.log('LobbyGame openWinCode 2=', id,  this.props.gameId, issueList);
       this.setState({
         lastIssue: issueList[0].issue,
         openNumbers: issueList[0].code.split(','),
@@ -170,7 +172,7 @@ class LobbyGame extends Component<Props, object> {
             gameType={this.state.gameType} 
             maxColumns={this.state.maxColumns} 
             maxRows={this.state.maxRows} 
-            issueList={this.state.issueList.reverse()} 
+            issueList={this.state.issueList.slice(0).reverse()} 
             methodMenuName={this.state.methodMenuName} 
             defaultMenu={this.state.defaultMenu} 
             defaultSubMenu={this.state.defaultSubMenu}

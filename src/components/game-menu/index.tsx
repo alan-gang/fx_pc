@@ -25,8 +25,8 @@ interface State {
 class GameMenu extends Component<Props, object> {
   rootSubmenuKeys = ['box', LOTTERY_TYPES.SSC, LOTTERY_TYPES.G11X5, LOTTERY_TYPES.PK10, LOTTERY_TYPES.K3];
   MAIN_WIDTH: number = 1200;
-  MENU_WIDTH: number = 200;
-  DEFAULT_GAME_TYPE: string = ''; // LOTTERY_TYPES.SSC;
+  MENU_WIDTH: number = 210;
+  DEFAULT_GAME_TYPE: string = LOTTERY_TYPES.SSC;
   menuGames: GameCategory[] = games;
   id: number;
   gameType: string;
@@ -43,7 +43,7 @@ class GameMenu extends Component<Props, object> {
     //   items: this.props.store.game.favourites || []
     // });
 
-    this.id = parseInt(this.getGameIdFromUrl() || '1', 10);
+    this.id = parseInt(this.getGameIdFromUrl() || '0', 10);
     this.gameType = getGameTypeByGameId(this.id) || this.DEFAULT_GAME_TYPE;
 
     this.state = {
@@ -53,7 +53,6 @@ class GameMenu extends Component<Props, object> {
       navData: []
     };
 
-   
   }
 
   componentWillMount() {
@@ -82,13 +81,38 @@ class GameMenu extends Component<Props, object> {
         items: this.props.store.game.favourites || []
       });
       this.setState({navData});
-      this.getIssuesByGameIds(availableGames.join(','));
+      let ids = this.getShowingMenuGameIds(navData);
+      this.getIssuesByGameIds(ids.join(','));
+      // this.getIssuesByGameIds(availableGames.join(','));
     });
     
     // let ids = getAllGameIds();
     // let ids = this.props.store.game.availableGames;
     // this.getIssuesByGameIds(ids.join(','));
     // console.log('game-header init end=', Date.now(), ' ids=', ids);
+  }
+
+  /**
+   * 获取菜单展开的游戏ID列表
+   * @param navData 游戏菜单配置
+   */
+  getShowingMenuGameIds(navData: GameCategory[]) {
+    let ids: number[] = [];
+    let favs = this.props.store.game.favourites || [];
+    for (let i = 0; i < navData.length; i++) {
+      if (navData[i].type === this.gameType) {
+        navData[i].items.forEach((game: Game) => {
+          ids.push(game.id);
+        });
+        break;
+      }
+    }
+    favs.forEach((game: Game, i: number) => {
+      if (!ids.includes(game.id)) {
+        ids.push(game.id);
+      }
+    });
+    return ids;
   }
 
   updateCurGameIssue(id: number, issue: any): void {

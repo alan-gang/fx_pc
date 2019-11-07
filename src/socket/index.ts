@@ -1,26 +1,26 @@
 import { any } from "prop-types";
 
 
-interface Messages {
-  [prop: string]: any;
-}
+// interface Messages {
+//   [prop: string]: any;
+// }
 
-interface Notify {
-  messages: Messages[];
-}
+// interface Notify {
+//   messages: Messages[];
+// }
 
-interface MySocket {
-  url: string;
-  data: any;
-  notify: Notify;
-  time: number;
-  socket: any;
-  sockets: any;
-  closeType: any;
-  get(msg: string): void;
-  close(name: string): void;
-  connect (args: any, name: string, cb?: any): ()=>WebSocket;
-}
+// interface MySocket {
+//   url: string;
+//   data: any;
+//   notify: Notify;
+//   time: number;
+//   socket: any;
+//   sockets: any;
+//   closeType: any;
+//   get(msg: string): void;
+//   close(name: string): void;
+//   connect (args: any, name: string, cb?: any): ()=>WebSocket;
+// }
 
 // let Socket: MySocket = {
 //   url: '',
