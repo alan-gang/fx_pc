@@ -48,8 +48,8 @@ class LobbyGame extends Component<Props, object> {
       'k3': {methodMenuName: 'diansu', defaultMenu: 'zh_dx', defaultSubMenu: '', title: '总和大小'},
     };
     let gameType = getGameTypeByGameId(props.gameId);
-    let item = props.store.game.getLimitListItemById(props.gameId);
-    let bestLudan: BestLudanItem = item && item.bestLudan;
+    let limitItem = props.store.game.getLimitListItemById(props.gameId);
+    let bestLudan: BestLudanItem = limitItem && limitItem.bestLudan;
     let ludanTab = getLunDanTabByName(gameType, bestLudan && bestLudan.codeStyle);
     let bestLudanName = (getLunDanFullTitleByName(gameType, bestLudan && bestLudan.codeStyle) || bestLudanConfig[gameType].title) + '路单';
     let methodMenuName = getMethodENameByLudanName(gameType, bestLudan && bestLudan.codeStyle) || bestLudanConfig[gameType].methodMenuName;

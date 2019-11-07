@@ -18,7 +18,10 @@ import { Icon } from 'antd'
 import RecentOpen from '../../components/recent-open/RecentOpen'
 import BetRemind from '../../components/bet-remind/BetRemind'
 import Ludan from 'comp/ludan';
-import { getLunDanTabByName } from '../../utils/ludan';
+import { getLunDanTabByName, getTabsByType } from '../../utils/ludan';
+import LimitSetDialog from 'comp/limit-set-dialog';
+import Socket from '../../socket';
+
 // import { methods } from 'src/utils/ludanMethods';
 
 import './index.styl';
@@ -31,7 +34,7 @@ interface IProps {
 
 interface State {
   id: number;
-  gameType: string;
+  // gameType: string;
   curIssue: string;
   lastIssue: string;
   curTime: number;
@@ -43,7 +46,6 @@ interface State {
   subMethods: GameSubMethodMenu[];
   curGameMethodItems: any[];
   odds: any;
-  // methodItems: any;
   issueList: any[];
   defaultInitMethodItemAmount: number; // 默认初始投注金额
   totalBetCount: number;  // 总注数
@@ -53,6 +55,9 @@ interface State {
   maxRows: number;
   defaultMenu?: string;
   defaultSubMenu?: string;
+  isShowLudan: boolean;
+  isShowLimitSetDialog: boolean;
+  limitLevelList: LimitLevelItem[];
 }
 
 interface DataMethodItem {
@@ -66,13 +71,6 @@ interface MatchParams {
 
 type Props = IProps & RouteComponentProps<MatchParams>;
 
-// interface GameCommonDataType {
-//   gameId: number;
-//   gameType: string;
-// }
-
-// const GameCommonDataContext = createContext<GameCommonDataType | null>(null);
-
 @inject("store")
 @observer
 class Game extends Component<Props, object> {
@@ -80,34 +78,32 @@ class Game extends Component<Props, object> {
   gameType: string = 'ssc';
   state: State;
   methodItems: any = methodItems;
-  // odds: any;
   calc: any = calc;
   constructor(props: Props) {
     super(props);
     this.id = parseInt(this.props.match.params.id || '1', 10);
     this.gameType = getGameTypeByGameId(this.id);
     let menus: GameMethodMenu[] = getMethodsConfigByType(this.gameType);
-
-    let gameType = getGameTypeByGameId(this.id);
-    let item = props.store.game.getLimitListItemById(this.id);
-    let bestLudan: BestLudanItem = item && item.bestLudan;
-    // let bestLudan: string = bestLudanConfig[gameType];
-    let ludanTab = getLunDanTabByName(gameType, bestLudan && bestLudan.codeStyle);
+    let limitItem = props.store.game.getLimitListItemById(this.id);
+    let bestLudan: BestLudanItem = limitItem && limitItem.bestLudan;
+    let ludanTab = getLunDanTabByName(this.gameType, bestLudan && bestLudan.codeStyle);
+    let curMenuEname = (menus && menus[0]).ename;
+    let ludanMenus = getTabsByType(this.gameType, curMenuEname);
+    let gameLimitLevel = this.props.store.game.getGameLimitLevelByGameId(this.id); // 设置的限红数据
+    let limitListItem = this.props.store.game.getLimitListItemById(this.id); 
     this.state = {
       id: 1,
-      gameType: 'ssc',
       curIssue: '',
       lastIssue: '',
       curTime: 0,
       remainTime: 0,
       openNumbers: [],
       curMenuIndex: 0,
-      curMenuEname: (menus && menus[0]).ename,
+      curMenuEname,
       curSubMenuIndex: 0,
       subMethods: [],
       curGameMethodItems: this.getMethodItemsByIds((menus && menus[0].ids) || []),
       odds: {},
-      // methodItems: {},
       issueList: [],
       defaultInitMethodItemAmount: 2,
       totalBetCount: 0,
@@ -116,31 +112,76 @@ class Game extends Component<Props, object> {
       maxColumns: 30,
       maxRows: 6,
       defaultMenu: ludanTab && ludanTab.name || '',
-      defaultSubMenu: (ludanTab && ludanTab.subM && ludanTab.subM.length > 0) ? bestLudan.codeStyle.split('_')[1] : ''
+      defaultSubMenu: (ludanTab && ludanTab.subM && ludanTab.subM.length > 0) ? bestLudan.codeStyle.split('_')[1] : '',
+      isShowLudan: ludanMenus && ludanMenus.length > 0,
+      isShowLimitSetDialog: !gameLimitLevel,
+      limitLevelList: !gameLimitLevel ? (limitListItem ? limitListItem.kqPrizeLimit : []) : [],
     }
     this.init();
-    // console.log('game constructor id=', this.id, this.gameType);
   }
   init() {
     this.getCurIssue(this.id);
     this.getUserPoint(this.id);
     this.getHistoryIssue(this.id);
-    this.getLimitData(this.id);
+    // this.getLimitData(this.id);
   }
-  componentWillReceiveProps(nextProps: Props, nextState: State) {
+  initSocket() {
+    let mysocket = new Socket({
+      url: this.props.store.common.broadcaseWSUrl,
+      name: 'gameIndex',
+      message: (data) => {
+        if (data.type === 'openWinCode') {
+          this.openWinCode(parseInt(data.content[0].lottId, 10), data.content[0]);
+        }
+      },
+      open: () => {
+        mysocket.send(JSON.stringify(Object.assign({action: 'noauth'}, {})));
+      }
+    }, true);
+  }
+  componentDidMount() {
+    this.initSocket();
+  }
+  componentWillReceiveProps(nextProps: Props) {
     this.id = parseInt(nextProps.match.params.id || '1', 10);
     this.gameType = getGameTypeByGameId(this.id);
     // console.log('game componentWillReceiveProps id=', this.id, this.gameType);
     // console.log('game componentWillReceiveProps', nextProps, nextState);
     if (this.props.match.params.id !== nextProps.match.params.id) {
+      let limitItem = this.props.store.game.getLimitListItemById(this.id);
+      let bestLudan: BestLudanItem = limitItem && limitItem.bestLudan;
+      let ludanTab = getLunDanTabByName(this.gameType, bestLudan && bestLudan.codeStyle);
       let menus: GameMethodMenu[] = getMethodsConfigByType(this.gameType);
+      let curMenuEname = menus && menus[0].ename
+      let ludanMenus = getTabsByType(this.gameType, curMenuEname);
+      let gameLimitLevel = this.props.store.game.getGameLimitLevelByGameId(this.id); // 设置的限红数据
+      let limitListItem = this.props.store.game.getLimitListItemById(this.id); 
       this.setState({
         curMenuIndex: 0,
-        curMenuEname: menus && menus[0].ename,
+        curMenuEname,
         curGameMethodItems: this.getMethodItemsByIds((menus && menus[0].ids) || []),
-        subMethods: (menus && menus[0].subMethods) || []
+        subMethods: (menus && menus[0].subMethods) || [],
+        defaultMenu: ludanTab && ludanTab.name || '',
+        defaultSubMenu: (ludanTab && ludanTab.subM && ludanTab.subM.length > 0) ? bestLudan.codeStyle.split('_')[1] : '',
+        isShowLudan: ludanMenus && ludanMenus.length > 0,
+        isShowLimitSetDialog: !gameLimitLevel,
+        limitLevelList: !gameLimitLevel ? (limitListItem ? limitListItem.kqPrizeLimit : []) : []
       });
       this.init();
+    }
+  }
+  openWinCode(id: number, openHistoryItem: any) {
+    if (id === this.id) {
+      let issueList = this.state.issueList;
+      issueList.unshift(openHistoryItem);
+      if (issueList.length > 0) {
+        this.setState({
+          lastIssue: issueList[0].issue,
+          openNumbers: issueList[0].code.split(','),
+          issueList: issueList
+        });
+      }
+      // this.getCurIssue();
     }
   }
   // 获取当前玩法下面的子玩法列表
@@ -169,14 +210,18 @@ class Game extends Component<Props, object> {
     this.setState({curSubMenuIndex: index});
   }
   methodMenuChangedCB = (method: GameMethodMenu) => {
-    let curGameMethodItems = this.getMethodItemsByIds(method.ids || [])
+    let curGameMethodItems = this.getMethodItemsByIds(method.ids || []);
+    let ludanMenus = getTabsByType(this.gameType, method.ename);
     this.setState({
       subMethods: method.subMethods || [],
       curGameMethodItems,
       totalBetCount: 0,
       totalBetAmount: 0,
       curSubMenuIndex: 0,
-      curMenuEname: method.ename
+      curMenuEname: method.ename,
+      defaultMenu: '',
+      defaultSubMenu: '',
+      isShowLudan: ludanMenus && ludanMenus.length > 0
     }, this.updateOddsOfMethod);
   }
   updateSubMethods = (method: GameSubMethodMenu) => {
@@ -354,13 +399,17 @@ class Game extends Component<Props, object> {
   getLimitData(id: number) {
     APIs.lottSets({lotteryIds: id}).then((data: any) => {
       if (data.success === 1) {
-        // Object.keys(data.data).forEach((key: string) => {
-        //   this.props.store.game.setLimitList([Object.assign({id: parseInt(key, 10)}, data.data[key])]);
-        // });
         this.props.store.game.setLimitList([Object.assign({id}, data.data[id])]);
         this.props.store.game.setLimitLevelList(data.data[id].kqPrizeLimit);
       }
     });
+  }
+  onLimitChoiceCB = (level: number) => {
+    this.props.store.game.updateGamesLimitLevel({gameId: this.id, level});
+    this.onCloseLimitChoiceHandler();
+  }
+  onCloseLimitChoiceHandler = () => {
+    this.setState({isShowLimitSetDialog: false});
   }
   render() {
     // console.log('game render id=', this.id);
@@ -406,16 +455,18 @@ class Game extends Component<Props, object> {
               orderFinishCB={this.orderFinishCB}
               resetSelectedOfAllMethodItem={this.resetSelectedOfAllMethodItem}
             />
-            <Ludan 
-              gameId={this.id} 
-              gameType={this.gameType} 
-              maxColumns={this.state.maxColumns} 
-              maxRows={this.state.maxRows} 
-              issueList={this.state.issueList.reverse()} 
-              methodMenuName={this.state.curMenuEname} 
-              defaultMenu={this.state.defaultMenu} 
-              defaultSubMenu={this.state.defaultSubMenu}
-            />
+            {this.state.isShowLudan &&
+              <Ludan 
+                gameId={this.id} 
+                gameType={this.gameType} 
+                maxColumns={this.state.maxColumns} 
+                maxRows={this.state.maxRows} 
+                issueList={this.state.issueList.reverse()} 
+                methodMenuName={this.state.curMenuEname} 
+                defaultMenu={this.state.defaultMenu} 
+                defaultSubMenu={this.state.defaultSubMenu}
+              />
+            }
           </section>
           <div className="recent-open">
             <div className="tabs">
@@ -427,6 +478,7 @@ class Game extends Component<Props, object> {
             }
           </div>
         </GameCommonDataContext.Provider>
+        <LimitSetDialog isShow={this.state.isShowLimitSetDialog} gameId={this.id} limitLevelList={this.state.limitLevelList} onLimitChoiceCB={this.onLimitChoiceCB} onCloseHandler={this.onCloseLimitChoiceHandler} />
       </article>
     );
   }

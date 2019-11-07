@@ -64,7 +64,7 @@ class Ludan extends Component<Props, object> {
     });
   }
   componentWillReceiveProps(nextProps: Props) {
-    console.log('componentWillReceiveProps ludan=', nextProps, this.props, this.props.methodMenuName);
+    // console.log('componentWillReceiveProps ludan=', nextProps, this.props, this.props.methodMenuName);
     // if (this.props.methodMenuName !== nextProps.methodMenuName || nextProps.issueList.length !== this.props.issueList.length) {
       let menus = getTabsByType(nextProps.gameType, nextProps.methodMenuName);
       let selectedMenu = nextProps.defaultMenu || ((menus && menus.length > 0) ? menus[0].name : '');

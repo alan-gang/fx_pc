@@ -1,7 +1,7 @@
 import React, { Component, MouseEvent  } from 'react';
 import { inject, observer } from 'mobx-react';
 import { NavLink } from 'react-router-dom';
-import games, { getGameById } from '../../game/games';
+import games, { getGameById, getAllGameIds } from '../../game/games';
 import { Menu } from 'antd';
 // import { ClickParam } from 'antd/lib/menu/index';
 import { GameCategory, Game } from '../../typings/games';
@@ -26,7 +26,7 @@ class GameMenu extends Component<Props, object> {
   rootSubmenuKeys = ['box', LOTTERY_TYPES.SSC, LOTTERY_TYPES.G11X5, LOTTERY_TYPES.PK10, LOTTERY_TYPES.K3];
   MAIN_WIDTH: number = 1200;
   MENU_WIDTH: number = 200;
-  DEFAULT_GAME_TYPE: string = LOTTERY_TYPES.SSC;
+  DEFAULT_GAME_TYPE: string = ''; // LOTTERY_TYPES.SSC;
   menuGames: GameCategory[] = games;
   id: number;
   gameType: string;
@@ -36,12 +36,12 @@ class GameMenu extends Component<Props, object> {
   constructor(props: Props) {
     super(props);
 
-    let navData: GameCategory[] = this.initSyncFavouriteStateToGames();
-    navData.unshift({
-      type: 'box',
-      name: '收藏夹',
-      items: this.props.store.game.favourites || []
-    });
+    // let navData: GameCategory[] = this.initSyncFavouriteStateToGames();
+    // navData.unshift({
+    //   type: 'box',
+    //   name: '收藏夹',
+    //   items: this.props.store.game.favourites || []
+    // });
 
     this.id = parseInt(this.getGameIdFromUrl() || '1', 10);
     this.gameType = getGameTypeByGameId(this.id) || this.DEFAULT_GAME_TYPE;
@@ -50,24 +50,45 @@ class GameMenu extends Component<Props, object> {
       offsetLeft: 30,
       openKeys: ['box', this.gameType],
       defaultSelectedKeys: [String(this.id)],
-      navData
+      navData: []
     };
 
+   
+  }
+
+  componentWillMount() {
     this.init();
   }
 
   init() {
+    
     // this.clearAllTimer();
     // console.log('game-header init start=', Date.now());
-    let games = this.state.navData;
-    games.forEach((gameCategory: GameCategory) => {
-      if (gameCategory.type === this.gameType) {
-        gameCategory.items.forEach((game: Game) => {
-          this.getIssueByGameId(game.id);
-        });
-      }
+
+    // let games = this.state.navData;
+    // games.forEach((gameCategory: GameCategory) => {
+    //   if (gameCategory.type === this.gameType) {
+    //     gameCategory.items.forEach((game: Game) => {
+    //       this.getIssueByGameId(game.id);
+    //     });
+    //   }
+    // });
+
+    this.props.store.game.getAvailableGames((availableGames: number[]) => {
+      let navData: GameCategory[] = this.initSyncFavouriteStateToGames();
+      navData.unshift({
+        type: 'box',
+        name: '收藏夹',
+        items: this.props.store.game.favourites || []
+      });
+      this.setState({navData});
+      this.getIssuesByGameIds(availableGames.join(','));
     });
-    // console.log('game-header init end=', Date.now());
+    
+    // let ids = getAllGameIds();
+    // let ids = this.props.store.game.availableGames;
+    // this.getIssuesByGameIds(ids.join(','));
+    // console.log('game-header init end=', Date.now(), ' ids=', ids);
   }
 
   updateCurGameIssue(id: number, issue: any): void {
@@ -102,6 +123,19 @@ class GameMenu extends Component<Props, object> {
         data.timeStr = timeFormat(data.remainTime);
         this.updateCurGameIssue(id, data);
         this.initCountDown(id);
+      }
+    });
+  }
+
+  getIssuesByGameIds(ids: string) {
+    APIs.getIssuesByGameIds({gameid: ids}).then((data: any) => {
+      if (data.success > 0) {
+        data.items.forEach((issue: any) => {
+          issue.remainTime = issue.saleend - data.current;
+          issue.timeStr = timeFormat(issue.remainTime);
+          this.updateCurGameIssue(issue.lotteryid, issue);
+          this.initCountDown(issue.lotteryid);
+        })
       }
     });
   }
@@ -202,8 +236,12 @@ class GameMenu extends Component<Props, object> {
           if (fav[i].id === game.id) {
             game.favourite = true;
           }
+          if (!this.props.store.game.hasAvailableGame(game.id)) {
+            game.available = false;
+          }
           return game;
         });
+        gameType.items = gameType.items.filter((game) => game.available !== false);
         return gameType;
       });
     }

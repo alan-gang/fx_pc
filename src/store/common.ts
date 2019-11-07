@@ -2,11 +2,11 @@
 import { observable, action } from "mobx";
 
 class Common {
-  @observable login?: boolean;
+  @observable broadcaseWSUrl: string = '';
 
   @action
-  setLogin(login: boolean) {
-    this.login = login;
+  setBroadcaseWSUrl(broadcaseWSUrl: string) {
+    this.broadcaseWSUrl = broadcaseWSUrl;
   }
 }
 

@@ -9,10 +9,21 @@ class User {
   @observable rewardPoint?: string;
   @observable userId?: number;
   @observable userLevel?: number;
+  @observable login: boolean = false;
+
+  @action
+  setLogin(login: boolean) {
+    this.login = login;
+  }
 
   @action
   setName(name: string) {
     this.name = name;
+  }
+
+  @action
+  setUserId(userId: number) {
+    this.userId = userId;
   }
 
   @action
