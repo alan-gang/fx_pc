@@ -7,6 +7,7 @@ import LimitSetDialog from 'comp/limit-set-dialog';
 import APIs from '../../http/APIs';
 import { getGameTypeByGameId } from '../../game/games';
 import { getLunDanTabByName, getLunDanFullTitleByName, getMethodENameByLudanName } from '../../utils/ludan';
+import Socket from '../../socket';
 
 import './lobbyGame.styl';
 
@@ -39,6 +40,7 @@ interface State {
 @observer
 class LobbyGame extends Component<Props, object> {
   state: State;
+  mysocket?: Socket;
   constructor(props: Props) {
     super(props);
     let bestLudanConfig: any = {
@@ -79,6 +81,36 @@ class LobbyGame extends Component<Props, object> {
   init() {
     this.getCurIssue(this.props.gameId);
     this.getHistoryIssue(this.props.gameId);
+  }
+  initSocket() {
+    this.mysocket = new Socket({
+      url: this.props.store.common.broadcaseWSUrl,
+      name: 'lobbyGame' + this.props.gameId,
+      message: (data) => {
+        if (data.type === 'openWinCode') {
+          this.openWinCode(parseInt(data.content[0].lottId, 10), data.content[0]);
+        }
+      },
+      open: () => {
+        this.mysocket && this.mysocket.send(JSON.stringify(Object.assign({action: 'noauth'}, {})));
+      }
+    }, true);
+  }
+  openWinCode(id: number, openHistoryItem: any) {
+    if (id === this.props.gameId) {
+      console.log('LobbyGame openWinCode=', id,  this.props.gameId, JSON.stringify(openHistoryItem));
+      let issueList = this.state.issueList;
+      issueList.unshift(openHistoryItem);
+      this.setState({
+        lastIssue: issueList[0].issue,
+        openNumbers: issueList[0].code.split(','),
+        issueList: issueList
+      });
+      this.getCurIssue(this.props.gameId);
+    }
+  }
+  componentDidMount() {
+    this.initSocket();
   }
   getCurIssue = (gameid: number) => {
     APIs.curIssue({gameid}).then((data: any) => {
@@ -123,6 +155,9 @@ class LobbyGame extends Component<Props, object> {
   }
   onCloseLimitChoiceHandler = () => {
     this.setState({isShowLimitSetDialog: false});
+  }
+  componentWillUnmount() {
+    this.mysocket && this.mysocket.removeListen();
   }
   render() {
     return (

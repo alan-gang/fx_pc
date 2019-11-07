@@ -112,7 +112,7 @@ let Subscriber: ISubscribe = {
       if (name === m.name) {
         this.messsages.splice(i, 1);
       }
-    })
+    });
   }
 }
 
@@ -179,8 +179,10 @@ class Socket {
   }
   send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void {
     this.socket && this.socket.send(data);
-  };
+  }
+  removeListen() {
+    Subscriber.remove(this.options.name || '');
+  }
 }
 
 export default Socket;
-

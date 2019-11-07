@@ -159,7 +159,6 @@ class GameMenu extends Component<Props, object> {
   }
 
   clearAllTimer(): void {
-    // console.log('game-header clearAllTimer start=', Date.now());
     let navData = this.state.navData;
     let box = navData.shift();
     navData = games.map((gameCategory: GameCategory) => {
@@ -174,7 +173,6 @@ class GameMenu extends Component<Props, object> {
     })
     if (box) navData.unshift(box);
     this.setState({navData});
-    // console.log('game-header clearAllTimer end=', Date.now());
   }
 
   componentDidMount() {

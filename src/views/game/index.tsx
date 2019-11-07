@@ -79,6 +79,7 @@ class Game extends Component<Props, object> {
   state: State;
   methodItems: any = methodItems;
   calc: any = calc;
+  mysocket?: Socket;
   constructor(props: Props) {
     super(props);
     this.id = parseInt(this.props.match.params.id || '1', 10);
@@ -126,7 +127,7 @@ class Game extends Component<Props, object> {
     // this.getLimitData(this.id);
   }
   initSocket() {
-    let mysocket = new Socket({
+    this.mysocket = new Socket({
       url: this.props.store.common.broadcaseWSUrl,
       name: 'gameIndex',
       message: (data) => {
@@ -135,7 +136,7 @@ class Game extends Component<Props, object> {
         }
       },
       open: () => {
-        mysocket.send(JSON.stringify(Object.assign({action: 'noauth'}, {})));
+        this.mysocket && this.mysocket.send(JSON.stringify(Object.assign({action: 'noauth'}, {})));
       }
     }, true);
   }
@@ -174,14 +175,12 @@ class Game extends Component<Props, object> {
     if (id === this.id) {
       let issueList = this.state.issueList;
       issueList.unshift(openHistoryItem);
-      if (issueList.length > 0) {
-        this.setState({
-          lastIssue: issueList[0].issue,
-          openNumbers: issueList[0].code.split(','),
-          issueList: issueList
-        });
-      }
-      // this.getCurIssue();
+      this.setState({
+        lastIssue: issueList[0].issue,
+        openNumbers: issueList[0].code.split(','),
+        issueList: issueList
+      });
+      this.getCurIssue(this.id);
     }
   }
   // 获取当前玩法下面的子玩法列表
@@ -410,6 +409,9 @@ class Game extends Component<Props, object> {
   }
   onCloseLimitChoiceHandler = () => {
     this.setState({isShowLimitSetDialog: false});
+  }
+  componentWillUnmount() {
+    this.mysocket && this.mysocket.removeListen();
   }
   render() {
     // console.log('game render id=', this.id);

@@ -59,7 +59,6 @@ class Lobby extends Component<Props, object> {
     return tempGames;
   }
   render() {
-    console.log(this.props.store.user.name);
     return (
       <article className="lobby-view">
         <LobbyMenu onMenuChanged={this.onMenuChanged} />
