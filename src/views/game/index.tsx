@@ -50,6 +50,7 @@ interface State {
   tabIndex: number; //  
   maxColumns: number;
   maxRows: number;
+  type: any;
 }
 
 interface DataMethodItem {
@@ -105,7 +106,15 @@ class Game extends Component<Props, object> {
       totalBetAmount: 0,
       tabIndex: 0,
       maxColumns: 30,
-      maxRows: 6
+      maxRows: 6,
+      // 玩法信息
+      type: {
+        id: '-3-1-1',
+        // 玩法名
+        title: '',
+        // 玩法描述
+        description: ''
+      }
     }
     this.init();
     // console.log('game constructor id=', this.id, this.gameType);
@@ -341,7 +350,7 @@ class Game extends Component<Props, object> {
   }
 
   getLimitData(id: number) {
-    APIs.lottSets({lotteryIds: id}).then((data: any) => {
+    APIs.lottSets({lotteryIds: id, v: 1}).then((data: any) => {
       if (data.success === 1) {
         // Object.keys(data.data).forEach((key: string) => {
         //   this.props.store.game.setLimitList([Object.assign({id: parseInt(key, 10)}, data.data[key])]);
@@ -351,6 +360,21 @@ class Game extends Component<Props, object> {
       }
     });
   }
+
+  setType = (type: any) => {
+    this.setState({
+      type: type
+    })
+    // this.__setCall({fn: '__clearSelectedNumbers'})
+    // this.__setCall({fn: '__setDefaultTimes', args: this.times})
+    // setTimeout(() => {
+    //   this.__setCall({fn: '__clearValue'})
+    // }, 0)
+    // setTimeout(() => {
+    //   this.__setCall({fn: '__setFt', callId: undefined})
+    // }, 100)
+  }
+
   render() {
     // console.log('game render id=', this.id);
     return (
@@ -367,7 +391,7 @@ class Game extends Component<Props, object> {
             getNewestIssue={this.getCurIssue}
           />
           <section className="game-main">
-            <MethodMenu gameType={this.gameType} curMenuIndex={this.state.curMenuIndex} methodMenuChangedCB={this.methodMenuChangedCB} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
+            <MethodMenu gameType={this.gameType} curSubMenuIndex={this.state.curSubMenuIndex} curMenuIndex={this.state.curMenuIndex} methodMenuChangedCB={this.methodMenuChangedCB} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
             {this.state.subMethods.length > 0 && <SubMethodMenu gameType={this.gameType} curSubMenuIndex={this.state.curSubMenuIndex} subMethods={this.state.subMethods} odds={this.state.odds} updateSubMethods={this.updateSubMethods} updateSubMethodMenuIndex={this.updateSubMethodMenuIndex} />}
             <Play 
               curGameMethodItems={this.state.curGameMethodItems} 
@@ -394,7 +418,7 @@ class Game extends Component<Props, object> {
               <span className={ `tab ${ this.state.tabIndex === 1 ? 'active' : '' }` } onClick={ () => this.changeTabIndex(1) }>投注提醒 <Icon theme="filled" type="setting" /></span>
             </div>
             {
-              this.state.tabIndex === 0 ? <RecentOpen gameId={this.state.id} /> : <BetRemind />
+              this.state.tabIndex === 0 ? <RecentOpen curMenuIndex={this.state.curMenuIndex} curSubMenuIndex={this.state.curSubMenuIndex} gameId={this.state.id} issueList={this.state.issueList.slice(0, 30)} gameType={this.state.gameType} /> : <BetRemind />
             }
           </div>
         </GameCommonDataContext.Provider>

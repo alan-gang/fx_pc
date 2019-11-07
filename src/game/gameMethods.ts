@@ -3,17 +3,39 @@ import { LOTTERY_TYPES } from '../utils/config';
 import { MethodsConfig } from '../typings/game-methods';
 import { GameMethodMenu } from '../typings/games';
 
+// 近期开奖配置
+const hz = (params = {}) => {
+  return Object.assign({
+    title: '和值',
+    type: 'hz'
+  }, params)
+}
+
+const dx = (params = {}) => {
+  return Object.assign({
+    title: '大小',
+    type: 'dx'
+  }, params)
+}
+
+const ds = {
+  title: '单双',
+  type: 'ds'
+}
+
 // 玩法配置
 export let methodsConfig: MethodsConfig = {
   [LOTTERY_TYPES.SSC]: [
     {
       name: '整合',
       ename: 'zhenghe',
+      recentType: [hz({min: 22})],
       ids: ['1251:1', '1250:1','1252:1', '1274:1', '1275:1', '1276:1']
     },
     {
       name: '定位',
       ename: 'dw',
+      recentType: [dx({min: 4}), ds],
       ids: ['1253:1']
     },
     {
@@ -24,6 +46,7 @@ export let methodsConfig: MethodsConfig = {
     {
       name: '一字组合',
       ename: 'yzzh',
+      recentType: [dx({min: 4}), ds],
       ids: ['1256:1', '1257:1', '1258:1', '1259:1']
     }
   ],
@@ -31,11 +54,13 @@ export let methodsConfig: MethodsConfig = {
     {
       name: '整合',
       ename: 'zhenghe',
+      recentType: [hz({min: 22})],
       ids: ['2050:1', '2050:2', '2053:2', '2051:1']
     },
     {
       name: '定位',
       ename: 'dw',
+      
       ids: ['2052:1']
     },
     {

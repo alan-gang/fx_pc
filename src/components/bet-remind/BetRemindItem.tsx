@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, createRef, ChangeEvent } from 'react'
 import { Icon } from 'antd'
 import LuDan from 'comp/ludan'
 import APIs from '../../http/APIs'
@@ -6,7 +6,11 @@ import { any } from 'prop-types'
 import { LOTTERY_TYPES } from '../../utils/config'
 import { getMethodName, getNoSubMenuMethods } from '../../utils/ludan'
 import { inject, observer } from 'mobx-react';
-
+import methodItems from '../../game/methodItems'
+import Timer from '../../utils/timer'
+import { timeFormat } from '../../utils/date'
+import local from '../../utils/local'
+import { message } from 'antd'
 
 interface GameData {
   codeStyle: string;
@@ -20,6 +24,7 @@ interface GameData {
   notifyVal: string;
   pos: string;
   unit: string;
+  codeRange: string;
 }
 
 interface Props {
@@ -27,6 +32,7 @@ interface Props {
   gamedata: GameData;
   gameType: string;
   store?: any;
+  removeItem: Function;
 }
 
 interface State {
@@ -36,12 +42,20 @@ interface State {
   remainTime: number;
   issueList: any[];
   kqargses: any;
+  timer: any;
+  timeCls: string;
+  time: string;
+}
+
+interface AppRefs {
+  inputParent: HTMLElement
 }
 
 @inject("store")
 @observer
-class BetRemindItem extends Component<Props> {
+class BetRemindItem extends Component<Props, {}> {
   state: State
+  private inputParent: React.RefObject<HTMLDivElement>
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -50,10 +64,52 @@ class BetRemindItem extends Component<Props> {
       curIssue: '',
       curDateTime: 0,
       remainTime: -1,
-      kqargses: any
+      kqargses: any,
+      timer: null,
+      timeCls: '',
+      time: '00:00:00'
     }
+    this.inputParent = createRef()
   }
 
+  // 获取赔率数据
+  getOdd = (type: string) => {
+    let limitItem = this.props.store.game.getLimitListItemById(this.props.gamedata.lotteryId)
+    if (limitItem) {
+      let arr: any[] = limitItem.items[this.props.gamedata.methodId]
+      if (arr) {
+        if (arr.length === 1) return arr[0].maxprize
+        let rows = methodItems[this.props.gamedata.methodId + ':1']().rows
+        if (rows.length > 1) {
+          let temp: any = arr[0].maxprize
+          rows.some((row: any) => {
+            if (row.n === type || row.p === this.props.gamedata.pos) {
+              return row.vs.some((tp: any) => {
+                if (tp.n === type || tp.pv === type) {
+                  temp = arr[tp.oddIndex || 0].maxprize
+                  return true
+                }
+              })
+            }
+          })
+          return temp
+        } else if (rows[0].vs.length > 0) {
+          let temp: any = arr[0].maxprize
+          rows[0].vs.some((row: any) => {
+            if (row.n === type || row.pv === type) {
+              temp = arr[row.oddIndex].maxprize
+              return true
+            }
+          })
+          return temp
+        } else {
+          return arr[0].maxprize
+        }
+      }
+      return ''
+    }
+    return ''
+  }
 
   changeOpen = () => {
     this.setState({
@@ -82,6 +138,37 @@ class BetRemindItem extends Component<Props> {
     this.getHistoryIssue()
   }
 
+  initTime = () => {
+    if (this.state.timer) {
+      this.state.timer.close()
+    }
+    let timer = new Timer(this.state.remainTime, (t: number) => {
+      if (t < 10 && t > 0) {
+        this.setState({
+          timeCls: 'c-red'
+        })
+      } else {
+        this.setState({
+          timeCls: ''
+        })
+      }
+      if (t <= 0) {
+        this.state.timer.close()
+        this.props.removeItem(this.props.gamedata)
+      }
+      this.setState({
+        time: timeFormat(t * 1000)
+      })
+    })
+    this.setState({
+      timer: timer
+    })
+  }
+
+  componentWillUnmount() {
+    this.state.timer.close()
+  }
+
   getCurIssueData = () => {
     APIs.curIssue({gameid: this.props.gamedata.lotteryId})
       .then((data: any) => {
@@ -91,6 +178,7 @@ class BetRemindItem extends Component<Props> {
             curDateTime: data.current,
             remainTime: Math.floor((data.saleend - data.current) / 1000)
           })
+          this.initTime()
         } else {
           this.setState({
             curIssue: ''
@@ -168,6 +256,7 @@ class BetRemindItem extends Component<Props> {
   }
 
   getLuDan = () => {
+    if (!this.state.issueList.length) return ''
     if (this.state.isOpen) {
       let arr = getNoSubMenuMethods(this.props.gameType)
       let temp = {}
@@ -197,8 +286,86 @@ class BetRemindItem extends Component<Props> {
     }
   }
 
-  componentWillUpdate(nextProps: Props, nextState: State) {
-    
+  // 限制 input 框只能输入数字
+  inputValChange(event: any) {
+    event.target.value = event.target.value.replace(/[^\d]/g,'')
+  }
+
+  __kqbooking = () => {
+    let totMoney = 0
+    let totProjs = 0
+    let betList = []
+    let types = this.props.gamedata.codeRange.split(',')
+    let limit = this.getLimit(this.props.gamedata.lotteryId)
+    if (this.inputParent.current) {
+      let list: any = this.inputParent.current.children
+      let inputs: any[] = []
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].className.indexOf('bet-item') !== -1) {
+          let arr = list[i].children
+          for (let j = 0; j < arr.length; j++) {
+            if (arr[j].nodeName === 'INPUT') {
+              if (arr[j].value > 0) {
+                inputs.push(arr[j])
+              }
+            }
+          }
+        }
+      }
+      let flag = false
+      betList = inputs.map((ipt, i) => {
+        let val = Number(ipt.value)
+        if (limit.maxAmt < val || limit.minAmt > val) {
+          let msg = limit.maxAmt < val ? '投注超出限红' : '投注低于最低限红'
+          flag = true
+          message.warning(msg)
+        }
+        totMoney += val
+        return {
+          content: this.props.gamedata.pos ? this.props.gamedata.pos + '-' + types[i] : types[i],
+          methodId: this.props.gamedata.methodId,
+          projs: 1,
+          money: val
+        }
+      })
+      if (flag) return
+      totProjs = inputs.length
+      if (!totMoney) return message.warning('请输入投注金额!')
+      let params = {
+        ...this.state.kqargses,
+        betList,
+        totMoney,
+        totProjs,
+        isFastBet: 1
+      }
+      params.limitLevel = this.getLimit(params.lotteryId).level
+      APIs.bet({betData: JSON.stringify(params)})
+        .then((res: any) => {
+          if (res.success === 1) {
+            message.success('投注成功')
+            inputs.forEach(ipt => ipt.value = '')
+          } else {
+            message.warning(res.msg || '投注失败')
+          }
+        })
+    }
+    // for (let i=0; i<len; i++) {
+    //   let val: any = 
+    // }
+  }
+
+  // 获取限红
+  getLimit = (gameId: any) => {
+    let xh = local.get('xh') || {}
+    if(xh[gameId]) {
+      return xh[gameId]
+    } else {
+      console.log(this.props.store.game.limitList[gameId])
+      if (this.props.store.game.limitList && this.props.store.game.limitList[gameId]) {
+        return this.props.store.game.limitList[gameId].jnPrizeLimit[0]
+      }
+      return {}
+    }
   }
 
   render() {
@@ -224,20 +391,19 @@ class BetRemindItem extends Component<Props> {
         <div className="bet-remind-play">
           <div className="lottery">
             <span className="issue">{ this.props.gamedata.issue }期</span>
-            <span className="time">00:21:01</span>
+            <span className="time">{this.state.time}</span>
           </div>
-          <div className="bet-list clearfix">
-            <div className="bet-item flt-l">
-              <span className="bet-ball">大</span>
-              <span className="odd">1.97</span>
-              <input type="text"/>
-            </div>
-            <div className="bet-item flt-r">
-              <span className="bet-ball">小</span>
-              <span className="odd">1.97</span>
-              <input type="text"/>
-            </div>
-            <div className="bet-now flt-r">立即购买</div>
+          <div className="bet-list clearfix" ref={this.inputParent}>
+            {this.props.gamedata.codeRange.split(',').map((item, index) => {
+              return (
+                <div key={index} className={`bet-item ${(index + 1) % 2 === 0 ? 'flt-r' : 'flt-l'}`}>
+                  <span className="bet-ball">{item.slice(-1)}</span>
+                  <span className="odd">{this.getOdd(item)}</span>
+                  <input onChange={this.inputValChange} type="text"/>
+                </div>
+              )
+            })}
+            <div className="bet-now flt-r" onClick={this.__kqbooking}>立即购买</div>
           </div>
         </div>
       </div>

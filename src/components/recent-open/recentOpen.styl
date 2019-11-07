@@ -28,18 +28,28 @@
         line-height .3rem
         text-align center
         box-sizing border-box
-        > div:first-child
-          width 30%
-          padding-left .12rem
-        > div:nth-child(3)
-          width 30%
-          padding-right .12rem
-        > div:nth-child(2)
+        .code
+          span
+            margin-left 2px
+            &:first-child
+              margin-left 0
+        >div:nth-child(2)
           flex 1
+        >div:last-child
+          margin-left .12rem
       .recent-open-header
         color $fc3
         line-height .36rem
         border-bottom 1px solid $border-color
+        >div:first-child
+          padding-left .12rem
+        >div:last-child
+          margin-right .12rem
+        .ds
+        .dx
+          width .7rem
+        .hz
+          width .58rem
     .tabs
       line-height .38rem
       .tab

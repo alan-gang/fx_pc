@@ -9,12 +9,14 @@ interface Props {
   store?: any;
   gameType: string;
   curMenuIndex: number;
+  curSubMenuIndex: number;
   updateMethodMenuIndex(index: number): void;
   methodMenuChangedCB(methodIds: GameMethodMenu): void;
 }
 
 interface State {
   menus: GameMethodMenu[];
+
   subMenus: GameSubMethodMenu[];
 }
 
@@ -28,6 +30,8 @@ class MethodMenu extends Component<Props, object> {
       menus: getMethodsConfigByType(this.props.gameType),
       subMenus: []
     }
+  }
+  componentDidMount() {
   }
   onMenuHandler = (menu: GameMethodMenu, index: number) => {
     this.props.updateMethodMenuIndex(index);

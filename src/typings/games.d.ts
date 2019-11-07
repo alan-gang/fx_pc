@@ -9,12 +9,14 @@ export interface GameSubMethodMenu {
   mid?: string;
   odd?: string;
   ids: string[];
+  recentType?: any[];
 }
 export interface GameMethodMenu {
   name: string;
   ename: string;
   ids: string[];
   subMethods?: GameSubMethodMenu[];
+  recentType?: any[];
 }
 export interface Game {
   id: number;

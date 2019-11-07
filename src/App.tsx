@@ -70,7 +70,7 @@ class App extends Component<Props, object> {
     });
   }
   getLimitData(ids: number[]) {
-    APIs.lottSets({lotteryIds: ids.join(',')}).then((data: any) => {
+    APIs.lottSets({lotteryIds: ids.join(','), v: 1}).then((data: any) => {
       if (data.success === 1) {
         Object.keys(data.data).forEach((key: string) => {
           store.game.setLimitList([Object.assign({id: parseInt(key, 10)}, data.data[key])]);

@@ -36,7 +36,7 @@ function cp(from = {}, to = {}) {
   return Object.assign({}, to, from);
 }
 
-export default {
+const methodItems: any = {
   '1250:1' () {
     // ssc 双面
     return {
@@ -619,3 +619,6 @@ export default {
     }
   }
 };
+
+export default methodItems
+

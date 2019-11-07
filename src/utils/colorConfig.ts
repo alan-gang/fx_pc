@@ -37,7 +37,7 @@ const textColors: TextColr = {
   'bgc-y': 'txt-y'
 }
 
-function getStyleTxtColor(d: string): string {
+export function getStyleTxtColor(d: string): string {
   return textColors[getStyle(d)];
 }
 
