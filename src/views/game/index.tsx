@@ -113,7 +113,7 @@ class Game extends Component<Props, object> {
       tabIndex: 0,
       maxColumns: 30,
       maxRows: 6,
-      defaultMenu: ludanTab && ludanTab.name || '',
+      defaultMenu: (ludanTab && ludanTab.name) || '',
       defaultSubMenu: (ludanTab && ludanTab.subM && ludanTab.subM.length > 0) ? bestLudan.codeStyle.split('_')[1] : '',
       isShowLudan: ludanMenus && ludanMenus.length > 0,
       isShowLimitSetDialog: !gameLimitLevel,
@@ -166,7 +166,7 @@ class Game extends Component<Props, object> {
         curMenuEname,
         curGameMethodItems: this.getMethodItemsByIds((menus && menus[0].ids) || []),
         subMethods: (menus && menus[0].subMethods) || [],
-        defaultMenu: ludanTab && ludanTab.name || '',
+        defaultMenu: (ludanTab && ludanTab.name) || '',
         defaultSubMenu: (ludanTab && ludanTab.subM && ludanTab.subM.length > 0) ? bestLudan.codeStyle.split('_')[1] : '',
         isShowLudan: ludanMenus && ludanMenus.length > 0,
         isShowLimitSetDialog: !gameLimitLevel,
@@ -419,7 +419,7 @@ class Game extends Component<Props, object> {
     this.mysocket && this.mysocket.removeListen();
   }
   render() {
-    // console.log('game render id=', this.id);
+    // console.log('game render id=', this.id, this.state.issueList);
     return (
       <article className="game-view">
         <GameCommonDataContext.Provider value={{gameId: this.id, gameType: this.gameType}} >
@@ -469,7 +469,7 @@ class Game extends Component<Props, object> {
                 gameType={this.gameType} 
                 maxColumns={this.state.maxColumns} 
                 maxRows={this.state.maxRows} 
-                issueList={this.state.issueList.reverse()} 
+                issueList={this.state.issueList.slice(0).reverse()} 
                 methodMenuName={this.state.curMenuEname} 
                 defaultMenu={this.state.defaultMenu} 
                 defaultSubMenu={this.state.defaultSubMenu}
@@ -482,7 +482,7 @@ class Game extends Component<Props, object> {
               <span className={ `tab ${ this.state.tabIndex === 1 ? 'active' : '' }` } onClick={ () => this.changeTabIndex(1) }>投注提醒 <Icon theme="filled" type="setting" /></span>
             </div>
             {
-              this.state.tabIndex === 0 ? <RecentOpen curMenuIndex={this.state.curMenuIndex} curSubMenuIndex={this.state.curSubMenuIndex} gameId={this.id} issueList={this.state.issueList.reverse()} gameType={this.gameType} /> : <BetRemind />
+              this.state.tabIndex === 0 ? <RecentOpen curMenuIndex={this.state.curMenuIndex} curSubMenuIndex={this.state.curSubMenuIndex} gameId={this.id} issueList={this.state.issueList.slice(0).reverse()} gameType={this.gameType} /> : <BetRemind />
             }
           </div>
         </GameCommonDataContext.Provider>

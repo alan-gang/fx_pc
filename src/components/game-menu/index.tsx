@@ -1,9 +1,8 @@
 import React, { Component, MouseEvent  } from 'react';
 import { inject, observer } from 'mobx-react';
 import { NavLink } from 'react-router-dom';
-import games, { getGameById, getAllGameIds } from '../../game/games';
+import games, { getGameById /*, getAllGameIds*/ } from '../../game/games';
 import { Menu } from 'antd';
-// import { ClickParam } from 'antd/lib/menu/index';
 import { GameCategory, Game } from '../../typings/games';
 import { LOTTERY_TYPES } from '../../utils/config';
 import { getGameTypeByGameId } from '../../game/games';
@@ -30,9 +29,7 @@ class GameMenu extends Component<Props, object> {
   menuGames: GameCategory[] = games;
   id: number;
   gameType: string;
-
   state: State;
-
   constructor(props: Props) {
     super(props);
 
@@ -52,7 +49,6 @@ class GameMenu extends Component<Props, object> {
       defaultSelectedKeys: [String(this.id)],
       navData: []
     };
-
   }
 
   componentWillMount() {
@@ -60,19 +56,6 @@ class GameMenu extends Component<Props, object> {
   }
 
   init() {
-    
-    // this.clearAllTimer();
-    // console.log('game-header init start=', Date.now());
-
-    // let games = this.state.navData;
-    // games.forEach((gameCategory: GameCategory) => {
-    //   if (gameCategory.type === this.gameType) {
-    //     gameCategory.items.forEach((game: Game) => {
-    //       this.getIssueByGameId(game.id);
-    //     });
-    //   }
-    // });
-
     this.props.store.game.getAvailableGames((availableGames: number[]) => {
       let navData: GameCategory[] = this.initSyncFavouriteStateToGames();
       navData.unshift({
@@ -85,11 +68,6 @@ class GameMenu extends Component<Props, object> {
       this.getIssuesByGameIds(ids.join(','));
       // this.getIssuesByGameIds(availableGames.join(','));
     });
-    
-    // let ids = getAllGameIds();
-    // let ids = this.props.store.game.availableGames;
-    // this.getIssuesByGameIds(ids.join(','));
-    // console.log('game-header init end=', Date.now(), ' ids=', ids);
   }
 
   /**
@@ -228,10 +206,6 @@ class GameMenu extends Component<Props, object> {
     }, 0);
   };
 
-  // onMenuItemHandler = ({ item, key, keyPath, domEvent }: ClickParam) => {
-  //   console.log('item=', item, 'key=', key, 'keyPath=', keyPath, 'domEvent=', domEvent, domEvent.target);
-  // }
-
   onAddFavourite = (id: number, type: string, event: MouseEvent<HTMLSpanElement>) => {
     event.stopPropagation();
     let game: Game | null = getGameById(id);
@@ -243,13 +217,15 @@ class GameMenu extends Component<Props, object> {
         game.favourite = true;
         this.props.store.game.setFavourite(game);
       }
-      let nav = this.state.navData[0];
-      nav.items = this.props.store.game.favourites || [];
-      this.state.navData[0] = nav;
-      this.setState({navData: this.state.navData});
+      let navData = this.state.navData;
+      navData[0].items = this.props.store.game.favourites || [];
+      this.setState({navData: navData});
     }
   }
 
+  /**
+   * 初始从缓存同步收藏夹的数据
+   */
   initSyncFavouriteStateToGames() {
     let fav = this.props.store.game.favourites || [];
     for (let i = 0; i < fav.length; i++) {
@@ -288,7 +264,6 @@ class GameMenu extends Component<Props, object> {
           openKeys={this.state.openKeys}
           defaultSelectedKeys={this.state.defaultSelectedKeys}
           onOpenChange={this.onOpenChange}
-          // onClick={this.onMenuItemHandler}
           style={{ width: 200 }}
           subMenuCloseDelay={0}
           subMenuOpenDelay={0}

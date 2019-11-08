@@ -358,7 +358,7 @@ export function getLuDanListByMethod(issueList: any[], type: string, name: strin
           case '4v7':
           case '5v6':
             temp = cs.data && cs.data.find((item: any) => mObj.method === item.pos);
-            item = temp && temp.val || '';
+            item = (temp && temp.val) || '';
             break;
           default:
             break;
