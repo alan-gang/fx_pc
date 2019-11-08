@@ -86,6 +86,9 @@ class GameHeader extends Component<Props, object> {
   }
   onLimitLevelChanged = (value: any) => {
     this.props.store.game.updateGamesLimitLevel({gameId: this.props.gameId, level: parseInt(value, 10)});
+    this.setState({
+      curGameLimitLevel: parseInt(value, 10)
+    });
   }
   clearTimer(): void {
     if (this.state.timer && this.state.timer.close) {
