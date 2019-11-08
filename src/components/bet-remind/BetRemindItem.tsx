@@ -11,6 +11,7 @@ import Timer from '../../utils/timer'
 import { timeFormat } from '../../utils/date'
 import local from '../../utils/local'
 import { message, Tooltip } from 'antd'
+import inject_unmount from '../inject_unmount'
 
 interface GameData {
   codeStyle: string;
@@ -53,6 +54,7 @@ interface AppRefs {
 
 @inject("store")
 @observer
+@inject_unmount
 class BetRemindItem extends Component<Props, {}> {
   state: State
   private inputParent: React.RefObject<HTMLDivElement>

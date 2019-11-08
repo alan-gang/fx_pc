@@ -4,7 +4,7 @@ import BetRemindItem from './BetRemindItem'
 import { getGameTypeByGameId, getGameById } from '../../game/games'
 import * as _ from 'underscore'
 import Bus from '../../utils/eventBus'
-import BaseComponent from '../../components/BaseComponent'
+import inject_unmount from '../../components/inject_unmount'
 
 import './betRemind.styl'
 
@@ -13,8 +13,8 @@ interface State {
   list: any[];
   size: number;
 }
-
-class BetRemind extends BaseComponent {
+@inject_unmount
+class BetRemind extends Component {
   state: State
   private listBox: RefObject<HTMLDivElement>
   private listContainer: RefObject<HTMLDivElement>
@@ -28,7 +28,7 @@ class BetRemind extends BaseComponent {
     }
     this.listBox = createRef()
     this.listContainer = createRef()
-    this.handleScrollThrottled = _.throttle(this.handleScroll, 1000)
+    this.handleScrollThrottled = _.throttle(this.handleScroll, 500)
   }
 
   componentDidMount() {
@@ -40,7 +40,7 @@ class BetRemind extends BaseComponent {
     Bus.removeListener('__pushBetRemind', this.addBetRemind)
   }
 
-  addBetRemind(arr: any) {
+  addBetRemind = (arr: any) => {
     this.setState({
       list: this.state.list.concat(arr)
     })
