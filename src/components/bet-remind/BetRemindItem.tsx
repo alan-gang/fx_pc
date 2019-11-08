@@ -7,11 +7,11 @@ import { LOTTERY_TYPES } from '../../utils/config'
 import { getMethodName, getNoSubMenuMethods } from '../../utils/ludan'
 import { inject, observer } from 'mobx-react';
 import methodItems from '../../game/methodItems'
-import Timer from '../../utils/timer'
-import { timeFormat } from '../../utils/date'
+
 import local from '../../utils/local'
 import { message, Tooltip } from 'antd'
 import inject_unmount from '../inject_unmount'
+import BetRemindTime from './BetRemindTime'
 
 interface GameData {
   codeStyle: string;
@@ -43,9 +43,9 @@ interface State {
   remainTime: number;
   issueList: any[];
   kqargses: any;
-  timer: any;
   timeCls: string;
   time: string;
+  showHeader: boolean;
 }
 
 interface AppRefs {
@@ -67,12 +67,14 @@ class BetRemindItem extends Component<Props, {}> {
       curDateTime: 0,
       remainTime: -1,
       kqargses: any,
-      timer: null,
       timeCls: '',
-      time: '00:00:00'
+      time: '00:00:00',
+      showHeader: false
     }
     this.inputParent = createRef()
   }
+
+
 
   // 获取赔率数据
   getOdd = (type: string) => {
@@ -120,7 +122,7 @@ class BetRemindItem extends Component<Props, {}> {
   }
 
   notifyType(): String {
-    let map = [null, '长龙', '单挑', '单边跳', '一厅两房', '拍拍连']
+    let map = [null, '长龙', '单跳', '单边跳', '一厅两房', '拍拍连']
     return map[this.props.gamedata.notifyType] || '连出'
   }
 
@@ -140,36 +142,6 @@ class BetRemindItem extends Component<Props, {}> {
     this.getHistoryIssue()
   }
 
-  initTime = () => {
-    if (this.state.timer) {
-      this.state.timer.close()
-    }
-    let timer = new Timer(this.state.remainTime, (t: number) => {
-      if (t < 10 && t > 0) {
-        this.setState({
-          timeCls: 'c-red'
-        })
-      } else {
-        this.setState({
-          timeCls: ''
-        })
-      }
-      if (t <= 0) {
-        this.state.timer.close()
-        this.props.removeItem(this.props.gamedata)
-      }
-      this.setState({
-        time: timeFormat(t * 1000)
-      })
-    })
-    this.setState({
-      timer: timer
-    })
-  }
-
-  componentWillUnmount() {
-    this.state.timer.close()
-  }
 
   getCurIssueData = () => {
     APIs.curIssue({gameid: this.props.gamedata.lotteryId})
@@ -178,9 +150,9 @@ class BetRemindItem extends Component<Props, {}> {
           this.setState({
             curIssue: data.issue,
             curDateTime: data.current,
-            remainTime: Math.floor((data.saleend - data.current) / 1000)
+            remainTime: Math.floor((data.saleend - data.current) / 1000),
+            showHeader: true
           })
-          this.initTime()
         } else {
           this.setState({
             curIssue: ''
@@ -392,10 +364,8 @@ class BetRemindItem extends Component<Props, {}> {
           this.getLuDan()
         }
         <div className="bet-remind-play">
-          <div className="lottery">
-            <span className="issue">{ this.props.gamedata.issue }期</span>
-            <span className="time">{this.state.time}</span>
-          </div>
+          {this.state.showHeader ? <BetRemindTime gamedata={this.props.gamedata} remainTime={this.state.remainTime} removeItem={this.props.removeItem} /> : ''}
+          
           <div className="bet-list clearfix" ref={this.inputParent}>
             {this.props.gamedata.codeRange.split(',').map((item, index) => {
               return (

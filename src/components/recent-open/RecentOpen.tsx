@@ -6,7 +6,6 @@ import { GameMethodMenu } from '../../typings/games'
 
 import './recentOpen.styl'
 import Bus from 'src/utils/eventBus'
-import { thisExpression } from '@babel/types'
 
 interface Props {
   gameId: number;
@@ -239,12 +238,18 @@ class RecentOpen extends Component<Props, Object> {
   }
 
   componentWillMount() {
-    Bus.addListener('ludanSelectMenuChange', menuName => {
-      this.setState({
-        selectMenu: menuName
-      })
-    })
+    Bus.addListener('ludanSelectMenuChange', this.listenLudanSelectChange)
   }
+
+  componentWillUnmount() {
+    Bus.removeListener('ludanSelectMenuChange', this.listenLudanSelectChange)
+  }
+
+  listenLudanSelectChange = (menuName: string) => {
+    this.setState({
+      selectMenu: menuName
+    })
+  } 
 
   getOpenCode = (issue: any) => {
     let range = this.method && this.method[0].range
