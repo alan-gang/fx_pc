@@ -23,6 +23,23 @@ const ds = {
   type: 'ds'
 }
 
+const kd = {
+  title: '跨度',
+  type: 'kd'
+}
+
+const color = {
+  title: '颜色',
+  type: 'ys'
+}
+
+const lh = (params: any) => {
+  return Object.assign({
+    title: '龙虎',
+    type: 'lh'
+  }, params)
+}
+
 // 玩法配置
 export let methodsConfig: MethodsConfig = {
   [LOTTERY_TYPES.SSC]: [
@@ -41,6 +58,7 @@ export let methodsConfig: MethodsConfig = {
     {
       name: '龙虎',
       ename: 'lhh',
+      recentType: [lh({title: '万千', range: {start: 0, end: 2}})],
       ids: ['1273:1']
     },
     {
@@ -60,17 +78,19 @@ export let methodsConfig: MethodsConfig = {
     {
       name: '定位',
       ename: 'dw',
-      
+      recentType: [dx({min: 4})],
       ids: ['2052:1']
     },
     {
       name: '龙虎',
       ename: 'lh',
+      recentType: [lh({name: '一位VS二位', range: {start: 0, end: 2}})],
       ids: ['2053:1']
     },
     {
       name: '任选',
       ename: 'rx',
+      recentType: [dx({min: 4})],
       ids: ['2054:1:1'],
       subMethods: [
         {s: true, name: '一中一', v: '1z1', oddIndex: 7, class: 'layout-ud w110 h60  pd-t-12', mid: '2054', odd: '', ids: ['2054:1:1']},
@@ -87,18 +107,20 @@ export let methodsConfig: MethodsConfig = {
       name: '组选',
       ename: 'zux',
       ids: ['2055:1'],
+      recentChild: true,
       subMethods: [
-        {s: true, name: '前二组选',  oddIndex: 0, class: 'layout-lr w180 h40 flex ai-c jc-c odd-pd-l-5', mid: '2055', odd: '', ids: ['2055:1']},
-        {s: false, name: '前三组选',  oddIndex: 0, class: 'layout-lr  w180 h40 flex ai-c jc-c odd-pd-l-5', mid: '2056', odd: '', ids: ['2056:1']}
+        {s: true, name: '前二组选', recentType: [hz({title: '前二和值', nForm: true, range: {start: 0, end: 2}})], oddIndex: 0, class: 'layout-lr w180 h40 flex ai-c jc-c odd-pd-l-5', mid: '2055', odd: '', ids: ['2055:1']},
+        {s: false, name: '前三组选', recentType: [hz({title: '前三和值', nForm: true,range: {start: 0, end: 3}})], oddIndex: 0, class: 'layout-lr  w180 h40 flex ai-c jc-c odd-pd-l-5', mid: '2056', odd: '', ids: ['2056:1']}
       ]
     },
     {
       name: '直选',
       ename: 'zx',
       ids: ['2057:1'],
+      recentChild: true,
       subMethods: [
-        {s: true, name: '前二直选',  oddIndex: 0, class: 'layout-lr w180 h40 flex ai-c jc-c odd-pd-l-5', mid: '2057', odd: '', ids: ['2057:1']},
-        {s: false, name: '前三直选',  oddIndex: 0, class: 'layout-lr  w180 h40 flex ai-c jc-c odd-pd-l-5', mid: '2058', odd: '', ids: ['2058:1']}
+        {s: true, name: '前二直选', recentType: [hz({title: '前二和值', nForm: true, range: {start: 0, end: 2}})], oddIndex: 0, class: 'layout-lr w180 h40 flex ai-c jc-c odd-pd-l-5', mid: '2057', odd: '', ids: ['2057:1']},
+        {s: false, name: '前三直选', recentType: [hz({title: '前三和值', nForm: true, range: {start: 0, end: 3}})], oddIndex: 0, class: 'layout-lr  w180 h40 flex ai-c jc-c odd-pd-l-5', mid: '2058', odd: '', ids: ['2058:1']}
       ]
     }
   ],
@@ -106,11 +128,13 @@ export let methodsConfig: MethodsConfig = {
     {
       name: '整合',
       ename: 'zhenghe',
+      recentType: [hz({range: [{start: 0, end: 1}, {start: 1, end: 2}], changeTitle: ['冠亚开奖号码'], min: 11})],
       ids: ['4050:1', '4053:1', '4053:2']
     },
     {
       name: '龙虎',
       ename: 'lh',
+      recentType: [lh({name: '龙虎', changeTitle: ['冠军', '第十名'], range: [{start: 0, end: 1}, {start: 1, end: 2}]})],
       ids: ['4054:1']
     },
     {
@@ -121,6 +145,7 @@ export let methodsConfig: MethodsConfig = {
     {
       name: '冠亚组合',
       ename: 'gyhz',
+      recentType: [hz({range: [{start: 0, end: 1}, {start: 1, end: 2}], changeTitle: ['冠亚', ['亚军']], min: 11})],
       ids: ['4050:1', '4051:1', '4052:1']
     }
   ],
@@ -128,36 +153,43 @@ export let methodsConfig: MethodsConfig = {
     {
       name: '点数',
       ename: 'diansu',
+      recentType: [hz({min: 10})],
       ids: ['5050:1', '5051:1']
     },
     {
       name: '三军',
       ename: 'shanjun',
+      recentType: [hz({min: 10})],
       ids: ['5052:1']
     },
     {
       name: '围骰/全骰',
       ename: 'wqshai',
+      recentType: [hz({min: 10})],
       ids: ['5053:1']
     },
     {
       name: '长牌',
       ename: 'changpai',
+      recentType: [hz({min: 10})],
       ids: ['5054:1']
     },
     {
       name: '短牌',
       ename: 'duanpai',
+      recentType: [hz({min: 10})],
       ids: ['5055:1']
     },
     {
       name: '颜色',
       ename: 'yskd',
+      recentType: [color],
       ids: ['5056:1']
     },
     {
       name: '跨度',
       ename: 'yskd',
+      recentType: [kd],
       ids: ['5057:1']
     }
   ]

@@ -9,7 +9,6 @@ interface Props {
   store?: any;
   gameType: string;
   curMenuIndex: number;
-  curSubMenuIndex: number;
   updateMethodMenuIndex(index: number): void;
   methodMenuChangedCB(methodIds: GameMethodMenu): void;
 }
