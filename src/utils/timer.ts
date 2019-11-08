@@ -23,8 +23,6 @@ class Timer {
     }, step);
   }
   public close(): void {
-    console.log(11111111111)
-    console.log(this.timerItval)
     clearInterval(this.timerItval);
     // this.fn(0, true);
   }

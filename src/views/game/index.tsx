@@ -135,6 +135,9 @@ class Game extends Component<Props, object> {
         if (data.type === 'openWinCode') {
           this.openWinCode(parseInt(data.content[0].lottId, 10), data.content[0]);
         }
+        if (data.type === 'betNotify') {
+          Bus.emit('__pushBetRemind', data.content)
+        }
       },
       open: () => {
         this.mysocket && this.mysocket.send(JSON.stringify(Object.assign({action: 'noauth'}, {})));

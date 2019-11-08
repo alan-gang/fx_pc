@@ -6,6 +6,7 @@ import { GameMethodMenu } from '../../typings/games'
 
 import './recentOpen.styl'
 import Bus from 'src/utils/eventBus'
+import { thisExpression } from '@babel/types'
 
 interface Props {
   gameId: number;
@@ -292,7 +293,7 @@ class RecentOpen extends Component<Props, Object> {
           {
             this.props.issueList.map(issue => {
 
-              return (<div key={issue.lottId + 'ltId' + issue.issue} className="recent-item">
+              return (<div key={issue.lottId + 'ltId' + issue.issue + this.state.selectMenu} className="recent-item">
                 <div>{issue.issue.slice(-4)}</div>
                 {this.getOpenCode(issue)}
                 {

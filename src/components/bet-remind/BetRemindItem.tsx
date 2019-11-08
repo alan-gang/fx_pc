@@ -10,7 +10,7 @@ import methodItems from '../../game/methodItems'
 import Timer from '../../utils/timer'
 import { timeFormat } from '../../utils/date'
 import local from '../../utils/local'
-import { message } from 'antd'
+import { message, Tooltip } from 'antd'
 
 interface GameData {
   codeStyle: string;
@@ -360,7 +360,6 @@ class BetRemindItem extends Component<Props, {}> {
     if(xh[gameId]) {
       return xh[gameId]
     } else {
-      console.log(this.props.store.game.limitList[gameId])
       if (this.props.store.game.limitList && this.props.store.game.limitList[gameId]) {
         return this.props.store.game.limitList[gameId].jnPrizeLimit[0]
       }
@@ -372,18 +371,20 @@ class BetRemindItem extends Component<Props, {}> {
     return (
       <div className="bet-remind">
         <div className="bet-remind-header flex jc-s-b">
-          <span>{ this.props.gamedata.lotteryName }</span>
+          <Tooltip title={this.props.gamedata.lotteryName} >
+            <span class="lottery-name">{ this.props.gamedata.lotteryName }</span>
+          </Tooltip>
           <div className="right">
             { this.props.gamedata.pos }<span className="c-red">{ this.props.gamedata.notifyVal }</span>
               - 
             { this.notifyType() }<span className="c-red">{ this.props.gamedata.contCount }</span>期
-            <span 
-              onClick={ this.changeOpen }
-              className={ `tigger ${ this.state.isOpen ? 'open' : '' }` }
-            >
-              <Icon theme="filled" type="down-circle" />
-            </span>
           </div>
+          <span 
+            onClick={ this.changeOpen }
+            className={ `tigger ${ this.state.isOpen ? 'open' : '' }` }
+          >
+            <Icon theme="filled" type="down-circle" />
+          </span>
         </div>
         {
           this.getLuDan()

@@ -3,12 +3,13 @@ import { getBetRemind } from '../../http/APIs'
 import BetRemindItem from './BetRemindItem'
 import { getGameTypeByGameId, getGameById } from '../../game/games'
 import * as _ from 'underscore'
+import Bus from '../../utils/eventBus'
 
 import './betRemind.styl'
 
 interface State {
   isOpen: boolean;
-  list: Array<any>;
+  list: any[];
   size: number;
 }
 
@@ -31,6 +32,11 @@ class BetRemind extends Component<Props, {}> {
 
   componentDidMount() {
     this.getBetRemind()
+    Bus.addListener('__pushBetRemind', (arr: any) => {
+      this.setState({
+        list: this.state.list.concat(arr)
+      })
+    })
   }
 
   changeOpen = () => {

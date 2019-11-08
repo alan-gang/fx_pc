@@ -11,7 +11,8 @@ class Header extends Component<Props, object> {
     {
       id: '1',
       name: '彩种大厅',
-      route: '/'
+      route: '/',
+      exact: true
     },
     {
       id: '2',
@@ -61,6 +62,7 @@ class Header extends Component<Props, object> {
           className="nav-item"
           key={nav.id}
           to={nav.route}
+          exact={nav.exact ? true : false}
         >
           {nav.name}
         </NavLink>
