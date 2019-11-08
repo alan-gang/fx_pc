@@ -149,7 +149,7 @@ class Socket {
       console.log('error: the websocket url is null');
       return;
     }
-    if (!this.socket && !globalSocket) {
+    if (!this.socket && !globalSocket && this.url) {
       this.socket = new WebSocket(this.url);
       this.socket.binaryType = (this.options.binaryType || 'arraybuffer') as BinaryType;
     }
