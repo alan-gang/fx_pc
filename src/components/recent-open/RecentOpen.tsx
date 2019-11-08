@@ -254,9 +254,10 @@ class RecentOpen extends Component<Props, Object> {
     if (Array.isArray(changeTitle) && Array.isArray(range)) {
       nums.forEach((num: string, index: number) => {
         if ((index >= range[0].start && index < range[0].end) || (index >= range[1].start && index < range[1].end)) {
-          arr.push(<span key={index} className="text-orange">{num}</span>)
+          arr.push(<span key={index} className="text-orange min-w-36">{num}</span>)
         }
       })
+      if (changeTitle.length < 2) return (<div className='code'>{arr}</div>)
       return arr
     }
     let temp = nums.map((num: string, index: number) => {
