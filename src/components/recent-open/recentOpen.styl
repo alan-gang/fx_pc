@@ -18,6 +18,13 @@
         overflow-y auto
         flex 1
         padding 0 .12rem
+        &:empty
+          content ''
+          display block
+          line-height 100px
+          color $fc3
+          font-size .18rem
+          text-align center
         .recent-item
           border-bottom 1px dashed $border-color
           > div

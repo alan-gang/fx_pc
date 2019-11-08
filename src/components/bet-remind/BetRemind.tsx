@@ -5,6 +5,7 @@ import { getGameTypeByGameId, getGameById } from '../../game/games'
 import * as _ from 'underscore'
 import Bus from '../../utils/eventBus'
 import inject_unmount from '../../components/inject_unmount'
+import dayjs from 'dayjs'
 
 import './betRemind.styl'
 
@@ -16,6 +17,8 @@ interface State {
 @inject_unmount
 class BetRemind extends Component {
   state: State
+  timeoutTimer: any
+  timer: any
   private listBox: RefObject<HTMLDivElement>
   private listContainer: RefObject<HTMLDivElement>
   private handleScrollThrottled: any
@@ -34,10 +37,36 @@ class BetRemind extends Component {
   componentDidMount() {
     this.getBetRemind()
     Bus.addListener('__pushBetRemind', this.addBetRemind)
+    this.startIntervalResetOrder()
   }
 
   componentWillUnmount() {
     Bus.removeListener('__pushBetRemind', this.addBetRemind)
+    if (this.timeoutTimer) clearTimeout(this.timeoutTimer)
+    if (this.timer) clearInterval(this.timer)
+  }
+
+  startIntervalResetOrder() {
+    let now: any = dayjs().format('mm')
+    // 每个 5 15 25 35 45 55 分钟时重新排序
+    let timerTime = 10
+    if (now > 5 && now < 15) {
+      timerTime = 15 - now
+    } else if (now > 15 && now < 25 ) {
+      timerTime = 25 - now
+    } else if (now > 25 && now < 35 ) {
+      timerTime = 35 - now
+    } else if (now > 35 && now < 45 ) {
+      timerTime = 45 - now
+    } else if (now > 45 && now < 55 ) {
+      timerTime = 55 - now
+    }
+    this.timeoutTimer = setTimeout(() => {
+      this.getBetRemind()
+      this.timer = setInterval(() => {
+        this.getBetRemind()
+      }, 10 * 60 * 1000)
+    }, timerTime * 60 * 1000)
   }
 
   addBetRemind = (arr: any) => {
