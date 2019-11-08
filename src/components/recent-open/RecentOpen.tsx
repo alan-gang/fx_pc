@@ -93,6 +93,107 @@ const Color = (props: any) => {
   return <span className="color-text-span">{`${red}红${black}黑`}</span>
 }
 
+const getSsc_syxw = () => ({
+  'wq_lhh': {
+    title: '万千',
+    type: 'lh',
+    range: {start: 0, end: 2}
+  },
+  'wb_lhh': {
+    title: '万百',
+    type: 'lh',
+    range: [{start: 0, end: 1}, {start: 2, end: 3}]
+  },
+  'ws_lhh': {
+    title: '万十',
+    type: 'lh',
+    range: [{start: 0, end: 1}, {start: 3, end: 4}]
+  },
+  'wg_lhh': {
+    title: '万个',
+    type: 'lh',
+    range: [{start: 0, end: 1}, {start: 4, end: 5}]
+  },
+  'qb_lhh': {
+    title: '千百',
+    type: 'lh',
+    range: [{start: 1, end: 2}, {start: 2, end: 3}]
+  },
+  'qs_lhh': {
+    title: '千十',
+    type: 'lh',
+    range: [{start: 1, end: 2}, {start: 3, end: 4}]
+  },
+  'qg_lhh': {
+    title: '千个',
+    type: 'lh',
+    range: [{start: 1, end: 2}, {start: 4, end: 5}]
+  },
+  'bs_lhh': {
+    title: '百十',
+    type: 'lh',
+    range: [{start: 2, end: 3}, {start: 3, end: 4}]
+  },
+  'bg_lhh': {
+    title: '百个',
+    type: 'lh',
+    range: [{start: 2, end: 3}, {start: 4, end: 5}]
+  },
+  'gw_lhh': {
+    title: '个位',
+    type: 'lh',
+    range: [{start: 3, end: 4}, {start: 4, end: 5}]
+  },
+  'sg_lhh': {
+    title: '个位',
+    type: 'lh',
+    range: [{start: 3, end: 4}, {start: 4, end: 5}]
+  }
+})
+const changeT = (titles: any, obj: any) => {
+  let keys = Object.keys(obj)
+  titles.forEach((title: string, index: number) => {
+    obj[keys[index]].title = title
+  })
+  return obj
+}
+let lhMap: any = {
+  'ssc': getSsc_syxw(),
+  '11x5': changeT(['一vs二', '一vs三', '一vs四', '一vs五', '二vs三', '二vs四', '二vs五', '三vs四', '三vs五', '四vs五', '四vs五'], getSsc_syxw()),
+  'pk10': {
+    '1vs10_lhh': {
+      title: '一vs十',
+      changeTitle: ['冠军', '第十名'],
+      type: 'lh',
+      range: [{start: 0, end: 1}, {start: 9, end: 10}]
+    },
+    '2vs9_lhh': {
+      title: '二vs九',
+      changeTitle: ['亚军', '第九名'],
+      type: 'lh',
+      range: [{start: 1, end: 2}, {start: 8, end: 9}]
+    },
+    '3vs8_lhh': {
+      title: '三vs八',
+      changeTitle: ['季军', '第八名'],
+      type: 'lh',
+      range: [{start: 2, end: 3}, {start: 7, end: 8}]
+    },
+    '4vs7_lhh': {
+      title: '四vs七',
+      changeTitle: ['第四名', '第七名'],
+      type: 'lh',
+      range: [{start: 3, end: 4}, {start: 6, end: 7}]
+    },
+    '5vs6_lhh': {
+      title: '五vs六',
+      changeTitle: ['第五名', '第六名'],
+      type: 'lh',
+      range: [{start: 4, end: 5}, {start: 5, end: 6}]
+    }
+  }
+}
+
 const LH = (props: any) => {
   let nums = props.issue.code.split(',')
   let range = props.type.range
@@ -127,6 +228,9 @@ class RecentOpen extends Component<Props, Object> {
 
   get method() {
     let temp: GameMethodMenu = this.getMethod(this.props.gameType, this.props.curMenuIndex, this.props.curSubMenuIndex)
+    if (this.state.selectMenu.indexOf('_lhh') !== -1) {
+      return [lhMap[this.props.gameType][this.state.selectMenu]]
+    }
     if (temp.recentChild && temp.subMethods) {
       return temp.subMethods[this.props.curSubMenuIndex].recentType
     }
@@ -143,9 +247,10 @@ class RecentOpen extends Component<Props, Object> {
 
   getOpenCode = (issue: any) => {
     let range = this.method && this.method[0].range
+    let changeTitle = this.method && this.method[0].changeTitle
     let nums = issue.code.split(',')
     let arr: any[] = []
-    if (Array.isArray(range)) {
+    if (Array.isArray(changeTitle) && Array.isArray(range)) {
       nums.forEach((num: string, index: number) => {
         if ((index >= range[0].start && index < range[0].end) || (index >= range[1].start && index < range[1].end)) {
           arr.push(<span key={index} className="text-orange">{num}</span>)
@@ -155,8 +260,17 @@ class RecentOpen extends Component<Props, Object> {
     }
     let temp = nums.map((num: string, index: number) => {
       let cn = ''
-      if (range && (index >= range.start && index < range.end)) {
-        cn = 'text-orange'
+      if (Array.isArray(range)) {
+        range.some((r: any) => {
+          if (index >= r.start && index < r.end) {
+            cn = 'text-orange'
+            return true
+          }
+        })
+      } else {
+        if (range && (index >= range.start && index < range.end)) {
+          cn = 'text-orange'
+        }
       }
       return <span key={index} className={cn}>{num}</span>
     })
@@ -195,7 +309,7 @@ class RecentOpen extends Component<Props, Object> {
                       case 'ys':
                         return <Color key={index} issue={issue} />
                       case 'lh':
-                        return <LH key={index} issue={issue} type={tp} />
+                        return <LH key={index} selectMenu={this.state.selectMenu} issue={issue} type={tp} />
                       default: return ''
                     }
                   })
