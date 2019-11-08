@@ -11,6 +11,7 @@ import Timer from '../../utils/timer'
 import { timeFormat } from '../../utils/date'
 import local from '../../utils/local'
 import { message, Tooltip } from 'antd'
+import inject_unmount from '../inject_unmount'
 
 interface GameData {
   codeStyle: string;
@@ -53,6 +54,7 @@ interface AppRefs {
 
 @inject("store")
 @observer
+@inject_unmount
 class BetRemindItem extends Component<Props, {}> {
   state: State
   private inputParent: React.RefObject<HTMLDivElement>
@@ -372,7 +374,7 @@ class BetRemindItem extends Component<Props, {}> {
       <div className="bet-remind">
         <div className="bet-remind-header flex jc-s-b">
           <Tooltip title={this.props.gamedata.lotteryName} >
-            <span class="lottery-name">{ this.props.gamedata.lotteryName }</span>
+            <span className="lottery-name">{ this.props.gamedata.lotteryName }</span>
           </Tooltip>
           <div className="right">
             { this.props.gamedata.pos }<span className="c-red">{ this.props.gamedata.notifyVal }</span>
