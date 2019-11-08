@@ -8,10 +8,10 @@ import games from "src/game/games";
 
 class MyGame {
   @observable favourites: Game[] = local.get(Types.SET_PC_FAVOURITE_GAMES) || [];
-  @observable limitLevel: number = 1; // 限红级别
+  // @observable limitLevel: number = 1; // 限红级别
   @observable limitLevelList: LimitLevelItem[] = [];
-  @observable limitList: LimitListItem[] = []; // 限红
-  @observable setGamesLimitLevel: GameLimitLevel[] = [];
+  @observable limitList: LimitListItem[] = session.get(Types.LOCAL_PC_FAST_SET_LIMIT_LIST) || []; // 限红
+  @observable setGamesLimitLevel: GameLimitLevel[] = session.get(Types.SESSION_PC_FAST_SET_GAMES_LIMIT_LEVEL) || [];
   @observable availableGames: number[] = [];
 
   hasGame(id: number): boolean {
@@ -78,11 +78,6 @@ class MyGame {
   }
 
   @action
-  setLimitLevel(level: number) {
-    this.limitLevel = level;
-  }
-
-  @action
   getGameLimitLevelByGameId(gameId: number): GameLimitLevel | undefined {
     return this.setGamesLimitLevel.find(gll => gll.gameId === gameId);
   }
@@ -96,6 +91,7 @@ class MyGame {
     } else {
       this.setGamesLimitLevel.push(gameLimitLevel);
     }
+    session.set(Types.SESSION_PC_FAST_SET_GAMES_LIMIT_LEVEL, this.setGamesLimitLevel);
   }
 
   @action

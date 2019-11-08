@@ -86,7 +86,7 @@ class LobbyGame extends Component<Props, object> {
     this.mysocket = new Socket({
       url: this.props.store.common.broadcaseWSUrl,
       name: 'lobbyGame' + this.props.gameId,
-      message: (data) => {
+      receive: (data) => {
         if (data.type === 'openWinCode') {
           this.openWinCode(parseInt(data.content[0].lottId, 10), data.content[0]);
         }

@@ -62,7 +62,7 @@ class App extends Component<Props, object> {
     let mysocket = new Socket({
       url: store.common.broadcaseWSUrl,
       name: 'appIndex',
-      message: (data: any) => {
+      receive: (data: any) => {
         console.log('App Socket=', data);
       },
       open: () => {
