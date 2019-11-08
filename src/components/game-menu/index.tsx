@@ -307,7 +307,7 @@ class GameMenu extends Component<Props, object> {
               {gameCate.items.map((game) => (
                 <Menu.Item key={game.id} className="game-menu-item">
                   <span className="nav-link-wp">
-                    <NavLink to={`/game/${game.id}`}><span>{game.name}</span><span className="game-timer">{game.issue && game.issue.timeStr}</span></NavLink>
+                    <NavLink to={`/game/${game.id}`}><span>{game.name}</span><span className={`game-timer ${game.issue && game.issue.remainTime < 10000 ? 'txt-c-r' : ''}`}>{game.issue && game.issue.timeStr}</span></NavLink>
                   </span>
                   <span className={`favourite ${game.favourite ? 'selected' : ''}`} onClick={(e: any) => this.onAddFavourite(game.id, gameCate.type, e)}></span>
                 </Menu.Item>

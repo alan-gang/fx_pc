@@ -76,7 +76,8 @@ interface SocketParams {
   name?: string;
   binaryType?: string;
   open?: () => void;
-  message(data: any): void;
+  message?: (data: any)=> void;
+  receive?: (data: any)=> void;
   close?: () => void;
   error?: () => void;
 }
@@ -159,7 +160,10 @@ class Socket {
       } else {
         this.socket = globalSocket;
       }
-      Subscriber.add(this.options.name || '', this.message);
+      if (!this.options.receive) {
+        console.log('info: receive function is null');
+      }
+      Subscriber.add(this.options.name || '', this.options.receive || this.noop);
     }
     if (this.socket) {
       this.socket.onopen = () => {

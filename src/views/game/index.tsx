@@ -131,7 +131,7 @@ class Game extends Component<Props, object> {
     this.mysocket = new Socket({
       url: this.props.store.common.broadcaseWSUrl,
       name: 'gameIndex',
-      message: (data) => {
+      receive: (data) => {
         if (data.type === 'openWinCode') {
           this.openWinCode(parseInt(data.content[0].lottId, 10), data.content[0]);
         }
@@ -178,6 +178,7 @@ class Game extends Component<Props, object> {
   openWinCode(id: number, openHistoryItem: any) {
     if (id === this.id) {
       let issueList = this.state.issueList;
+      // console.log('info game openWinCode=', id, this.id, issueList);
       issueList.unshift(openHistoryItem);
       this.setState({
         lastIssue: issueList[0].issue,
