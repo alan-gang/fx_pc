@@ -4,6 +4,7 @@ import BetRemindItem from './BetRemindItem'
 import { getGameTypeByGameId, getGameById } from '../../game/games'
 import * as _ from 'underscore'
 import Bus from '../../utils/eventBus'
+import BaseComponent from '../../components/BaseComponent'
 
 import './betRemind.styl'
 
@@ -13,7 +14,7 @@ interface State {
   size: number;
 }
 
-class BetRemind extends Component<Props, {}> {
+class BetRemind extends BaseComponent {
   state: State
   private listBox: RefObject<HTMLDivElement>
   private listContainer: RefObject<HTMLDivElement>
@@ -32,10 +33,16 @@ class BetRemind extends Component<Props, {}> {
 
   componentDidMount() {
     this.getBetRemind()
-    Bus.addListener('__pushBetRemind', (arr: any) => {
-      this.setState({
-        list: this.state.list.concat(arr)
-      })
+    Bus.addListener('__pushBetRemind', this.addBetRemind)
+  }
+
+  componentWillUnmount() {
+    Bus.removeListener('__pushBetRemind', this.addBetRemind)
+  }
+
+  addBetRemind(arr: any) {
+    this.setState({
+      list: this.state.list.concat(arr)
     })
   }
 

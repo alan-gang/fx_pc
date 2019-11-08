@@ -372,7 +372,7 @@ class BetRemindItem extends Component<Props, {}> {
       <div className="bet-remind">
         <div className="bet-remind-header flex jc-s-b">
           <Tooltip title={this.props.gamedata.lotteryName} >
-            <span class="lottery-name">{ this.props.gamedata.lotteryName }</span>
+            <span className="lottery-name">{ this.props.gamedata.lotteryName }</span>
           </Tooltip>
           <div className="right">
             { this.props.gamedata.pos }<span className="c-red">{ this.props.gamedata.notifyVal }</span>
