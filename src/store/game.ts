@@ -4,7 +4,6 @@ import Types from './types';
 import local from '../utils/local';
 import session from '../utils/session';
 import APIs from '../http/APIs';
-import games from "src/game/games";
 
 class MyGame {
   @observable favourites: Game[] = local.get(Types.SET_PC_FAVOURITE_GAMES) || [];
@@ -108,6 +107,7 @@ class MyGame {
     });
   }
 
+  @action
   getAvailableGames(callback?: Function) {
     if (this.availableGames.length > 0) {
       callback && callback(this.availableGames);
@@ -123,4 +123,3 @@ class MyGame {
 }
 
 export default new MyGame;
-

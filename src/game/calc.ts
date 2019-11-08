@@ -1,4 +1,4 @@
-import { N, P, A, C } from './base'
+import { /*N,*/ P, A, C } from './base'
 interface Params {
   nsl: number[]
 }

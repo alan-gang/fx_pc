@@ -1,4 +1,4 @@
-import React, { Component, MouseEvent, ChangeEvent, FocusEvent } from 'react';
+import React, { Component, MouseEvent, ChangeEvent } from 'react';
 import { inject, observer } from 'mobx-react';
 import methodItems from '../../game/methodItems';
 import { Row, Col, Input } from 'antd';
