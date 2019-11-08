@@ -1,7 +1,7 @@
 import React, { Component, MouseEvent  } from 'react';
 import { inject, observer } from 'mobx-react';
 import { NavLink } from 'react-router-dom';
-import games, { getGameById } from '../../game/games';
+import games, { getGameById, getAllGameIds } from '../../game/games';
 import { Menu } from 'antd';
 // import { ClickParam } from 'antd/lib/menu/index';
 import { GameCategory, Game } from '../../typings/games';
@@ -25,7 +25,7 @@ interface State {
 class GameMenu extends Component<Props, object> {
   rootSubmenuKeys = ['box', LOTTERY_TYPES.SSC, LOTTERY_TYPES.G11X5, LOTTERY_TYPES.PK10, LOTTERY_TYPES.K3];
   MAIN_WIDTH: number = 1200;
-  MENU_WIDTH: number = 200;
+  MENU_WIDTH: number = 210;
   DEFAULT_GAME_TYPE: string = LOTTERY_TYPES.SSC;
   menuGames: GameCategory[] = games;
   id: number;
@@ -36,38 +36,83 @@ class GameMenu extends Component<Props, object> {
   constructor(props: Props) {
     super(props);
 
-    let navData: GameCategory[] = this.initSyncFavouriteStateToGames();
-    navData.unshift({
-      type: 'box',
-      name: '收藏夹',
-      items: this.props.store.game.favourites || []
-    });
+    // let navData: GameCategory[] = this.initSyncFavouriteStateToGames();
+    // navData.unshift({
+    //   type: 'box',
+    //   name: '收藏夹',
+    //   items: this.props.store.game.favourites || []
+    // });
 
-    this.id = parseInt(this.getGameIdFromUrl() || '1', 10);
+    this.id = parseInt(this.getGameIdFromUrl() || '0', 10);
     this.gameType = getGameTypeByGameId(this.id) || this.DEFAULT_GAME_TYPE;
 
     this.state = {
       offsetLeft: 30,
       openKeys: ['box', this.gameType],
       defaultSelectedKeys: [String(this.id)],
-      navData
+      navData: []
     };
 
+  }
+
+  componentWillMount() {
     this.init();
   }
 
   init() {
+    
     // this.clearAllTimer();
     // console.log('game-header init start=', Date.now());
-    let games = this.state.navData;
-    games.forEach((gameCategory: GameCategory) => {
-      if (gameCategory.type === this.gameType) {
-        gameCategory.items.forEach((game: Game) => {
-          this.getIssueByGameId(game.id);
+
+    // let games = this.state.navData;
+    // games.forEach((gameCategory: GameCategory) => {
+    //   if (gameCategory.type === this.gameType) {
+    //     gameCategory.items.forEach((game: Game) => {
+    //       this.getIssueByGameId(game.id);
+    //     });
+    //   }
+    // });
+
+    this.props.store.game.getAvailableGames((availableGames: number[]) => {
+      let navData: GameCategory[] = this.initSyncFavouriteStateToGames();
+      navData.unshift({
+        type: 'box',
+        name: '收藏夹',
+        items: this.props.store.game.favourites || []
+      });
+      this.setState({navData});
+      let ids = this.getShowingMenuGameIds(navData);
+      this.getIssuesByGameIds(ids.join(','));
+      // this.getIssuesByGameIds(availableGames.join(','));
+    });
+    
+    // let ids = getAllGameIds();
+    // let ids = this.props.store.game.availableGames;
+    // this.getIssuesByGameIds(ids.join(','));
+    // console.log('game-header init end=', Date.now(), ' ids=', ids);
+  }
+
+  /**
+   * 获取菜单展开的游戏ID列表
+   * @param navData 游戏菜单配置
+   */
+  getShowingMenuGameIds(navData: GameCategory[]) {
+    let ids: number[] = [];
+    let favs = this.props.store.game.favourites || [];
+    for (let i = 0; i < navData.length; i++) {
+      if (navData[i].type === this.gameType) {
+        navData[i].items.forEach((game: Game) => {
+          ids.push(game.id);
         });
+        break;
+      }
+    }
+    favs.forEach((game: Game, i: number) => {
+      if (!ids.includes(game.id)) {
+        ids.push(game.id);
       }
     });
-    // console.log('game-header init end=', Date.now());
+    return ids;
   }
 
   updateCurGameIssue(id: number, issue: any): void {
@@ -106,6 +151,19 @@ class GameMenu extends Component<Props, object> {
     });
   }
 
+  getIssuesByGameIds(ids: string) {
+    APIs.getIssuesByGameIds({gameid: ids}).then((data: any) => {
+      if (data.success > 0) {
+        data.items.forEach((issue: any) => {
+          issue.remainTime = issue.saleend - data.current;
+          issue.timeStr = timeFormat(issue.remainTime);
+          this.updateCurGameIssue(issue.lotteryid, issue);
+          this.initCountDown(issue.lotteryid);
+        })
+      }
+    });
+  }
+
   initCountDown(id: number): void {
     let game = this.getGameById(id);
     let issue = game && game.issue;
@@ -125,7 +183,6 @@ class GameMenu extends Component<Props, object> {
   }
 
   clearAllTimer(): void {
-    // console.log('game-header clearAllTimer start=', Date.now());
     let navData = this.state.navData;
     let box = navData.shift();
     navData = games.map((gameCategory: GameCategory) => {
@@ -140,7 +197,6 @@ class GameMenu extends Component<Props, object> {
     })
     if (box) navData.unshift(box);
     this.setState({navData});
-    // console.log('game-header clearAllTimer end=', Date.now());
   }
 
   componentDidMount() {
@@ -202,8 +258,12 @@ class GameMenu extends Component<Props, object> {
           if (fav[i].id === game.id) {
             game.favourite = true;
           }
+          if (!this.props.store.game.hasAvailableGame(game.id)) {
+            game.available = false;
+          }
           return game;
         });
+        gameType.items = gameType.items.filter((game) => game.available !== false);
         return gameType;
       });
     }

@@ -27,11 +27,19 @@ class Lobby extends Component<Props, object> {
   state: State;
   constructor(props: Props) {
     super(props);
-    let curGames = getAllGames(); // getGamesByType(this.DEFAULT_GAME_TYPE);
-    // let curGames = getGamesByType(this.DEFAULT_GAME_TYPE);
+    let curGames = this.filterAvailableGames(getAllGames()); 
     this.state = {
       curGameType: this.DEFAULT_GAME_TYPE,
       curGames
+    }
+  }
+  componentWillMount() {
+    if (this.state.curGames.length <= 0) {
+      this.props.store.game.getAvailableGames((availableGames: number[]) => {
+        this.setState({
+          curGames: this.filterAvailableGames(getAllGames())
+        })
+      });
     }
   }
   goto = (path: string) => {
@@ -40,8 +48,17 @@ class Lobby extends Component<Props, object> {
   onMenuChanged = (type: string) => {
     this.setState({curGames: type === this.DEFAULT_GAME_TYPE ? getAllGames() : getGamesByType(type)})
   }
+  filterAvailableGames(games: Game[]) {
+    if (this.props.store.game.availableGames.length <= 0) return [];
+    let tempGames: Game[] = [];
+    games.forEach((game: Game) => {
+      if (this.props.store.game.hasAvailableGame(game.id)) {
+        tempGames.push(game);
+      }
+    });
+    return tempGames;
+  }
   render() {
-    console.log(this.props.store.user.name);
     return (
       <article className="lobby-view">
         <LobbyMenu onMenuChanged={this.onMenuChanged} />

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import Bus from '../../utils/eventBus'
 
 import './ludanMenu.styl';
 
@@ -27,6 +28,9 @@ class LundanMenu extends Component<Props, object> {
       subMenus: this.getSubMenusByName(this.props.menus, this.props.selectedMenu)
     }
   }
+  componentDidMount() {
+    Bus.emit('ludanSelectMenuChange', this.props.selectedMenu)
+  }
   getMenuByName(menus: any[] = [], name: string = '') {
     return menus.find((menu: any) => name === menu.name);
   }
@@ -36,8 +40,14 @@ class LundanMenu extends Component<Props, object> {
   }
   componentWillReceiveProps(nextProps: Props, nextState: State) {
     if (this.props.selectedMenu !== nextProps.selectedMenu || this.props.selectedSubMenu !== nextProps.selectedSubMenu) {
+      Bus.emit('ludanSelectMenuChange', nextProps.selectedMenu)
       this.setState({subMenus: this.getSubMenusByName(nextProps.menus, nextProps.selectedMenu)})
     }
+  }
+  
+  changeMenu = (menu: any) => {
+    this.props.updateMenu(menu)
+    Bus.emit('ludanSelectMenuChange', menu.name)
   }
   render() {
     return (
@@ -50,7 +60,7 @@ class LundanMenu extends Component<Props, object> {
         </nav>}
         <nav className="flex menu">
           {this.props.menus && this.props.menus.length > 0 && this.props.menus.map((menu: any, i: number) => (
-            <div key={i} className={`flex jc-c ai-c menu-item ${this.props.selectedMenu === menu.name ? 'selected' : ''}`} onClick={() => this.props.updateMenu(menu)}>{menu.title}</div>
+            <div key={i} className={`flex jc-c ai-c menu-item ${this.props.selectedMenu === menu.name ? 'selected' : ''}`} onClick={() => this.changeMenu(menu)}>{menu.title}</div>
           ))}
         </nav>
       </section>  

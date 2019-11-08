@@ -10,6 +10,16 @@ export function curIssue(params: object = {}) {
   return http.get('/issue.do?method=current', { params });
 }
 
+/**
+ * 批量获取游戏期号
+ * @param params {
+ *  gameid   逗号分隔的多个游戏ID
+ * }
+ */
+export function getIssuesByGameIds(params: object = {}) {
+  return http.get('/issue.do?method=currentList', { params });
+}
+
 /*
  * 获取历史奖期数据
  * @param params {
@@ -119,6 +129,7 @@ export function getBetRemind() {
 
 export default {
   curIssue,
+  getIssuesByGameIds,
   historyIssue,
   orderList,
   login,

@@ -3,6 +3,8 @@ import { Game } from '../typings/games';
 import Types from './types';
 import local from '../utils/local';
 import session from '../utils/session';
+import APIs from '../http/APIs';
+import games from "src/game/games";
 
 class MyGame {
   @observable favourites: Game[] = local.get(Types.SET_PC_FAVOURITE_GAMES) || [];
@@ -10,6 +12,7 @@ class MyGame {
   @observable limitLevelList: LimitLevelItem[] = [];
   @observable limitList: LimitListItem[] = []; // 限红
   @observable setGamesLimitLevel: GameLimitLevel[] = [];
+  @observable availableGames: number[] = [];
 
   hasGame(id: number): boolean {
     return !!this.favourites.find((game: Game) => game.id === id);
@@ -94,6 +97,34 @@ class MyGame {
       this.setGamesLimitLevel.push(gameLimitLevel);
     }
   }
+
+  @action
+  hasAvailableGame(gameId: number) {
+    return this.availableGames.includes(gameId);
+  }
+
+  @action
+  updateAvailableGames() {
+    APIs.getLotterys().then((data: any) => {
+      if (data.lotteryList) {
+        this.availableGames = data.lotteryList.map((game: any) => game.lotteryId);
+      }
+    });
+  }
+
+  getAvailableGames(callback?: Function) {
+    if (this.availableGames.length > 0) {
+      callback && callback(this.availableGames);
+      return;
+    }
+    APIs.getLotterys().then((data: any) => {
+      if (data.lotteryList) {
+        this.availableGames = data.lotteryList.map((game: any) => game.lotteryId);
+        callback && callback(this.availableGames);
+      }
+    });
+  }
 }
 
 export default new MyGame;
+

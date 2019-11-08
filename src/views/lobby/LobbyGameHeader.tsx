@@ -42,19 +42,19 @@ class LobbyGameHeader extends Component<Props, object> {
   }
   componentWillReceiveProps(nextProps: Props) {
     // console.log('game header componentWillReceiveProps ', nextProps)
-    if (nextProps.remainTime !== this.state.remainTime) {
+    // if (nextProps.remainTime !== this.state.remainTime) {
       this.setState({remainTime: nextProps.remainTime});
       this.initTimer(nextProps.remainTime);
-    }
+    // }
   }
   initTimer(remainTime: number) {
+    // console.log('game header initTimer ', remainTime)
     if (remainTime <= 0) return;
     let timer = this.state.timer;
     let timeStr: string = '';
     let times: string[] = [];
     if (timer && timer.close) {
       timer.close();
-      timer = null;
     }
     timer = new Timer(Math.floor(remainTime), (t: number): void => {
       if (t <= 0) {
@@ -68,13 +68,10 @@ class LobbyGameHeader extends Component<Props, object> {
   }
   clearTimer(): void {
     if (this.state.timer && this.state.timer.close) {
-      console.log('LobbyGameHeader clearTimer')
       this.state.timer.close();
-      this.state.timer = null;
     }
   }
   componentWillUnmount() {
-    console.log('LobbyGameHeader componentWillUnmount');
     this.clearTimer();
   }
   render() {

@@ -157,8 +157,9 @@ export function getNoSubMenuMethods(type: string) {
 }
 
 /**
- * 根据游戏类型，名字获取游戏玩法
- *    如:ssc , wq_ds 对应 “整合”玩法
+ * 根据游戏类型，名字codeStyle获取游戏玩法
+ *    如:
+ *      根据ssc , wq_ds 获取对应为 “整合”的玩法
  * @param type 游戏类别
  * @param name 名字
  */
@@ -169,10 +170,17 @@ export function getMethodENameByLudanName(type: string, name: string): any {
   for (let i = 0; i < keys.length; i++) {
     tabs = types[keys[i]];
     for (let j = 0; j < tabs.length; j++) {
-      if (!tabs[i] || !tabs[i].subM) continue;
-      for (let k = 0; k < tabs[i].subM.length; k++) {
-        if (joinLunDanName(tabs[i].name, tabs[i].subM[k].name) === name) {
-          return keys[i];
+      if (tabs[j]) {
+        if (tabs[j].subM && tabs[j].subM.length > 0) {
+          for (let k = 0; k < tabs[j].subM.length; k++) {
+            if (joinLunDanName(tabs[j].name, tabs[j].subM[k].name) === name) {
+              return keys[i];
+            }
+          }
+        } else {
+          if (tabs[j].name === name) {
+            return keys[i];
+          }
         }
       }
     }
@@ -181,8 +189,9 @@ export function getMethodENameByLudanName(type: string, name: string): any {
 }
 
 /**
- * 根据游戏类型，名字获取tab
- *    如万位
+ * 根据游戏类型，名字codeStyle获取路单tab
+ *    如：
+ *      根据ssc , wq_ds 获取对应为 "万个"的路单tab
  * @param type 游戏类别
  * @param name 名字
  */
@@ -193,10 +202,17 @@ export function getLunDanTabByName(type: string, name: string): any {
   for (let i = 0; i < keys.length; i++) {
     tabs = types[keys[i]];
     for (let j = 0; j < tabs.length; j++) {
-      if (!tabs[i] || !tabs[i].subM) continue;
-      for (let k = 0; k < tabs[i].subM.length; k++) {
-        if (joinLunDanName(tabs[i].name, tabs[i].subM[k].name) === name) {
-          return tabs[i];
+      if (tabs[j]) {
+        if (tabs[j].subM && tabs[j].subM.length > 0) {
+          for (let k = 0; k < tabs[j].subM.length; k++) {
+            if (joinLunDanName(tabs[j].name, tabs[j].subM[k].name) === name) {
+              return tabs[j];
+            }
+          }
+        } else {
+          if (tabs[j].name === name) {
+            return tabs[j];
+          }
         }
       }
     }
@@ -210,19 +226,23 @@ export function getLunDanTabByName(type: string, name: string): any {
  * @param type 游戏类别
  * @param name 路单名字
  */
-export function getLunDanFullTitleByName(type: string, name: string): string {
+export function getLunDanFullTitleByName(type: string = '', name: string = ''): string {
   let ludanTab = getLunDanTabByName(type, name);
-  if (ludanTab && ludanTab.subM) {
-    for (let k = 0; k < ludanTab.subM.length; k++) {
-      if (joinLunDanName(ludanTab.name, ludanTab.subM[k].name) === name) {
-        return ludanTab.title + ludanTab.subM[k].title;
+  if (ludanTab) {
+    if (ludanTab.subM && ludanTab.subM.length > 0) {
+      for (let k = 0; k < ludanTab.subM.length; k++) {
+        if (joinLunDanName(ludanTab.name, ludanTab.subM[k].name) === name) {
+          return ludanTab.title + ludanTab.subM[k].title;
+        }
       }
+    } else {
+      return ludanTab.title;
     }
-  }
+  } 
   return '';
 }
 
-function joinLunDanName(name: string, subName: string): string {
+function joinLunDanName(name: string = '', subName: string = ''): string {
   return name + (subName ? '_' : '') + subName;
 }
 

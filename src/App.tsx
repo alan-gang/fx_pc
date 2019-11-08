@@ -17,6 +17,7 @@ import 'moment/locale/zh-cn';
 import 'antd/dist/antd.less';
 import './assets/style/common/common.styl';
 import './App.css';
+import Socket from './socket';
 
 moment.locale('zh-cn');
 
@@ -41,23 +42,41 @@ class App extends Component<Props, object> {
     this.getLimitData(getAllGameIds());
   }
   componentWillMount() {
-    
-    this.getCfgInfo();
+    // this.getCfgInfo();
   }
   autoLogin(params: object) {
     APIs.signIn(params).then((data: any) => {
-      store.user.setName(data.userName);
-      this.getUserPrefence();
-      this.updateBalance();
-    })
+      if (data.success > 0) {
+        store.common.setBroadcaseWSUrl(data.broadcaseWSUrl);
+        store.user.setName(data.userName);
+        store.user.setUserId(data.userId);
+        store.user.setLogin(true);
+        this.getUserPrefence();
+        this.updateBalance();
+        store.game.updateAvailableGames();
+        // this.initSocket();
+      }
+    });
+  }
+  initSocket() {
+    let mysocket = new Socket({
+      url: store.common.broadcaseWSUrl,
+      name: 'appIndex',
+      message: (data: any) => {
+        console.log('App Socket=', data);
+      },
+      open: () => {
+        mysocket.send(JSON.stringify(Object.assign({action: 'noauth'}, {})));
+      }
+    }, true);
   }
   getCfgInfo() {
-    APIs.getCfgInfo({}).then(({broadcaseWSUrl}: any) => {
+    // APIs.getCfgInfo({}).then(({broadcaseWSUrl}: any) => {
       // if (!Socket.sockets.user) {
       //   Socket.connect(broadcaseWSUrl, 'user', this.connected);
       // }
       // Socket.notify.messages.push(this.message);
-    });
+    // });
   }
   updateBalance() {
     store.user.updateBalance();

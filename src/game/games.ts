@@ -96,8 +96,8 @@ export function getAllGames() {
   return allGames;
 }
 
-export function getAllGameIds() {
-  return getAllGames().map((game: Game) => game.id);
+export function getAllGameIds(): number[] {
+  return getAllGames().map((game: Game) => game.id) || [];
 }
 
 export default games;

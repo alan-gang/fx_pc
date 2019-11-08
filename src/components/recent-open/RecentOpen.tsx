@@ -5,8 +5,7 @@ import memoize from 'memoize-one'
 import { GameMethodMenu } from '../../typings/games'
 
 import './recentOpen.styl'
-import { spawn } from 'child_process'
-import { timingSafeEqual } from 'crypto'
+import Bus from 'src/utils/eventBus'
 
 interface Props {
   gameId: number;
@@ -16,6 +15,10 @@ interface Props {
   curSubMenuIndex: number;
 //   methodid: string;
 //   type: any;
+}
+
+interface State {
+  selectMenu: string;
 }
 
 const DX = (props: any) => {
@@ -110,8 +113,12 @@ const LH = (props: any) => {
 }
 
 class RecentOpen extends Component<Props, Object> {
+  state: State
   constructor(props: Props) {
     super(props)
+    this.state = {
+      selectMenu: ''
+    }
   }
 
   getMethod = memoize((gameType ,curMenuIndex, curSubMenuIndex) => {
@@ -124,6 +131,14 @@ class RecentOpen extends Component<Props, Object> {
       return temp.subMethods[this.props.curSubMenuIndex].recentType
     }
     return temp.recentType
+  }
+
+  componentWillMount() {
+    Bus.addListener('ludanSelectMenuChange', menuName => {
+      this.setState({
+        selectMenu: menuName
+      })
+    })
   }
 
   getOpenCode = (issue: any) => {
@@ -163,7 +178,7 @@ class RecentOpen extends Component<Props, Object> {
           {
             this.props.issueList.map(issue => {
 
-              return (<div key={issue.issue} className="recent-item">
+              return (<div key={issue.lottId + 'ltId' + issue.issue} className="recent-item">
                 <div>{issue.issue.slice(-4)}</div>
                 {this.getOpenCode(issue)}
                 {

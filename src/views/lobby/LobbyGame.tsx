@@ -7,6 +7,7 @@ import LimitSetDialog from 'comp/limit-set-dialog';
 import APIs from '../../http/APIs';
 import { getGameTypeByGameId } from '../../game/games';
 import { getLunDanTabByName, getLunDanFullTitleByName, getMethodENameByLudanName } from '../../utils/ludan';
+import Socket from '../../socket';
 
 import './lobbyGame.styl';
 
@@ -39,6 +40,7 @@ interface State {
 @observer
 class LobbyGame extends Component<Props, object> {
   state: State;
+  mysocket?: Socket;
   constructor(props: Props) {
     super(props);
     let bestLudanConfig: any = {
@@ -48,8 +50,8 @@ class LobbyGame extends Component<Props, object> {
       'k3': {methodMenuName: 'diansu', defaultMenu: 'zh_dx', defaultSubMenu: '', title: '总和大小'},
     };
     let gameType = getGameTypeByGameId(props.gameId);
-    let item = props.store.game.getLimitListItemById(props.gameId);
-    let bestLudan: BestLudanItem = item && item.bestLudan;
+    let limitItem = props.store.game.getLimitListItemById(props.gameId);
+    let bestLudan: BestLudanItem = limitItem && limitItem.bestLudan;
     let ludanTab = getLunDanTabByName(gameType, bestLudan && bestLudan.codeStyle);
     let bestLudanName = (getLunDanFullTitleByName(gameType, bestLudan && bestLudan.codeStyle) || bestLudanConfig[gameType].title) + '路单';
     let methodMenuName = getMethodENameByLudanName(gameType, bestLudan && bestLudan.codeStyle) || bestLudanConfig[gameType].methodMenuName;
@@ -79,6 +81,38 @@ class LobbyGame extends Component<Props, object> {
   init() {
     this.getCurIssue(this.props.gameId);
     this.getHistoryIssue(this.props.gameId);
+  }
+  initSocket() {
+    this.mysocket = new Socket({
+      url: this.props.store.common.broadcaseWSUrl,
+      name: 'lobbyGame' + this.props.gameId,
+      message: (data) => {
+        if (data.type === 'openWinCode') {
+          this.openWinCode(parseInt(data.content[0].lottId, 10), data.content[0]);
+        }
+      },
+      open: () => {
+        this.mysocket && this.mysocket.send(JSON.stringify(Object.assign({action: 'noauth'}, {})));
+      }
+    }, true);
+  }
+  openWinCode(id: number, openHistoryItem: any) {
+    // console.log('LobbyGame openWinCode=', id,  this.props.gameId)
+    if (id === this.props.gameId) {
+      let issueList = this.state.issueList;
+      // console.log('LobbyGame openWinCode 1=', id,  this.props.gameId, issueList);
+      issueList.unshift(openHistoryItem);
+      // console.log('LobbyGame openWinCode 2=', id,  this.props.gameId, issueList);
+      this.setState({
+        lastIssue: issueList[0].issue,
+        openNumbers: issueList[0].code.split(','),
+        issueList: issueList
+      });
+      this.getCurIssue(this.props.gameId);
+    }
+  }
+  componentDidMount() {
+    this.initSocket();
   }
   getCurIssue = (gameid: number) => {
     APIs.curIssue({gameid}).then((data: any) => {
@@ -124,6 +158,9 @@ class LobbyGame extends Component<Props, object> {
   onCloseLimitChoiceHandler = () => {
     this.setState({isShowLimitSetDialog: false});
   }
+  componentWillUnmount() {
+    this.mysocket && this.mysocket.removeListen();
+  }
   render() {
     return (
       <section className="lobby-game-view">
@@ -135,7 +172,7 @@ class LobbyGame extends Component<Props, object> {
             gameType={this.state.gameType} 
             maxColumns={this.state.maxColumns} 
             maxRows={this.state.maxRows} 
-            issueList={this.state.issueList.reverse()} 
+            issueList={this.state.issueList.slice(0).reverse()} 
             methodMenuName={this.state.methodMenuName} 
             defaultMenu={this.state.defaultMenu} 
             defaultSubMenu={this.state.defaultSubMenu}
