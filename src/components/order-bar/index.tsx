@@ -31,6 +31,8 @@ interface State {
   amount: number;
 }
 
+let DEFAULT_AMOUNT = 2;
+
 @inject('store')
 @observer
 class OrderBar extends Component<Props, object> {
@@ -251,9 +253,13 @@ class OrderBar extends Component<Props, object> {
     });
   }
   onAmountChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    let value = event.target.value
+    let value = event.target.value;
+    let eType  = event.type;
     if (!/^\d*$/g.test(value)) {
       value = String(this.props.defaultInitMethodItemAmount);
+    }
+    if (eType === 'blur' && !/^\d+$/g.test(value)) {
+      value = String(this.props.defaultInitMethodItemAmount || DEFAULT_AMOUNT);
     }
     this.setState({amount: value});
     this.props.updateDefaultInitMethodItemAmount(parseInt(value, 10));
@@ -265,12 +271,12 @@ class OrderBar extends Component<Props, object> {
           <Col span={4}>
             <div className="flex ai-c fast-amount-wp">
               <span className="flex ai-c jc-c">快速金额</span>
-              <Input className="fast-amount" value={this.state.amount} onChange={this.onAmountChanged} />
+              <Input className="fast-amount" value={this.state.amount} onChange={this.onAmountChanged} onBlur={this.onAmountChanged} />
             </div>  
           </Col>
           <Col span={10}><CoinSet coinChoosed={this.coinChoosed} /></Col>
           <Col span={5} className="txt-r">
-            已选 <span className="txt-red">{this.props.betCount}</span> 注 共 <span className="txt-red"> {this.props.amount} </span>元
+            已选 <span className="txt-red">{this.props.betCount}</span> 注 共 <span className="txt-red"> {(this.state.amount * this.props.betCount).toFixed(3)} </span>元
           </Col>
           <Col span={5} className="flex ai-c jc-e btns-wp">
             <Button type="primary" className="btn-reset" disabled={this.props.betCount <= 0} onClick={this.onResetHandler}>重置</Button>
