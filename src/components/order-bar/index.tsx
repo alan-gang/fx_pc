@@ -276,7 +276,7 @@ class OrderBar extends Component<Props, object> {
           </Col>
           <Col span={10}><CoinSet coinChoosed={this.coinChoosed} /></Col>
           <Col span={5} className="txt-r">
-            已选 <span className="txt-red">{this.props.betCount}</span> 注 共 <span className="txt-red"> {(this.state.amount * this.props.betCount).toFixed(3)} </span>元
+            已选 <span className="txt-red">{this.props.betCount}</span> 注 共 <span className="txt-red"> {(this.props.amount).toFixed(3)} </span>元
           </Col>
           <Col span={5} className="flex ai-c jc-e btns-wp">
             <Button type="primary" className="btn-reset" disabled={this.props.betCount <= 0} onClick={this.onResetHandler}>重置</Button>

@@ -276,7 +276,7 @@ class Game extends Component<Props, object> {
 
   // 更新默认初始下注金额
   updateDefaultInitMethodItemAmount = (amount: number): void => {
-    this.setState({defaultInitMethodItemAmount: amount});
+    this.setState({defaultInitMethodItemAmount: amount}, this.calcBet);
   }
   calcBet() {
     let methodList: DataMethodItem[] = [];
