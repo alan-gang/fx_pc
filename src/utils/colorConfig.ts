@@ -31,7 +31,7 @@ function getStyle(d: string): string {
 }
 
 const textColors: TextColr = {
-  'bgc-r': 'txt-r',
+  'bgc-r': 'text-r',
   'bgc-b': 'txt-b',
   'bgc-g': 'txt-g',
   'bgc-y': 'txt-y'
