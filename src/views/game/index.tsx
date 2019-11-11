@@ -120,6 +120,7 @@ class Game extends Component<Props, object> {
       limitLevelList: !gameLimitLevel ? (limitListItem ? limitListItem.kqPrizeLimit : []) : [],
     }
     this.init();
+    Bus.emit('gameIdChanged', this.id);
   }
   init() {
     this.getCurIssue(this.id);
@@ -150,6 +151,7 @@ class Game extends Component<Props, object> {
   componentWillReceiveProps(nextProps: Props) {
     this.id = parseInt(nextProps.match.params.id || '1', 10);
     this.gameType = getGameTypeByGameId(this.id);
+    Bus.emit('gameIdChanged', this.id);
     // console.log('game componentWillReceiveProps id=', this.id, this.gameType);
     // console.log('game componentWillReceiveProps', nextProps, nextState);
     if (this.props.match.params.id !== nextProps.match.params.id) {
@@ -434,7 +436,6 @@ class Game extends Component<Props, object> {
             getNewestIssue={this.getCurIssue}
           />
           <section className="game-main">
-
             <MethodMenu gameType={this.gameType} curMenuIndex={this.state.curMenuIndex} methodMenuChangedCB={this.methodMenuChangedCB} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
             {this.state.subMethods.length > 0 && 
               <SubMethodMenu 
