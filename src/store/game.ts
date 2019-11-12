@@ -2,7 +2,6 @@ import { observable, action, runInAction } from "mobx";
 import { Game } from '../typings/games';
 import Types from './types';
 import local from '../utils/local';
-import session from '../utils/session';
 import APIs from '../http/APIs';
 
 class MyGame {
