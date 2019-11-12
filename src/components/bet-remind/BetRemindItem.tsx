@@ -330,15 +330,17 @@ class BetRemindItem extends Component<Props, {}> {
 
   // 获取限红
   getLimit = (gameId: any) => {
-    let xh = local.get('xh') || {}
-    if(xh[gameId]) {
-      return xh[gameId]
+    let xh = this.props.store.game.getGameLimitLevelByGameId(gameId) || {}
+    if(xh) {
+      if (this.props.store.game.limitList && this.props.store.game.limitList[gameId]) {
+        return this.props.store.game.limitList[gameId].jnPrizeLimit[xh.level - 1]
+      }
     } else {
       if (this.props.store.game.limitList && this.props.store.game.limitList[gameId]) {
         return this.props.store.game.limitList[gameId].jnPrizeLimit[0]
       }
-      return {}
     }
+    return {}
   }
 
   render() {
