@@ -35,11 +35,14 @@ const { Option } = Select;
 @observer
 class GameHeader extends Component<Props, object> {
   state: State;
+  curIssue?: string;
+  curTime?: number;
   constructor(props: Props) {
     super(props);
     let limitItem = props.store.game.getLimitListItemById(props.gameId);
     let curGameLimitLevel = props.store.game.getGameLimitLevelByGameId(props.gameId);
-    // console.log('curGameLimitLevel=', curGameLimitLevel, curGameLimitLevel && curGameLimitLevel.level, limitItem, props.gameId, props.store.game.setGamesLimitLevel);
+    this.curIssue = props.curIssue;
+    this.curTime = props.curTime;
     this.state = {
       timer: null,
       remainTime: this.props.remainTime,
@@ -50,7 +53,6 @@ class GameHeader extends Component<Props, object> {
       curGameLimitLevel: curGameLimitLevel && curGameLimitLevel.level || 1,
       tipText: '第一次进入需选择限红；再次进入不需要选择限红；除非该游戏限红与之前游戏限红不同。当切换不同的限红模式时，再次投注同一彩种，需至少间隔1期再投注。'
     }
-    // console.log('game header constructor ', this.props.remainTime);
   }
   componentDidMount() {
     this.initTimer(this.props.remainTime);
@@ -58,12 +60,17 @@ class GameHeader extends Component<Props, object> {
   componentWillReceiveProps(nextProps: Props) {
     let limitItem = nextProps.store.game.getLimitListItemById(nextProps.gameId);
     let curGameLimitLevel = nextProps.store.game.getGameLimitLevelByGameId(nextProps.gameId);
-    this.setState({
-      remainTime: nextProps.remainTime,
+    let stateData: any = {
       limitLevelList: limitItem && limitItem.kqPrizeLimit || [],
       curGameLimitLevel: curGameLimitLevel && curGameLimitLevel.level || 1
-    });
-    this.initTimer(nextProps.remainTime);
+    }
+    if (this.curIssue !== nextProps.curIssue || this.curTime !== nextProps.curTime) {
+      this.curIssue = nextProps.curIssue;
+      this.curTime = nextProps.curTime;
+      stateData.remainTime = nextProps.remainTime;
+      this.initTimer(nextProps.remainTime);
+    }
+    this.setState(stateData);
   }
   initTimer(remainTime: number) {
     if (remainTime <= 0) return;
@@ -100,7 +107,6 @@ class GameHeader extends Component<Props, object> {
   }
   render() {
     let state = this.state;
-    // console.log('game-header render ', state.curGameLimitLevel, state.limitLevelList);
     return (
       <section className={`game-header-view flex ai-c ${this.props.gameType}`}>
         <div className={`game-logo game-header-logo-${this.props.gameId}`}>

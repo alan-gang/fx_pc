@@ -44,7 +44,6 @@ class GameMenu extends Component<Props, object> {
 
     this.id = parseInt(this.getGameIdFromUrl() || '0', 10);
     this.gameType = getGameTypeByGameId(this.id) || this.DEFAULT_GAME_TYPE;
-
     this.state = {
       offsetLeft: 30,
       openKeys: ['box', this.gameType],
@@ -212,7 +211,7 @@ class GameMenu extends Component<Props, object> {
         openKeys: latestOpenKey ? [latestOpenKey] : [],
       });
     }
-    this.gameType = latestOpenKey;
+    this.gameType = latestOpenKey || openKeys[0];
     setTimeout(() => {
       this.clearAllTimer();
       this.init();
