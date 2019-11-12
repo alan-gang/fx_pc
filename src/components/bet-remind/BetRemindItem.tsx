@@ -297,9 +297,9 @@ class BetRemindItem extends Component<Props, {}> {
         totMoney += val
         return {
           content: this.props.gamedata.pos ? this.props.gamedata.pos + '-' + types[i] : types[i],
-          methodId: this.props.gamedata.methodId,
+          methodId: this.props.gamedata.methodId + '',
           projs: 1,
-          money: val
+          money: val + ''
         }
       })
       if (flag) return

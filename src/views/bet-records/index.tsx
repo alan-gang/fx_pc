@@ -217,6 +217,7 @@ class BetRecords extends Component<Props, object> {
         {
           title: '投注时间',
           dataIndex: 'writeTime',
+          width: 160
         },
         {
           title: '游戏',
@@ -229,6 +230,7 @@ class BetRecords extends Component<Props, object> {
         {
           title: '投注内容',
           dataIndex: 'code',
+          width: 180,
           render: (code: string, record: any) => <div><span className={`inlb txt-c code-bg ${ this.getStyle(code) }`}>{code}</span><span className="odd text-orange">{ (record.dyPointDec.split('-')[0] / 100).toFixed(2) }</span></div>
         },
         {
