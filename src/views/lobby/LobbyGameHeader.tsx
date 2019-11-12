@@ -35,20 +35,15 @@ class LobbyGameHeader extends Component<Props, object> {
       minutes: '00',
       seconds: '00'
     }
-    // console.log('game header constructor ', this.props.remainTime);
   }
   componentDidMount() {
     this.initTimer(this.props.remainTime);
   }
   componentWillReceiveProps(nextProps: Props) {
-    // console.log('game header componentWillReceiveProps ', nextProps)
-    // if (nextProps.remainTime !== this.state.remainTime) {
-      this.setState({remainTime: nextProps.remainTime});
-      this.initTimer(nextProps.remainTime);
-    // }
+    this.setState({remainTime: nextProps.remainTime});
+    this.initTimer(nextProps.remainTime);
   }
   initTimer(remainTime: number) {
-    // console.log('game header initTimer ', remainTime)
     if (remainTime <= 0) return;
     let timer = this.state.timer;
     let timeStr: string = '';

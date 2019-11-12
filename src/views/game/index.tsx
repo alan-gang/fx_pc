@@ -152,8 +152,6 @@ class Game extends Component<Props, object> {
     this.id = parseInt(nextProps.match.params.id || '1', 10);
     this.gameType = getGameTypeByGameId(this.id);
     Bus.emit('gameIdChanged', this.id);
-    // console.log('game componentWillReceiveProps id=', this.id, this.gameType);
-    // console.log('game componentWillReceiveProps', nextProps, nextState);
     if (this.props.match.params.id !== nextProps.match.params.id) {
       let limitItem = this.props.store.game.getLimitListItemById(this.id);
       let bestLudan: BestLudanItem = limitItem && limitItem.bestLudan;
@@ -180,7 +178,6 @@ class Game extends Component<Props, object> {
   openWinCode(id: number, openHistoryItem: any) {
     if (id === this.id) {
       let issueList = this.state.issueList;
-      // console.log('info game openWinCode=', id, this.id, issueList);
       issueList.unshift(openHistoryItem);
       this.setState({
         lastIssue: issueList[0].issue,
@@ -421,7 +418,6 @@ class Game extends Component<Props, object> {
     this.mysocket && this.mysocket.removeListen();
   }
   render() {
-    // console.log('game render id=', this.id, this.state.issueList);
     return (
       <article className="game-view">
         <GameCommonDataContext.Provider value={{gameId: this.id, gameType: this.gameType}} >

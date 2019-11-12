@@ -85,7 +85,7 @@ export function getGameTypeByGameId(id: number): string {
 
 export function getGamesByType(type: string): Game[] {
   let gameCategory = games.find((gameCategory: GameCategory) => gameCategory.type === type);
-  return gameCategory && gameCategory.items || [];
+  return (gameCategory && gameCategory.items) || [];
 }
 
 export function getAllGames() {

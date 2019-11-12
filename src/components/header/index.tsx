@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Icon } from 'antd';
-import { useHistory, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 import './index.styl';
 @inject("store")
