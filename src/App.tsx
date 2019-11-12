@@ -63,7 +63,6 @@ class App extends Component<Props, object> {
       url: store.common.broadcaseWSUrl,
       name: 'appIndex',
       receive: (data: any) => {
-        console.log('App Socket=', data);
       },
       open: () => {
         mysocket.send(JSON.stringify(Object.assign({action: 'noauth'}, {})));

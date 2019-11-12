@@ -36,7 +36,7 @@ class LundanMenu extends Component<Props, object> {
   }
   getSubMenusByName(menus: any[], selectedMenu: string = ''): any[] {
     let menu = this.getMenuByName(menus, selectedMenu);
-    return menu && menu.subM || [];
+    return (menu && menu.subM) || [];
   }
   componentWillReceiveProps(nextProps: Props, nextState: State) {
     if (this.props.selectedMenu !== nextProps.selectedMenu || this.props.selectedSubMenu !== nextProps.selectedSubMenu) {

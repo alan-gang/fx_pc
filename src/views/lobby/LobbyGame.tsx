@@ -55,7 +55,7 @@ class LobbyGame extends Component<Props, object> {
     let ludanTab = getLunDanTabByName(gameType, bestLudan && bestLudan.codeStyle);
     let bestLudanName = (getLunDanFullTitleByName(gameType, bestLudan && bestLudan.codeStyle) || bestLudanConfig[gameType].title) + '路单';
     let methodMenuName = getMethodENameByLudanName(gameType, bestLudan && bestLudan.codeStyle) || bestLudanConfig[gameType].methodMenuName;
-    let defaultMenu = ludanTab && ludanTab.name || bestLudanConfig[gameType].defaultMenu;
+    let defaultMenu = (ludanTab && ludanTab.name) || bestLudanConfig[gameType].defaultMenu;
     let defaultSubMenu = (ludanTab && ludanTab.subM && ludanTab.subM.length > 0) ? bestLudan.codeStyle.split('_')[1] : bestLudanConfig[gameType].defaultSubMenu;
     this.state = {
       gameType,
@@ -97,12 +97,9 @@ class LobbyGame extends Component<Props, object> {
     }, true);
   }
   openWinCode(id: number, openHistoryItem: any) {
-    // console.log('LobbyGame openWinCode=', id,  this.props.gameId)
     if (id === this.props.gameId) {
       let issueList = this.state.issueList;
-      // console.log('LobbyGame openWinCode 1=', id,  this.props.gameId, issueList);
       issueList.unshift(openHistoryItem);
-      // console.log('LobbyGame openWinCode 2=', id,  this.props.gameId, issueList);
       this.setState({
         lastIssue: issueList[0].issue,
         openNumbers: issueList[0].code.split(','),

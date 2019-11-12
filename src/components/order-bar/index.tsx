@@ -88,7 +88,7 @@ class OrderBar extends Component<Props, object> {
       isusefree: 0,
       betList: [],
       isFastBet: 1,
-      limitLevel: curGameLimitLevel && curGameLimitLevel.level || 1
+      limitLevel: (curGameLimitLevel && curGameLimitLevel.level) || 1
     };
     let pos: string = '';
     let val: string = '';
@@ -212,14 +212,6 @@ class OrderBar extends Component<Props, object> {
     if (['zx_q2', 'zx_q3'].includes(methodTypeName)) {
       repeatCount = countRepeat(methodList.map((methodItem: DataMethodItem) => methodItem.rows));
     }
-
-    // 去重
-    // if (['zx_q2', 'zx_q3'].includes(methodTypeName)) {
-    //   methodList = methodList.map((methodItem: DataMethodItem) => {
-    //     methodItem.rows = removeRepeat2DArray(methodItem.rows);
-    //     return methodItem;
-    //   });
-    // }
 
     if (!['zx_q3'].includes(methodTypeName)) {
       methodList = methodList.map((methodItem: DataMethodItem) => {

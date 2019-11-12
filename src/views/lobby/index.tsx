@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { RouteComponentProps } from "react-router-dom";
 import LobbyMenu from './LobbyMenu';
 import LobbyGame from './LobbyGame';
-import games, { getGamesByType, getAllGames } from '../../game/games';
+import { getGamesByType, getAllGames } from '../../game/games';
 import { Game } from '../../typings/games';
 
 import './index.styl';

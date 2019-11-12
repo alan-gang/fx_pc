@@ -29,10 +29,9 @@ class SubMethodMenu extends Component<Props, object> {
   }
   getOddById(ids: string[], oddIndex: number) {
     let methodOdds = this.props.odds[this.parseId(ids[0])] 
-    return methodOdds && methodOdds[oddIndex] && methodOdds[oddIndex].maxprize || '';
+    return (methodOdds && methodOdds[oddIndex] && methodOdds[oddIndex].maxprize) || '';
   }
   render() {
-    let props = this.props;
     let subMethods = this.props.subMethods;
     return (
       <section className={`sub-method-menu-view`}>

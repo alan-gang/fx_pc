@@ -49,8 +49,8 @@ class GameHeader extends Component<Props, object> {
       hours: '00',
       minutes: '00',
       seconds: '00',
-      limitLevelList: limitItem && limitItem.kqPrizeLimit || [],
-      curGameLimitLevel: curGameLimitLevel && curGameLimitLevel.level || 1,
+      limitLevelList: (limitItem && limitItem.kqPrizeLimit) || [],
+      curGameLimitLevel: (curGameLimitLevel && curGameLimitLevel.level) || 1,
       tipText: '第一次进入需选择限红；再次进入不需要选择限红；除非该游戏限红与之前游戏限红不同。当切换不同的限红模式时，再次投注同一彩种，需至少间隔1期再投注。'
     }
   }
@@ -61,8 +61,8 @@ class GameHeader extends Component<Props, object> {
     let limitItem = nextProps.store.game.getLimitListItemById(nextProps.gameId);
     let curGameLimitLevel = nextProps.store.game.getGameLimitLevelByGameId(nextProps.gameId);
     let stateData: any = {
-      limitLevelList: limitItem && limitItem.kqPrizeLimit || [],
-      curGameLimitLevel: curGameLimitLevel && curGameLimitLevel.level || 1
+      limitLevelList: (limitItem && limitItem.kqPrizeLimit) || [],
+      curGameLimitLevel: (curGameLimitLevel && curGameLimitLevel.level) || 1
     }
     if (this.curIssue !== nextProps.curIssue || this.curTime !== nextProps.curTime) {
       this.curIssue = nextProps.curIssue;
