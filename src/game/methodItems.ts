@@ -556,7 +556,7 @@ const methodItems: any = {
   },
   '5052:1' () {
     // K3 三军
-    let vs = [{s: false, n: '1', col: 8, class: 'icon', icons: [1]}, {s: false, n: '2', col: 8, class: 'icon', icons: [1]}, {s: false, n: '3', col: 8, class: 'icon', icons: [1]}, {s: false, n: '4', col: 8, class: 'icon', icons: [1]}, {s: false, n: '5', col: 8, class: 'icon', icons: [1]}, {s: false, n: '6', col: 8, class: 'icon', icons: [1]}];
+    let vs = [{s: false, n: '1', col: 8, class: 'icon', icons: [1]}, {s: false, n: '2', col: 8, class: 'icon', icons: [2]}, {s: false, n: '3', col: 8, class: 'icon', icons: [3]}, {s: false, n: '4', col: 8, class: 'icon', icons: [4]}, {s: false, n: '5', col: 8, class: 'icon', icons: [5]}, {s: false, n: '6', col: 8, class: 'icon', icons: [6]}];
     return {
       rows: [
         getCommonRow({nonasv: true, n: '三军', vs: cpArr(vs)}),

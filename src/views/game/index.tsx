@@ -12,7 +12,7 @@ import { getMethodsConfigByType } from '../../game/gameMethods';
 import { GameMethodMenu, GameSubMethodMenu } from '../../typings/games';
 import methodItems from '../../game/methodItems';
 import APIs from '../../http/APIs';
-import { removeRepeat2DArray } from '../../utils/game';
+import { removeRepeat2DArray, countRepeat } from '../../utils/game';
 import { GameCommonDataContext } from '../../context/gameContext';
 import { Icon } from 'antd'
 import RecentOpen from '../../components/recent-open/RecentOpen'
@@ -120,6 +120,7 @@ class Game extends Component<Props, object> {
       limitLevelList: !gameLimitLevel ? (limitListItem ? limitListItem.kqPrizeLimit : []) : [],
     }
     this.init();
+    Bus.emit('gameIdChanged', this.id);
   }
   init() {
     this.getCurIssue(this.id);
@@ -150,6 +151,7 @@ class Game extends Component<Props, object> {
   componentWillReceiveProps(nextProps: Props) {
     this.id = parseInt(nextProps.match.params.id || '1', 10);
     this.gameType = getGameTypeByGameId(this.id);
+    Bus.emit('gameIdChanged', this.id);
     // console.log('game componentWillReceiveProps id=', this.id, this.gameType);
     // console.log('game componentWillReceiveProps', nextProps, nextState);
     if (this.props.match.params.id !== nextProps.match.params.id) {
@@ -274,13 +276,14 @@ class Game extends Component<Props, object> {
 
   // 更新默认初始下注金额
   updateDefaultInitMethodItemAmount = (amount: number): void => {
-    this.setState({defaultInitMethodItemAmount: amount});
+    this.setState({defaultInitMethodItemAmount: amount}, this.calcBet);
   }
   calcBet() {
     let methodList: DataMethodItem[] = [];
     let method: any;
     let betCount: number = 0;
     let totalAmount: number = 0;
+    let repeatCount = 0;
 
     // 构造选择的号码集合，金额集合
     let curGameMethodItems = this.state.curGameMethodItems;
@@ -315,25 +318,24 @@ class Game extends Component<Props, object> {
       methodList.push(method);
     });
 
-    // 去重
+    // 计算重复数
     if (['zx_q2', 'zx_q3'].includes(methodTypeName)) {
-      methodList = methodList.map((methodItem: DataMethodItem) => {
-        methodItem.rows = removeRepeat2DArray(methodItem.rows.slice(0));
-        return methodItem;
-      });
+      repeatCount = countRepeat(methodList.map((methodItem: DataMethodItem) => methodItem.rows));
     }
     
     // 构造注数计算格式
-    methodList = methodList.map((methodItem: DataMethodItem) => {
-      methodItem.rows = methodItem.rows.map((row: any) => {
-        return row.length;
-      })
-      return methodItem;
-    });
+    if (!['zx_q3'].includes(methodTypeName)) {
+      methodList = methodList.map((methodItem: DataMethodItem) => {
+        methodItem.rows = methodItem.rows.map((row: any) => {
+          return row.length;
+        })
+        return methodItem;
+      });
+    }
 
     // 总注数
     methodList.forEach((methodItem: DataMethodItem) => {
-      betCount += this.calc[methodItem.id]({nsl: methodItem.rows});
+      betCount += this.calc[methodItem.id]({nsl: methodItem.rows, ns: methodItem.rows, repeatCount});
     });
 
     // 任选，组选，直选金额计算
@@ -434,7 +436,6 @@ class Game extends Component<Props, object> {
             getNewestIssue={this.getCurIssue}
           />
           <section className="game-main">
-
             <MethodMenu gameType={this.gameType} curMenuIndex={this.state.curMenuIndex} methodMenuChangedCB={this.methodMenuChangedCB} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
             {this.state.subMethods.length > 0 && 
               <SubMethodMenu 

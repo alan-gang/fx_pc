@@ -9,13 +9,15 @@ import { getGameTypeByGameId } from '../../game/games';
 import Timer from '../../utils/timer';
 import { timeFormat } from '../../utils/date';
 import APIs from '../../http/APIs';
+import EventEmitter from '../../utils/eventBus';
 
 import './index.styl';
 
 interface State {
   offsetLeft: number;
   openKeys: string[];
-  defaultSelectedKeys: string[]; 
+  defaultSelectedKeys: string[];
+  selectedKeys: string[];
   navData: GameCategory[];
 }
 
@@ -47,6 +49,7 @@ class GameMenu extends Component<Props, object> {
       offsetLeft: 30,
       openKeys: ['box', this.gameType],
       defaultSelectedKeys: [String(this.id)],
+      selectedKeys: [],
       navData: []
     };
   }
@@ -65,7 +68,9 @@ class GameMenu extends Component<Props, object> {
       });
       this.setState({navData});
       let ids = this.getShowingMenuGameIds(navData);
-      this.getIssuesByGameIds(ids.join(','));
+      if (ids.length > 0) {
+        this.getIssuesByGameIds(ids.join(','));
+      }
       // this.getIssuesByGameIds(availableGames.join(','));
     });
   }
@@ -177,11 +182,19 @@ class GameMenu extends Component<Props, object> {
     this.setState({navData});
   }
 
+  gameIdChangedHandler = (gameId: number) => {
+    this.id = gameId;
+    this.gameType = getGameTypeByGameId(this.id) || this.DEFAULT_GAME_TYPE;
+    this.setState({selectedKeys: [String(this.id)]});
+    this.onOpenChange([String(this.gameType)]);
+  }
+
   componentDidMount() {
     this.updatePosition();
     window.addEventListener('resize', () => {
       this.updatePosition();
     }, false);
+    EventEmitter.on('gameIdChanged', this.gameIdChangedHandler);
   }
 
   updatePosition() {
@@ -255,6 +268,10 @@ class GameMenu extends Component<Props, object> {
     return hash.substring(hash.lastIndexOf('/') + 1, hash.length);
   }
 
+  componentWillUnmount() {
+    EventEmitter.off('gameIdChanged', this.gameIdChangedHandler);
+  }
+
   render() {
     return (
       <nav className="game-menu-view" style={{left: `${this.state.offsetLeft}px`}}>
@@ -262,6 +279,7 @@ class GameMenu extends Component<Props, object> {
         <Menu
           mode="inline"
           openKeys={this.state.openKeys}
+          selectedKeys={this.state.selectedKeys}
           defaultSelectedKeys={this.state.defaultSelectedKeys}
           onOpenChange={this.onOpenChange}
           style={{ width: 200 }}

@@ -1,6 +1,8 @@
 import { /*N,*/ P, A, C } from './base'
 interface Params {
-  nsl: number[]
+  nsl: number[];
+  ns?: any[];
+  repeatCount?: number;
 }
 
 export default {
@@ -93,11 +95,21 @@ export default {
   '2056:1'({nsl}: Params) {
     return C(nsl && nsl[0], 3)
   },
-  '2057:1'({nsl}: Params) {
-    return P(nsl)
+  '2057:1'({nsl, repeatCount}: Params) {
+    return P(nsl) - (repeatCount || 0);
   },
-  '2058:1'({nsl}: Params) {
-    return P(nsl)
+  '2058:1'({ns}: Params) {
+    let n = 0;
+    if (ns) {
+      ns[0] && ns[0][0] && ns[0].forEach((f: number) => {
+        ns[1] && ns[1][0] && ns[1].forEach((s: number) => {
+          ns[2] && ns[2][0] && ns[2].forEach((t: number) => {
+            if (f !== s && f !== t && s !== t) n++;
+          })
+        })
+      });
+    }
+    return n;
   },
 
   // PK10

@@ -4,7 +4,7 @@ import { Row, Col, Input, Button, message, Modal } from 'antd';
 import CoinSet from '../coin-set';
 import APIs from '../../http/APIs';
 import calc from '../../game/calc';
-import { removeRepeat2DArray } from '../../utils/game';
+import { removeRepeat2DArray, countRepeat } from '../../utils/game';
 
 import './index.styl';
 
@@ -30,6 +30,8 @@ interface DataMethodItem {
 interface State {
   amount: number;
 }
+
+let DEFAULT_AMOUNT = 2;
 
 @inject('store')
 @observer
@@ -148,11 +150,13 @@ class OrderBar extends Component<Props, object> {
         }
         for (let i = 0; i < nc.length; i++) {
           for (let j = 0; j < nc[i].length; j++) {
-            if (!nc[i + 1]) { continue; }
+            if (!nc[i + 1]) continue;
             for (let k = 0; k < nc[i + 1].length; k++) {
+              if (nc[i][j] === nc[i + 1][k]) continue;
               if (nc.length >= 3) {
-                if (!nc[i + 2]) { continue; }
+                if (!nc[i + 2]) continue;
                 for (let m = 0; m < nc[i + 2].length; m++) {
+                  if (nc[i + 1][k] === nc[i + 2][m] || nc[i][j] === nc[i + 2][m]) continue;  
                   contents.push(Object.assign({
                     content: `${nc[i][j]},${nc[i + 1][k]},${nc[i + 2][m]}`
                   }, param));
@@ -191,6 +195,7 @@ class OrderBar extends Component<Props, object> {
     let methodList: DataMethodItem[] = [];
     let method: any;
     let betCount: number = 0;
+    let repeatCount = 0;
 
     // 构造注数计算格式
     let methodTypeName: string = '';
@@ -203,24 +208,31 @@ class OrderBar extends Component<Props, object> {
       methodList.push(method);
     });
     
-    // 去重
+    // 计算重复数
     if (['zx_q2', 'zx_q3'].includes(methodTypeName)) {
+      repeatCount = countRepeat(methodList.map((methodItem: DataMethodItem) => methodItem.rows));
+    }
+
+    // 去重
+    // if (['zx_q2', 'zx_q3'].includes(methodTypeName)) {
+    //   methodList = methodList.map((methodItem: DataMethodItem) => {
+    //     methodItem.rows = removeRepeat2DArray(methodItem.rows);
+    //     return methodItem;
+    //   });
+    // }
+
+    if (!['zx_q3'].includes(methodTypeName)) {
       methodList = methodList.map((methodItem: DataMethodItem) => {
-        methodItem.rows = removeRepeat2DArray(methodItem.rows);
+        methodItem.rows = methodItem.rows.map((row: any) => {
+          return row.length;
+        })
         return methodItem;
       });
     }
 
-    methodList = methodList.map((methodItem: DataMethodItem) => {
-      methodItem.rows = methodItem.rows.map((row: any) => {
-        return row.length;
-      })
-      return methodItem;
-    });
-
     // 总注数
     methodList.forEach((methodItem: DataMethodItem) => {
-      betCount += this.calc[methodItem.id]({nsl: methodItem.rows});
+      betCount += this.calc[methodItem.id]({nsl: methodItem.rows, ns: methodItem.rows, repeatCount});
     });
 
     return betCount;
@@ -251,9 +263,13 @@ class OrderBar extends Component<Props, object> {
     });
   }
   onAmountChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    let value = event.target.value
+    let value = event.target.value;
+    let eType  = event.type;
     if (!/^\d*$/g.test(value)) {
       value = String(this.props.defaultInitMethodItemAmount);
+    }
+    if (eType === 'blur' && !/^\d+$/g.test(value)) {
+      value = String(this.props.defaultInitMethodItemAmount || DEFAULT_AMOUNT);
     }
     this.setState({amount: value});
     this.props.updateDefaultInitMethodItemAmount(parseInt(value, 10));
@@ -265,12 +281,12 @@ class OrderBar extends Component<Props, object> {
           <Col span={4}>
             <div className="flex ai-c fast-amount-wp">
               <span className="flex ai-c jc-c">快速金额</span>
-              <Input className="fast-amount" value={this.state.amount} onChange={this.onAmountChanged} />
+              <Input className="fast-amount" value={this.state.amount} onChange={this.onAmountChanged} onBlur={this.onAmountChanged} />
             </div>  
           </Col>
           <Col span={10}><CoinSet coinChoosed={this.coinChoosed} /></Col>
           <Col span={5} className="txt-r">
-            已选 <span className="txt-red">{this.props.betCount}</span> 注 共 <span className="txt-red"> {this.props.amount} </span>元
+            已选 <span className="txt-red">{this.props.betCount}</span> 注 共 <span className="txt-red"> {(this.props.amount).toFixed(3)} </span>元
           </Col>
           <Col span={5} className="flex ai-c jc-e btns-wp">
             <Button type="primary" className="btn-reset" disabled={this.props.betCount <= 0} onClick={this.onResetHandler}>重置</Button>

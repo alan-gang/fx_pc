@@ -83,9 +83,19 @@
   // }
 
   .ant-menu-root {
+    height 8.55rem
+    overflow-x hidden
+    overflow-y auto
     border-bottom-left-radius 0.08rem
     border-bottom-right-radius 0.08rem
   }
+  @media screen and (max-height: 900px) {
+    .ant-menu-root {
+      max-height 5rem
+      overflow-y auto
+    }
+  }
+
   .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
     background $game-menu-item-selected-bg-color
     color $theme-txt-color-4
