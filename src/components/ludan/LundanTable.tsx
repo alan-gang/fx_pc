@@ -14,6 +14,9 @@ interface Props {
 @inject('store')
 @observer
 class LundanTable extends Component<Props, object> {
+  filter(value: any) {
+    return ['icon-cur', 'icon-qs'].indexOf(value) !== -1 ? '' : value;
+  }
   render() {
     return (
       <section className="ludan-table-view">
@@ -22,8 +25,8 @@ class LundanTable extends Component<Props, object> {
             <div className="col" key={i}>
               {this.props.maxRows && Array.from(Array(this.props.maxRows)).map((n, j) => (
                 <React.Fragment key={j}>
-                  {j === this.props.maxRows - 1 && <div className="tb-cell flex ai-c jc-c"><span className={`ld-item txt-c ${getCellStyle(this.props.ludanList, i, j, this.props.maxRows)}`} >{getCellData(this.props.ludanList, i, j, this.props.maxRows) }</span></div>}
-                  {j !== this.props.maxRows - 1 && <div className="tb-cell flex ai-c jc-c"><span className={`ld-item txt-c ${getCellStyle(this.props.ludanList, i, j, this.props.maxRows)}`}  >{getCellData(this.props.ludanList, i, j, this.props.maxRows)}</span></div>}
+                  {j === this.props.maxRows - 1 && <div className="tb-cell flex ai-c jc-c"><span className={`ld-item txt-c ${getCellStyle(this.props.ludanList, i, j, this.props.maxRows)}`} >{this.filter(getCellData(this.props.ludanList, i, j, this.props.maxRows)) }</span></div>}
+                  {j !== this.props.maxRows - 1 && <div className="tb-cell flex ai-c jc-c"><span className={`ld-item txt-c ${getCellStyle(this.props.ludanList, i, j, this.props.maxRows)}`}  >{this.filter(getCellData(this.props.ludanList, i, j, this.props.maxRows))}</span></div>}
                 </React.Fragment>
               ))} 
             </div>
