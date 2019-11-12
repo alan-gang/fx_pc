@@ -421,7 +421,6 @@ class Game extends Component<Props, object> {
     this.mysocket && this.mysocket.removeListen();
   }
   render() {
-    console.log('game render id=', this.id, this.state.issueList, this.state.remainTime);
     return (
       <article className="game-view">
         <GameCommonDataContext.Provider value={{gameId: this.id, gameType: this.gameType}} >
