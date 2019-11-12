@@ -1,4 +1,4 @@
-import { observable, action } from "mobx";
+import { observable, action, runInAction } from "mobx";
 import { Game } from '../typings/games';
 import Types from './types';
 import local from '../utils/local';
@@ -102,7 +102,9 @@ class MyGame {
   updateAvailableGames() {
     APIs.getLotterys().then((data: any) => {
       if (data.lotteryList) {
-        this.availableGames = data.lotteryList.map((game: any) => game.lotteryId);
+        runInAction(() => {
+          this.availableGames = data.lotteryList.map((game: any) => game.lotteryId);
+        })
       }
     });
   }
@@ -110,13 +112,15 @@ class MyGame {
   @action
   getAvailableGames(callback?: Function) {
     if (this.availableGames.length > 0) {
-      callback && callback(this.availableGames);
+      callback && callback(this.availableGames.slice(0));
       return;
     }
     APIs.getLotterys().then((data: any) => {
       if (data.lotteryList) {
-        this.availableGames = data.lotteryList.map((game: any) => game.lotteryId);
-        callback && callback(this.availableGames);
+        runInAction(() => {
+          this.availableGames = data.lotteryList.map((game: any) => game.lotteryId);
+          callback && callback(this.availableGames.slice(0));
+        })
       }
     });
   }

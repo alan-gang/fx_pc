@@ -68,7 +68,9 @@ class GameMenu extends Component<Props, object> {
       });
       this.setState({navData});
       let ids = this.getShowingMenuGameIds(navData);
-      this.getIssuesByGameIds(ids.join(','));
+      if (ids.length > 0) {
+        this.getIssuesByGameIds(ids.join(','));
+      }
       // this.getIssuesByGameIds(availableGames.join(','));
     });
   }
