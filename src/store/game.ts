@@ -9,8 +9,8 @@ class MyGame {
   @observable favourites: Game[] = local.get(Types.SET_PC_FAVOURITE_GAMES) || [];
   // @observable limitLevel: number = 1; // 限红级别
   @observable limitLevelList: LimitLevelItem[] = [];
-  @observable limitList: LimitListItem[] = session.get(Types.LOCAL_PC_FAST_SET_LIMIT_LIST) || []; // 限红
-  @observable setGamesLimitLevel: GameLimitLevel[] = session.get(Types.SESSION_PC_FAST_SET_GAMES_LIMIT_LEVEL) || [];
+  @observable limitList: LimitListItem[] = local.get(Types.LOCAL_PC_FAST_SET_LIMIT_LIST) || []; // 限红
+  @observable setGamesLimitLevel: GameLimitLevel[] = local.get(Types.LOCAL_PC_FAST_SET_GAMES_LIMIT_LEVEL) || [];
   @observable availableGames: number[] = [];
 
   hasGame(id: number): boolean {
@@ -68,7 +68,7 @@ class MyGame {
         this.limitList.push(item);
       }
     });
-    session.set(Types.LOCAL_PC_FAST_SET_LIMIT_LIST, this.limitList);
+    local.set(Types.LOCAL_PC_FAST_SET_LIMIT_LIST, this.limitList);
   }
   
   @action
@@ -90,7 +90,7 @@ class MyGame {
     } else {
       this.setGamesLimitLevel.push(gameLimitLevel);
     }
-    session.set(Types.SESSION_PC_FAST_SET_GAMES_LIMIT_LEVEL, this.setGamesLimitLevel);
+    local.set(Types.LOCAL_PC_FAST_SET_GAMES_LIMIT_LEVEL, this.setGamesLimitLevel);
   }
 
   @action
