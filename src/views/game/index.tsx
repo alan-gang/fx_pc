@@ -479,7 +479,7 @@ class Game extends Component<Props, object> {
               <span className={ `tab ${ this.state.tabIndex === 1 ? 'active' : '' }` } onClick={ () => this.changeTabIndex(1) }>投注提醒 <Icon theme="filled" type="setting" /></span>
             </div>
             {
-              this.state.tabIndex === 0 ? <RecentOpen curMenuIndex={this.state.curMenuIndex} curSubMenuIndex={this.state.curSubMenuIndex} gameId={this.id} issueList={this.state.issueList.slice(0).reverse()} gameType={this.gameType} /> : <BetRemind />
+              this.state.tabIndex === 0 ? <RecentOpen curMenuIndex={this.state.curMenuIndex} curSubMenuIndex={this.state.curSubMenuIndex} gameId={this.id} issueList={this.state.issueList.slice(0)} gameType={this.gameType} /> : <BetRemind />
             }
           </div>
         </GameCommonDataContext.Provider>
