@@ -333,11 +333,11 @@ class BetRemindItem extends Component<Props, {}> {
     let xh = this.props.store.game.getGameLimitLevelByGameId(gameId) || {}
     if(xh) {
       if (this.props.store.game.limitList && this.props.store.game.limitList[gameId]) {
-        return this.props.store.game.limitList[gameId].jnPrizeLimit[xh.level - 1]
+        return this.props.store.game.limitList[gameId].kqPrizeLimit[xh.level - 1]
       }
     } else {
       if (this.props.store.game.limitList && this.props.store.game.limitList[gameId]) {
-        return this.props.store.game.limitList[gameId].jnPrizeLimit[0]
+        return this.props.store.game.limitList[gameId].kqPrizeLimit[0]
       }
     }
     return {}
