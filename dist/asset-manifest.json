@@ -13,8 +13,8 @@
     "main.css": "/fastm/static/css/main.dfca195d.chunk.css",
     "main.js": "/fastm/fastm/static/js/main.66cba9c2.chunk.js",
     "main.js.map": "/fastm/fastm/static/js/main.66cba9c2.chunk.js.map",
-    "runtime-main.js": "/fastm/fastm/static/js/runtime-main.f914a28e.js",
-    "runtime-main.js.map": "/fastm/fastm/static/js/runtime-main.f914a28e.js.map",
+    "runtime-main.js": "/fastm/fastm/static/js/runtime-main.ed8115f4.js",
+    "runtime-main.js.map": "/fastm/fastm/static/js/runtime-main.ed8115f4.js.map",
     "fastm/static/js/7.13cf7806.chunk.js": "/fastm/fastm/static/js/7.13cf7806.chunk.js",
     "fastm/static/js/7.13cf7806.chunk.js.map": "/fastm/fastm/static/js/7.13cf7806.chunk.js.map",
     "fastm/static/js/8.439a7840.chunk.js": "/fastm/fastm/static/js/8.439a7840.chunk.js",
@@ -29,10 +29,10 @@
     "fastm/static/js/12.17035431.chunk.js.map": "/fastm/fastm/static/js/12.17035431.chunk.js.map",
     "fastm/static/js/13.032cd3d3.chunk.js": "/fastm/fastm/static/js/13.032cd3d3.chunk.js",
     "fastm/static/js/13.032cd3d3.chunk.js.map": "/fastm/fastm/static/js/13.032cd3d3.chunk.js.map",
-    "fastm/static/js/14.788ec36a.chunk.js": "/fastm/fastm/static/js/14.788ec36a.chunk.js",
-    "fastm/static/js/14.788ec36a.chunk.js.map": "/fastm/fastm/static/js/14.788ec36a.chunk.js.map",
+    "fastm/static/js/14.c8583e40.chunk.js": "/fastm/fastm/static/js/14.c8583e40.chunk.js",
+    "fastm/static/js/14.c8583e40.chunk.js.map": "/fastm/fastm/static/js/14.c8583e40.chunk.js.map",
     "index.html": "/fastm/index.html",
-    "precache-manifest.45f17257e8f4c10d24f7371baf4286b7.js": "/fastm/precache-manifest.45f17257e8f4c10d24f7371baf4286b7.js",
+    "precache-manifest.52ab36f2827b97ce10bc509e99844fe4.js": "/fastm/precache-manifest.52ab36f2827b97ce10bc509e99844fe4.js",
     "service-worker.js": "/fastm/service-worker.js",
     "static/css/main.dfca195d.chunk.css.map": "/fastm/static/css/main.dfca195d.chunk.css.map",
     "static/media/1.png": "/fastm/static/media/1.0df24675.png",
@@ -72,7 +72,7 @@
     "static/media/logo.png": "/fastm/static/media/logo.701dbc5c.png"
   },
   "entrypoints": [
-    "fastm/static/js/runtime-main.f914a28e.js",
+    "fastm/static/js/runtime-main.ed8115f4.js",
     "fastm/static/js/7.13cf7806.chunk.js",
     "static/css/main.dfca195d.chunk.css",
     "fastm/static/js/main.66cba9c2.chunk.js"

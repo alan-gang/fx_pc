@@ -15,8 +15,6 @@ class LotteryExplain extends Component<Props, {}> {
 【后四位】：依照官方公布当时的在线人数，取末四位为千百十个这四个号码；
 例如：线上人数227415242人，则末4码为5242
 
-腾讯QQ的线用户人数数据可参见齐聚数据网：
-https://www.qiju.info/#/qijuData/2
         </pre>
         <h3>微博5分彩</h3>
         <pre>
