@@ -375,15 +375,17 @@ class BetRemindItem extends Component<Props, {}> {
           {this.state.showHeader ? <BetRemindTime gamedata={this.props.gamedata} remainTime={this.state.remainTime} removeItem={this.props.removeItem} /> : ''}
           
           <div className="bet-list clearfix" ref={this.inputParent}>
+            {/* <div className="flex jc-s-b fw-w"> */}
             {this.props.gamedata.codeRange.split(',').map((item, index) => {
               return (
-                <div key={index} className={`bet-item ${(index + 1) % 2 === 0 ? 'flt-r' : 'flt-l'}`}>
+                <div key={index} className={`flex1 bet-item ${(index + 1) % 2 === 0 ? 'flt-r' : 'flt-l'}`}>
                   <span className="bet-ball">{item.slice(-1)}</span>
                   <span className="odd">{this.getOdd(item)}</span>
                   <input onChange={this.inputValChange} type="text"/>
                 </div>
               )
             })}
+            {/* </div> */}
             <div className="bet-now flt-r" onClick={this.__kqbooking}>立即购买</div>
           </div>
         </div>
