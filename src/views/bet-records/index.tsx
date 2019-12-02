@@ -231,7 +231,7 @@ class BetRecords extends Component<Props, object> {
           title: '投注内容',
           dataIndex: 'code',
           width: 180,
-          render: (code: string, record: any) => <div><span className={`inlb txt-c code-bg ${ this.getStyle(code) }`}>{code}</span><span className="odd text-orange">{ (record.dyPointDec.split('-')[0] / 100).toFixed(2) }</span></div>
+          render: (code: string, record: any) => <div><span className={`inlb txt-c code-bg ${ this.getStyle(code) }`}>{code}</span><span className="odd text-orange">{ (parseFloat(record.dyPointDec.split('-')[0]) / 10).toFixed(3) }</span></div>
         },
         {
           title: '期号',
