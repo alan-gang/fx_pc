@@ -79,8 +79,10 @@ class BetRemindItem extends Component<Props, {}> {
   // 获取赔率数据
   getOdd = (type: string) => {
     let limitItem = this.props.store.game.getLimitListItemById(this.props.gamedata.lotteryId)
+    // console.log(this.props.gamedata.lotteryId, ' limitItem=', limitItem)
     if (limitItem) {
       let arr: any[] = limitItem.items[this.props.gamedata.methodId]
+      // console.log(this.props.gamedata.methodId, ' arr=', arr )
       if (arr) {
         if (arr.length === 1) return arr[0].maxprize
         let rows = methodItems[this.props.gamedata.methodId + ':1']().rows
@@ -359,7 +361,7 @@ class BetRemindItem extends Component<Props, {}> {
           <div className="right">
             { this.props.gamedata.pos }<span className="c-red">{ this.props.gamedata.notifyVal }</span>
               - 
-            { this.notifyType() }<span className="c-red">{ this.props.gamedata.contCount }</span>期
+            { this.notifyType() }<span className="c-red">{ this.props.gamedata.contCount }</span>{this.props.gamedata.unit}
           </div>
           <span 
             onClick={ this.changeOpen }
