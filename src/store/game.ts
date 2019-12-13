@@ -61,6 +61,28 @@ class MyGame {
     return;
   }
 
+  /**
+   * 获取当前游戏的快钱限红级别列表
+   * @param gameId 游戏ID
+   * @return LimitLevelItem[] | undefined
+   */
+  @action
+  getLimitDataOfKqByGameId(gameId: number): LimitLevelItem[] | undefined {
+    return (this.getLimitListItemById(gameId) || {}).kqPrizeLimit;
+  }
+
+  /**
+   * 根据游戏ID和限红级别获取对应的限红级别数据
+   * @param gameId 游戏ID
+   * @param level 限红级别
+   * @return LimitLevelItem | undefined
+   */
+  @action
+  getLimitLevelData(gameId: number, level: number): LimitLevelItem | undefined {
+    let LimitLevelList = this.getLimitDataOfKqByGameId(gameId) || [];
+    return LimitLevelList.find((limitLevelItem: LimitLevelItem) => limitLevelItem.level === level);
+  }
+
   @action
   updateLimitListItem(item: LimitListItem) {
     for (let i = 0; i < this.limitList.length; i++) {

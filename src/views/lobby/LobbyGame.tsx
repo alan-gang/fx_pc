@@ -51,6 +51,7 @@ class LobbyGame extends Component<Props, object> {
     };
     let gameType = getGameTypeByGameId(props.gameId);
     let limitItem = props.store.game.getLimitListItemById(props.gameId);
+    // console.log('bestLudan=', JSON.stringify(limitItem && limitItem.bestLudan));
     let bestLudan: BestLudanItem = limitItem && limitItem.bestLudan;
     let ludanTab = getLunDanTabByName(gameType, bestLudan && bestLudan.codeStyle);
     let bestLudanName = (getLunDanFullTitleByName(gameType, bestLudan && bestLudan.codeStyle) || bestLudanConfig[gameType].title) + '路单';
@@ -77,6 +78,9 @@ class LobbyGame extends Component<Props, object> {
   }
   componentWillMount() {
     this.init();
+  }
+  componentWillReceiveProps(nextProps: Props) {
+    // console.log('LobbyGame=', nextProps.store.game.getLimitListItemById(nextProps.gameId))
   }
   init() {
     this.getCurIssue(this.props.gameId);

@@ -29,6 +29,7 @@ interface DataMethodItem {
 
 interface State {
   amount: number;
+  disable: boolean;
 }
 
 let DEFAULT_AMOUNT = 2;
@@ -42,7 +43,8 @@ class OrderBar extends Component<Props, object> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      amount: this.props.defaultInitMethodItemAmount
+      amount: this.props.defaultInitMethodItemAmount,
+      disable: false
     }
   }
   coinChoosed = (value: number) => {
@@ -70,9 +72,21 @@ class OrderBar extends Component<Props, object> {
       return false;
     } else if(!params.betList || params.betList.length <= 0) {
       return false;
+    } else if (!this.validateLimit(params.lotteryId, params.limitLevel, params.totMoney)) {
+      return false;
     } else if (params.errorMsg) {
       message.warning(params.errorMsg);
       return false;
+    }
+    return true;
+  }
+  validateLimit(gameId: number, level: number, amount: number) {
+    let limit = this.props.store.game.getLimitLevelData(gameId, level);
+    if (limit) {
+      if (amount < limit.minAmt || amount > limit.maxAmt) {
+        message.warning(amount < limit.minAmt ? '您输入的金额不能低于最低限红' : '您输入的金额超过最高限红');
+        return false;
+      } 
     }
     return true;
   }
@@ -230,12 +244,19 @@ class OrderBar extends Component<Props, object> {
     return betCount;
   }
   order() {
+    this.setState({disable: true});
     let params = this.getParams();
     if (!this.validate(params)) {
+      this.setState({disable: false});
       return null;
     }
+    setTimeout(() => {
+      this.showLoading = false;
+      this.setState({disable: false});
+    }, 30000);
     APIs.bet({betData: JSON.stringify(params)}).then(({success, msg}: any) => {
       this.showLoading = false;
+      this.setState({disable: false});
       if (success === 1) {
         this.props.store.user.updateBalance();
         Modal.success({
@@ -282,7 +303,7 @@ class OrderBar extends Component<Props, object> {
           </Col>
           <Col span={5} className="flex ai-c jc-e btns-wp">
             <Button type="primary" className="btn-reset" disabled={this.props.betCount <= 0} onClick={this.onResetHandler}>重置</Button>
-            <Button type="danger" className="btn-order" disabled={this.props.betCount <= 0} onClick={this.onOrderHandler}>一键下单</Button>
+            <Button type="danger" className="btn-order" disabled={this.props.betCount <= 0 || this.state.disable} onClick={this.onOrderHandler}>一键下单</Button>
           </Col>
         </Row>
       </section>
