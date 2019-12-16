@@ -150,11 +150,13 @@ class BetRemindItem extends Component<Props, {}> {
     APIs.curIssue({gameid: this.props.gamedata.lotteryId})
       .then((data: any) => {
         if (data.success > 0) {
+          let kqargses = this.state.kqargses;
           this.setState({
             curIssue: data.issue,
             curDateTime: data.current,
             remainTime: Math.floor((data.saleend - data.current) / 1000),
-            showHeader: true
+            showHeader: true,
+            kqargses: Object.assign(kqargses, {issue: data.issue})
           })
         } else {
           this.setState({
