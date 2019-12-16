@@ -132,7 +132,8 @@ class BetRemindItem extends Component<Props, {}> {
     this.setState({
       isOpen: this.props.open,
       kqargses: {
-        issue: this.props.gamedata.issue,
+        // issue: this.props.gamedata.issue,
+        issue: this.state.curIssue,
         lotteryId: this.props.gamedata.lotteryId,
         totMoney: 0,
         totProjs: 0,
@@ -374,7 +375,7 @@ class BetRemindItem extends Component<Props, {}> {
           this.getLuDan()
         }
         <div className="bet-remind-play">
-          {this.state.showHeader ? <BetRemindTime gamedata={this.props.gamedata} remainTime={this.state.remainTime} removeItem={this.props.removeItem} /> : ''}
+          {this.state.showHeader ? <BetRemindTime gamedata={this.props.gamedata} remainTime={this.state.remainTime} removeItem={this.props.removeItem} curIssue={this.state.curIssue} /> : ''}
           
           <div className="bet-list clearfix" ref={this.inputParent}>
             {/* <div className="flex jc-s-b fw-w"> */}

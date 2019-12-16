@@ -7,6 +7,7 @@ interface Props {
   remainTime: number;
   gamedata: any;
   removeItem: Function;
+  curIssue: string;
 }
 
 interface State {
@@ -65,7 +66,7 @@ class BetRemindTime extends Component<Props, {}> {
   render() {
     return (
       <div className="lottery">
-        <span className="issue">{ this.props.gamedata.issue }期</span>
+        <span className="issue">{ this.props.curIssue }期</span>
         <span className="time">{this.state.time}</span>
       </div>
     )

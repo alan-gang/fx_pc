@@ -72,7 +72,7 @@ class OrderBar extends Component<Props, object> {
       return false;
     } else if(!params.betList || params.betList.length <= 0) {
       return false;
-    } else if (!this.validateLimit(params.lotteryId, params.limitLevel, params.totMoney)) {
+    } else if (!this.validateLimit(params.lotteryId, params.limitLevel, params)) {
       return false;
     } else if (params.errorMsg) {
       message.warning(params.errorMsg);
@@ -80,13 +80,17 @@ class OrderBar extends Component<Props, object> {
     }
     return true;
   }
-  validateLimit(gameId: number, level: number, amount: number) {
+  validateLimit(gameId: number, level: number, pararms: any) {
     let limit = this.props.store.game.getLimitLevelData(gameId, level);
     if (limit) {
-      if (amount < limit.minAmt || amount > limit.maxAmt) {
-        message.warning(amount < limit.minAmt ? '您输入的金额不能低于最低限红' : '您输入的金额超过最高限红');
-        return false;
-      } 
+      let amount: number = 0;
+      for (let i = 0; i < pararms.betList.length; i++) {
+        amount = pararms.betList[i].money;
+        if (amount < limit.minAmt || amount > limit.maxAmt) {
+          message.warning(amount < limit.minAmt ? '您输入的金额不能低于最低限红' : '您输入的金额超过最高限红');
+          return false;
+        }
+      }
     }
     return true;
   }
