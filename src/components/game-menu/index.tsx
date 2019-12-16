@@ -236,16 +236,29 @@ class GameMenu extends Component<Props, object> {
   }
 
   /**
-   * 初始从缓存同步收藏夹的数据
+   * 初始从缓存同步收藏夹的数据, 过滤无效游戏
    */
   initSyncFavouriteStateToGames() {
     let fav = this.props.store.game.favourites || [];
-    for (let i = 0; i < fav.length; i++) {
+    if (fav.length > 0) {
+      for (let i = 0; i < fav.length; i++) {
+        this.menuGames = this.menuGames.map((gameType) => {
+          gameType.items = gameType.items.map((game) => {
+            if (fav[i].id === game.id) {
+              game.favourite = true;
+            }
+            if (!this.props.store.game.hasAvailableGame(game.id)) {
+              game.available = false;
+            }
+            return game;
+          });
+          gameType.items = gameType.items.filter((game) => game.available !== false);
+          return gameType;
+        });
+      }
+    } else {
       this.menuGames = this.menuGames.map((gameType) => {
         gameType.items = gameType.items.map((game) => {
-          if (fav[i].id === game.id) {
-            game.favourite = true;
-          }
           if (!this.props.store.game.hasAvailableGame(game.id)) {
             game.available = false;
           }
