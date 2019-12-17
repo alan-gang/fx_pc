@@ -2,7 +2,7 @@ import React, { Component, MouseEvent  } from 'react';
 import { inject, observer } from 'mobx-react';
 import { NavLink } from 'react-router-dom';
 import games, { getGameById /*, getAllGameIds*/ } from '../../game/games';
-import { Menu } from 'antd';
+import { Menu, message } from 'antd';
 import { GameCategory, Game } from '../../typings/games';
 import { LOTTERY_TYPES } from '../../utils/config';
 import { getGameTypeByGameId } from '../../game/games';
@@ -10,7 +10,6 @@ import Timer from '../../utils/timer';
 import { timeFormat } from '../../utils/date';
 import APIs from '../../http/APIs';
 import EventEmitter from '../../utils/eventBus';
-
 import './index.styl';
 
 interface State {
@@ -34,14 +33,6 @@ class GameMenu extends Component<Props, object> {
   state: State;
   constructor(props: Props) {
     super(props);
-
-    // let navData: GameCategory[] = this.initSyncFavouriteStateToGames();
-    // navData.unshift({
-    //   type: 'box',
-    //   name: '收藏夹',
-    //   items: this.props.store.game.favourites || []
-    // });
-
     this.id = parseInt(this.getGameIdFromUrl() || '0', 10);
     this.gameType = getGameTypeByGameId(this.id) || this.DEFAULT_GAME_TYPE;
     this.state = {
@@ -60,17 +51,19 @@ class GameMenu extends Component<Props, object> {
   init() {
     this.props.store.game.getAvailableGames((availableGames: number[]) => {
       let navData: GameCategory[] = this.initSyncFavouriteStateToGames();
-      navData.unshift({
-        type: 'box',
-        name: '收藏夹',
-        items: this.props.store.game.favourites || []
-      });
+      const box = navData.find((nav) => nav.type === 'box');
+      if (!box) {
+        navData.unshift({
+          type: 'box',
+          name: '收藏夹',
+          items: this.props.store.game.getMyFavourites()
+        });
+      }
       this.setState({navData});
       let ids = this.getShowingMenuGameIds(navData);
       if (ids.length > 0) {
         this.getIssuesByGameIds(ids.join(','));
       }
-      // this.getIssuesByGameIds(availableGames.join(','));
     });
   }
 
@@ -219,6 +212,10 @@ class GameMenu extends Component<Props, object> {
   };
 
   onAddFavourite = (id: number, type: string, event: MouseEvent<HTMLSpanElement>) => {
+    if (!this.props.store.user.login) {
+      message.warning('请您先登录！');
+      return;
+    }
     event.stopPropagation();
     let game: Game | null = getGameById(id);
     if (!!game) {
@@ -230,7 +227,7 @@ class GameMenu extends Component<Props, object> {
         this.props.store.game.setFavourite(game);
       }
       let navData = this.state.navData;
-      navData[0].items = this.props.store.game.favourites || [];
+      navData[0].items = this.props.store.game.getMyFavourites();
       this.setState({navData: navData});
     }
   }
@@ -239,8 +236,18 @@ class GameMenu extends Component<Props, object> {
    * 初始从缓存同步收藏夹的数据, 过滤无效游戏
    */
   initSyncFavouriteStateToGames() {
-    let fav = this.props.store.game.favourites || [];
+    let fav = this.props.store.game.getMyFavourites();
     if (fav.length > 0) {
+
+      // 过虑收藏夹中过期的游戏
+      fav = fav.map((fg: any) => {
+        if (this.props.store.game.hasAvailableGame(fg.id)) {
+          return fg;
+        }
+      });
+      this.props.store.game.updateMyFavourites(this.props.store.game.getMyFavouritePos(), fav);
+
+      // 标识已被收藏的游戏，过滤游戏菜单过期的游戏
       for (let i = 0; i < fav.length; i++) {
         this.menuGames = this.menuGames.map((gameType) => {
           gameType.items = gameType.items.map((game) => {

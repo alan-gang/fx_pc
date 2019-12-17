@@ -56,6 +56,7 @@ interface AppRefs {
 @observer
 @inject_unmount
 class BetRemindItem extends Component<Props, {}> {
+  disable: boolean = false;
   state: State
   private inputParent: React.RefObject<HTMLDivElement>
   constructor(props: Props) {
@@ -271,6 +272,7 @@ class BetRemindItem extends Component<Props, {}> {
   }
 
   __kqbooking = () => {
+    if (this.disable) return;
     let totMoney = 0
     let totProjs = 0
     let betList = []
@@ -318,8 +320,13 @@ class BetRemindItem extends Component<Props, {}> {
         isFastBet: 1
       }
       params.limitLevel = this.getLimit(params.lotteryId).level
+      this.disable = true;
+      setTimeout(() => {
+        this.disable = false;
+      }, 30000);
       APIs.bet({betData: JSON.stringify(params)})
         .then((res: any) => {
+          this.disable = false;
           if (res.success === 1) {
             this.props.store.user.updateBalance();
             message.success('投注成功')
@@ -329,9 +336,6 @@ class BetRemindItem extends Component<Props, {}> {
           }
         })
     }
-    // for (let i=0; i<len; i++) {
-    //   let val: any = 
-    // }
   }
 
   // 获取限红
