@@ -321,6 +321,7 @@ class BetRemindItem extends Component<Props, {}> {
       APIs.bet({betData: JSON.stringify(params)})
         .then((res: any) => {
           if (res.success === 1) {
+            this.props.store.user.updateBalance();
             message.success('投注成功')
             inputs.forEach(ipt => ipt.value = '')
           } else {
