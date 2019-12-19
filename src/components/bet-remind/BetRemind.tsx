@@ -123,7 +123,10 @@ class BetRemind extends Component {
       temp.splice(idx, 1)
       this.setState({
         list: temp
-      })
+      });
+      if (temp.length <= 0) {
+        this.getBetRemind();
+      }
     }
   }
 

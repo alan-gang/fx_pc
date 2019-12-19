@@ -41,7 +41,7 @@ class LimitSetDialog extends Component<Props, object> {
             <section className={`game-logo logo-${this.props.gameId}`}></section>
             <p className="txt-c mgt-35">选择限红进入游戏</p>
             <section className="flex jc-c limit-list">
-              {this.props.limitLevelList.map((item: LimitLevelItem, i: number) => (
+              {this.props.limitLevelList && this.props.limitLevelList.map((item: LimitLevelItem, i: number) => (
                 <Button key={i} type="danger" className="crs-p btn-limit-amount" onClick={()=>this.onLimitChoiceHandler(item.level)}>{item.minAmt}-{item.maxAmt}</Button>
               ))}
             </section>

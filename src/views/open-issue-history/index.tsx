@@ -166,7 +166,7 @@ class OpenIssueHistory extends Component<Props, object> {
       {
         title: '开奖号码',
         dataIndex: 'code',
-        width: '1.9rem',
+        width: this.state.gameType === LOTTERY_TYPES.PK10 ? '3.9rem' : '1.9rem',
         render: (code: string, record: any) => {
           return code.split(',').map((num, index) => {
             return <span key={record.issue + 'code' + index} className="ball bg-orange">{ num }</span>

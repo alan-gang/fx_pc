@@ -164,6 +164,9 @@ export function getNoSubMenuMethods(type: string) {
  * @param name 名字
  */
 export function getMethodENameByLudanName(type: string, name: string): any {
+  if (!type || !name) {
+    return null
+  }
   let types = methodTabs[type];
   let keys = Object.keys(types);
   let tabs;
@@ -196,6 +199,9 @@ export function getMethodENameByLudanName(type: string, name: string): any {
  * @param name 名字
  */
 export function getLunDanTabByName(type: string, name: string): any {
+  if (!type || !name) {
+    return null
+  }
   let types = methodTabs[type];
   let keys = Object.keys(types);
   let tabs;

@@ -137,7 +137,7 @@ class GameHeader extends Component<Props, object> {
             <span>
             {state.limitLevelList && state.limitLevelList.length > 0 && 
               <Select defaultValue={state.curGameLimitLevel} value={state.curGameLimitLevel} style={{ width: 80 }} onChange={this.onLimitLevelChanged}>
-                {state.limitLevelList.map((limitLevelItem: LimitLevelItem, i: number) => (
+                {state.limitLevelList && state.limitLevelList.map((limitLevelItem: LimitLevelItem, i: number) => (
                   <Option value={limitLevelItem.level} key={i}>{`${limitLevelItem.minAmt}-${limitLevelItem.maxAmt}`}</Option>
                 ))}
               </Select>
