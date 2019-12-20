@@ -53,7 +53,7 @@ class LobbyGame extends Component<Props, object> {
     let gameType = getGameTypeByGameId(props.gameId);
     let limitItem = props.store.game.getLimitListItemById(props.gameId);
     // console.log('bestLudan=', JSON.stringify(limitItem && limitItem.bestLudan));
-    let bestLudan: BestLudanItem = limitItem && limitItem.bestLudan || {};
+    let bestLudan: BestLudanItem = limitItem && limitItem.bestLudan;
     let ludanTab = getLunDanTabByName(gameType, bestLudan && bestLudan.codeStyle);
     let bestLudanName = (getLunDanFullTitleByName(gameType, bestLudan && bestLudan.codeStyle) || bestLudanConfig[gameType].title) + '路单';
     let methodMenuName = getMethodENameByLudanName(gameType, bestLudan && bestLudan.codeStyle) || bestLudanConfig[gameType].methodMenuName;
@@ -168,6 +168,14 @@ class LobbyGame extends Component<Props, object> {
     let map = [null, '长龙', '单跳', '单边跳', '一厅两房', '拍拍连']
     return map[this.state.bestLudan.notifyType] || '连出'
   }
+  renderBestLudanTxt() {
+    let bestLudan = this.state.bestLudan;
+    if (!bestLudan) return <span></span>
+    return <React.Fragment>
+      <span class="mgr-10">{ bestLudan.pos }<span className="c-red">{ bestLudan.notifyVal }</span>路单</span>
+      <span>{ this.notifyType() }<span className="c-red">{ bestLudan.contCount }</span>{bestLudan.unit}</span>
+    </React.Fragment>
+  }
   render() {
     let bestLudan = this.state.bestLudan;
     return (
@@ -188,8 +196,7 @@ class LobbyGame extends Component<Props, object> {
         </div>
         <Row className="footer-bar">
           <Col span={12}>
-            <span class="mgr-10">{ bestLudan.pos }<span className="c-red">{ bestLudan.notifyVal }</span>路单</span>
-            <span>{ this.notifyType() }<span className="c-red">{ bestLudan.contCount }</span>{bestLudan.unit}</span>
+            {this.renderBestLudanTxt()}
             {/* {this.state.bestLudanName} */}
           </Col>
           <Col span={12} className="txt-r">

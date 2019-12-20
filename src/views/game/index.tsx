@@ -8,7 +8,7 @@ import OrderBar from 'comp/order-bar';
 import { RouteComponentProps } from "react-router-dom";
 import { getGameTypeByGameId } from '../../game/games';
 import calc from '../../game/calc';
-import { getMethodsConfigByType } from '../../game/gameMethods';
+import { getMethodsConfigByType, getMethodPosByGameTypeAndId } from '../../game/gameMethods';
 import { GameMethodMenu, GameSubMethodMenu } from '../../typings/games';
 import methodItems from '../../game/methodItems';
 import APIs from '../../http/APIs';
@@ -89,7 +89,8 @@ class Game extends Component<Props, object> {
     let limitItem = props.store.game.getLimitListItemById(this.id);
     let bestLudan: BestLudanItem = limitItem && limitItem.bestLudan;
     let ludanTab = getLunDanTabByName(this.gameType, bestLudan && bestLudan.codeStyle);
-    let curMenuEname = (menus && menus[0]).ename;
+    let curMenuIndex = getMethodPosByGameTypeAndId(this.gameType, bestLudan.methodId) || 0;
+    let curMenuEname = (menus && menus[curMenuIndex]).ename;
     let ludanMenus = getTabsByType(this.gameType, curMenuEname);
     let gameLimitLevel = this.props.store.game.getGameLimitLevelByGameId(this.id); // 设置的限红数据
     let limitListItem = this.props.store.game.getLimitListItemById(this.id); 
@@ -100,14 +101,14 @@ class Game extends Component<Props, object> {
       curTime: 0,
       remainTime: 0,
       openNumbers: [],
-      curMenuIndex: 0,
+      curMenuIndex,
       curMenuEname,
       curSubMenuIndex: 0,
       subMethods: [],
-      curGameMethodItems: this.getMethodItemsByIds((menus && menus[0].ids) || []),
+      curGameMethodItems: this.getMethodItemsByIds((menus && menus[curMenuIndex].ids) || []),
       odds: {},
       issueList: [],
-      defaultInitMethodItemAmount: 2,
+      defaultInitMethodItemAmount: 10,
       totalBetCount: 0,
       totalBetAmount: 0,
       tabIndex: 0,
