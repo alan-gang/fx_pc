@@ -483,7 +483,7 @@ class Game extends Component<Props, object> {
             }
           </div>
         </GameCommonDataContext.Provider>
-        <LimitSetDialog isShow={this.state.isShowLimitSetDialog} gameId={this.id} limitLevelList={this.state.limitLevelList} onLimitChoiceCB={this.onLimitChoiceCB} onCloseHandler={this.onCloseLimitChoiceHandler} />
+        {this.state.isShowLimitSetDialog && this.props.store.game.limitList && this.props.store.game.limitList.length > 0 && <LimitSetDialog isShow={this.state.isShowLimitSetDialog} gameId={this.id} limitLevelList={this.state.limitLevelList} onLimitChoiceCB={this.onLimitChoiceCB} onCloseHandler={this.onCloseLimitChoiceHandler} />}
       </article>
     );
   }

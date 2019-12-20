@@ -240,8 +240,8 @@ class GameMenu extends Component<Props, object> {
     if (fav.length > 0) {
 
       // 过虑收藏夹中过期的游戏
-      fav = fav.map((fg: any) => {
-        if (this.props.store.game.hasAvailableGame(fg.id)) {
+      fav = fav.filter((fg: any) => {
+        if (fg && this.props.store.game.hasAvailableGame(fg.id)) {
           return fg;
         }
       });

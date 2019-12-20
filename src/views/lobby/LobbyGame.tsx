@@ -34,6 +34,7 @@ interface State {
   methodMenuName: string;
   defaultMenu?: string;
   defaultSubMenu?: string;
+  bestLudan: BestLudanItem;
 }
 
 @inject("store")
@@ -73,7 +74,8 @@ class LobbyGame extends Component<Props, object> {
       limitLevelList: [],
       methodMenuName,
       defaultMenu,
-      defaultSubMenu
+      defaultSubMenu,
+      bestLudan
     }
   }
   componentWillMount() {
@@ -162,7 +164,12 @@ class LobbyGame extends Component<Props, object> {
   componentWillUnmount() {
     this.mysocket && this.mysocket.removeListen();
   }
+  notifyType(): String {
+    let map = [null, '长龙', '单跳', '单边跳', '一厅两房', '拍拍连']
+    return map[this.state.bestLudan.notifyType] || '连出'
+  }
   render() {
+    let bestLudan = this.state.bestLudan;
     return (
       <section className="lobby-game-view">
         <LobbyGameHeader gameType={this.props.gameType} gameId={this.props.gameId} curIssue={this.state.curIssue} remainTime={this.state.remainTime} getNewestIssue={this.getCurIssue} />
@@ -180,7 +187,11 @@ class LobbyGame extends Component<Props, object> {
           />
         </div>
         <Row className="footer-bar">
-          <Col span={12}>{this.state.bestLudanName}</Col>
+          <Col span={12}>
+            <span class="mgr-10">{ bestLudan.pos }<span className="c-red">{ bestLudan.notifyVal }</span>路单</span>
+            <span>{ this.notifyType() }<span className="c-red">{ bestLudan.contCount }</span>{bestLudan.unit}</span>
+            {/* {this.state.bestLudanName} */}
+          </Col>
           <Col span={12} className="txt-r">
             <Button type="danger" className="btn-into-game" onClick={this.onIntoGame}>进入游戏</Button>
           </Col>
