@@ -89,7 +89,7 @@ class Game extends Component<Props, object> {
     let limitItem = props.store.game.getLimitListItemById(this.id);
     let bestLudan: BestLudanItem = limitItem && limitItem.bestLudan;
     let ludanTab = getLunDanTabByName(this.gameType, bestLudan && bestLudan.codeStyle);
-    let curMenuIndex = getMethodPosByGameTypeAndId(this.gameType, bestLudan.methodId) || 0;
+    let curMenuIndex = bestLudan && getMethodPosByGameTypeAndId(this.gameType, bestLudan.methodId) || 0;
     let curMenuEname = (menus && menus[curMenuIndex]).ename;
     let ludanMenus = getTabsByType(this.gameType, curMenuEname);
     let gameLimitLevel = this.props.store.game.getGameLimitLevelByGameId(this.id); // 设置的限红数据
@@ -158,15 +158,16 @@ class Game extends Component<Props, object> {
       let bestLudan: BestLudanItem = limitItem && limitItem.bestLudan;
       let ludanTab = getLunDanTabByName(this.gameType, bestLudan && bestLudan.codeStyle);
       let menus: GameMethodMenu[] = getMethodsConfigByType(this.gameType);
-      let curMenuEname = menus && menus[0].ename
+      let curMenuIndex = bestLudan && getMethodPosByGameTypeAndId(this.gameType, bestLudan.methodId) || 0;
+      let curMenuEname = menus && menus[curMenuIndex].ename
       let ludanMenus = getTabsByType(this.gameType, curMenuEname);
       let gameLimitLevel = this.props.store.game.getGameLimitLevelByGameId(this.id); // 设置的限红数据
       let limitListItem = this.props.store.game.getLimitListItemById(this.id); 
       this.setState({
-        curMenuIndex: 0,
+        curMenuIndex,
         curMenuEname,
-        curGameMethodItems: this.getMethodItemsByIds((menus && menus[0].ids) || []),
-        subMethods: (menus && menus[0].subMethods) || [],
+        curGameMethodItems: this.getMethodItemsByIds((menus && menus[curMenuIndex].ids) || []),
+        subMethods: (menus && menus[curMenuIndex].subMethods) || [],
         defaultMenu: (ludanTab && ludanTab.name) || '',
         defaultSubMenu: (ludanTab && ludanTab.subM && ludanTab.subM.length > 0) ? bestLudan.codeStyle.split('_')[1] : '',
         isShowLudan: ludanMenus && ludanMenus.length > 0,
