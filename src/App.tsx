@@ -51,7 +51,7 @@ class App extends Component<Props, object> {
         store.user.setName(data.userName);
         store.user.setUserId(data.userId);
         store.user.setLogin(true);
-        this.getUserPrefence();
+        // this.getUserPrefence();
         this.updateBalance();
         store.game.updateAvailableGames();
         // this.initSocket();
@@ -69,24 +69,24 @@ class App extends Component<Props, object> {
       }
     }, true);
   }
-  getCfgInfo() {
+  // getCfgInfo() {
     // APIs.getCfgInfo({}).then(({broadcaseWSUrl}: any) => {
       // if (!Socket.sockets.user) {
       //   Socket.connect(broadcaseWSUrl, 'user', this.connected);
       // }
       // Socket.notify.messages.push(this.message);
     // });
-  }
+  // }
   updateBalance() {
     store.user.updateBalance();
   }
-  getUserPrefence() {
-    APIs.getUserPrefence().then((data: any) => {
-      if (data.success === 1) {
+  // getUserPrefence() {
+  //   APIs.getUserPrefence().then((data: any) => {
+  //     if (data.success === 1) {
         // this.setMenuList(data.menuList);
-      }
-    });
-  }
+  //     }
+  //   });
+  // }
   getLimitData(ids: number[]) {
     APIs.lottSets({lotteryIds: ids.join(','), v: 1}).then((data: any) => {
       if (data.success === 1) {

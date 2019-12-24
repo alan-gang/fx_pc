@@ -127,6 +127,15 @@ export function getBetRemind() {
   return http.get('/userpoint.do?method=getBetNotifyData');
 }
 
+/**
+ * 最优路单
+ * @param params 
+ * lotteryId
+ */
+export function getBestLudan(params: object = {}) {
+  return http.get('/userpoint.do?method=getOptimalLudan', { params });
+}
+
 export default {
   curIssue,
   getIssuesByGameIds,
@@ -143,5 +152,6 @@ export default {
   getUserPrefence,
   lottSets,
   getLotterys,
-  getBetRemind
+  getBetRemind,
+  getBestLudan
 };

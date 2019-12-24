@@ -6,7 +6,7 @@ import { Row, Col, Button } from 'antd';
 import LimitSetDialog from 'comp/limit-set-dialog';
 import APIs from '../../http/APIs';
 import { getGameTypeByGameId } from '../../game/games';
-import { getLunDanTabByName, getLunDanFullTitleByName, getMethodENameByLudanName } from '../../utils/ludan';
+import { getLunDanTabByName, getLunDanFullTitleByName, getMethodENameByLudanName, getLudanTabByTypeAndName } from '../../utils/ludan';
 import Socket from '../../socket';
 
 import './lobbyGame.styl';
@@ -37,6 +37,13 @@ interface State {
   bestLudan: BestLudanItem;
 }
 
+let bestLudanConfig: any = {
+  'ssc': {methodMenuName: 'zhenghe', defaultMenu: 'zh', defaultSubMenu: 'dx', title: '总和大小'},
+  '11x5': {methodMenuName: 'zhenghe', defaultMenu: 'zh', defaultSubMenu: 'dx', title: '总和大小'},
+  'pk10': {methodMenuName: 'zhenghe', defaultMenu: 'zh', defaultSubMenu: 'dx', title: '冠亚和值大小'},
+  'k3': {methodMenuName: 'diansu', defaultMenu: 'zh_dx', defaultSubMenu: '', title: '总和大小'},
+};
+
 @inject("store")
 @observer
 class LobbyGame extends Component<Props, object> {
@@ -44,12 +51,6 @@ class LobbyGame extends Component<Props, object> {
   mysocket?: Socket;
   constructor(props: Props) {
     super(props);
-    let bestLudanConfig: any = {
-      'ssc': {methodMenuName: 'zhenghe', defaultMenu: 'zh', defaultSubMenu: 'dx', title: '总和大小'},
-      '11x5': {methodMenuName: 'zhenghe', defaultMenu: 'zh', defaultSubMenu: 'dx', title: '总和大小'},
-      'pk10': {methodMenuName: 'zhenghe', defaultMenu: 'zh', defaultSubMenu: 'dx', title: '冠亚和值大小'},
-      'k3': {methodMenuName: 'diansu', defaultMenu: 'zh_dx', defaultSubMenu: '', title: '总和大小'},
-    };
     let gameType = getGameTypeByGameId(props.gameId);
     let limitItem = props.store.game.getLimitListItemById(props.gameId);
     // console.log('bestLudan=', JSON.stringify(limitItem && limitItem.bestLudan));
@@ -77,14 +78,18 @@ class LobbyGame extends Component<Props, object> {
       defaultSubMenu,
       bestLudan
     }
+    if (!limitItem) {
+      this.getLimitData(props.gameId);
+    }
   }
   componentWillMount() {
     this.init();
+
   }
   componentWillReceiveProps(nextProps: Props) {
     // console.log('LobbyGame=', nextProps.store.game.getLimitListItemById(nextProps.gameId))
   }
-  init() {
+  init = () => {
     this.getCurIssue(this.props.gameId);
     this.getHistoryIssue(this.props.gameId);
   }
@@ -94,7 +99,12 @@ class LobbyGame extends Component<Props, object> {
       name: 'lobbyGame' + this.props.gameId,
       receive: (data) => {
         if (data.type === 'openWinCode') {
-          this.openWinCode(parseInt(data.content[0].lottId, 10), data.content[0]);
+          if (data.content && data.content.length > 0 && parseInt(data.content[0].lottId, 10) === this.props.gameId) {
+            this.openWinCode(parseInt(data.content[0].lottId, 10), data.content[0]);
+            setTimeout(() => {
+              this.getLimitData(this.props.gameId);
+            }, 2000)
+          }
         }
       },
       open: () => {
@@ -172,12 +182,34 @@ class LobbyGame extends Component<Props, object> {
     let bestLudan = this.state.bestLudan;
     if (!bestLudan) return <span></span>
     return <React.Fragment>
-      <span class="mgr-10">{ bestLudan.pos }<span className="c-red">{ bestLudan.notifyVal }</span>路单</span>
+      <span className="mgr-10">{ bestLudan.pos }<span className="c-red">{ bestLudan.notifyVal }</span>路单</span>
       <span>{ this.notifyType() }<span className="c-red">{ bestLudan.contCount }</span>{bestLudan.unit}</span>
     </React.Fragment>
   }
+  updateBestLudan(bestLudan: BestLudanItem) {
+    let bestLudanName = (getLunDanFullTitleByName(this.state.gameType, bestLudan && bestLudan.codeStyle) || bestLudanConfig[this.state.gameType].title) + '路单';
+    let methodMenuName = getMethodENameByLudanName(this.state.gameType, bestLudan && bestLudan.codeStyle) || bestLudanConfig[this.state.gameType].methodMenuName;
+    let ludanTab = getLudanTabByTypeAndName(this.state.gameType, methodMenuName, bestLudan && bestLudan.codeStyle);
+    let defaultMenu = (ludanTab && ludanTab.name) || bestLudanConfig[this.state.gameType].defaultMenu;
+    console.log('id=', this.props.gameId, 'methodMenuName=', methodMenuName, ' defaultMenu=', defaultMenu)
+    this.setState({
+      bestLudanName: bestLudanName,
+      methodMenuName,
+      defaultMenu,
+      bestLudan
+    });
+  }
+  getLimitData(id: number) {
+    APIs.getBestLudan({lotteryId: id}).then((data: any) => {
+      if (data.success === 1) {
+        if (data.bestLudan) {
+          // let bestLudan: BestLudanItem = data.bestLudan;
+          this.updateBestLudan(data.bestLudan);
+        }
+      }
+    });
+  }
   render() {
-    let bestLudan = this.state.bestLudan;
     return (
       <section className="lobby-game-view">
         <LobbyGameHeader gameType={this.props.gameType} gameId={this.props.gameId} curIssue={this.state.curIssue} remainTime={this.state.remainTime} getNewestIssue={this.getCurIssue} />
