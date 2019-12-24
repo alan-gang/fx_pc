@@ -7,7 +7,7 @@ import { historyIssueByDate } from '../../http/APIs'
 import Colors from '../../utils/colorConfig'
 import { COLUMN_TYPES, getTypeValue } from '../../utils/report'
 import { LOTTERY_TYPES } from '../../utils/config'
-
+import './index.styl';
 
 interface State {
   gameId: number;
@@ -169,7 +169,7 @@ class OpenIssueHistory extends Component<Props, object> {
         width: this.state.gameType === LOTTERY_TYPES.PK10 ? '3.9rem' : '1.9rem',
         render: (code: string, record: any) => {
           return code.split(',').map((num, index) => {
-            return <span key={record.issue + 'code' + index} className="ball bg-orange">{ num }</span>
+            return <span key={record.issue + 'code' + index} className={`ball bg-orange n-${num}`}>{ this.state.gameType === LOTTERY_TYPES.K3 ? '' : num }</span>
           })
         }
       }
@@ -468,7 +468,7 @@ class OpenIssueHistory extends Component<Props, object> {
 
   render() {
     return (
-      <article className="open-issue-history-view">
+      <article className={`open-issue-history-view ${this.state.gameType}`}>
         <div className="page-title active">历史开奖</div>
         <div className="search m-t-10">
           <label className="m-l-0">
