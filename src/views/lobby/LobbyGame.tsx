@@ -191,7 +191,7 @@ class LobbyGame extends Component<Props, object> {
     let methodMenuName = getMethodENameByLudanName(this.state.gameType, bestLudan && bestLudan.codeStyle) || bestLudanConfig[this.state.gameType].methodMenuName;
     let ludanTab = getLudanTabByTypeAndName(this.state.gameType, methodMenuName, bestLudan && bestLudan.codeStyle);
     let defaultMenu = (ludanTab && ludanTab.name) || bestLudanConfig[this.state.gameType].defaultMenu;
-    console.log('id=', this.props.gameId, 'methodMenuName=', methodMenuName, ' defaultMenu=', defaultMenu)
+    // console.log('id=', this.props.gameId, 'methodMenuName=', methodMenuName, ' defaultMenu=', defaultMenu)
     this.setState({
       bestLudanName: bestLudanName,
       methodMenuName,

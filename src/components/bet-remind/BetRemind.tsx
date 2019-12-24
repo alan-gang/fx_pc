@@ -122,7 +122,8 @@ class BetRemind extends Component {
       let temp = [...this.state.list]
       temp.splice(idx, 1)
       this.setState({
-        list: temp
+        list: temp,
+        size: this.state.size + 1
       });
       if (temp.length <= 0) {
         this.getBetRemind();

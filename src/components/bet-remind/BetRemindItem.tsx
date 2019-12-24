@@ -46,6 +46,7 @@ interface State {
   timeCls: string;
   time: string;
   showHeader: boolean;
+  gamedata: GameData;
 }
 
 interface AppRefs {
@@ -70,7 +71,21 @@ class BetRemindItem extends Component<Props, {}> {
       kqargses: any,
       timeCls: '',
       time: '00:00:00',
-      showHeader: false
+      showHeader: false,
+      gamedata: {
+        codeStyle: '',
+        contCount: 0,
+        issue: '',
+        lotteryId: -1,
+        lotteryName: '',
+        ltrGroupId: -1,
+        methodId: 0,
+        notifyType: -1,
+        notifyVal: '',
+        pos: '',
+        unit: '',
+        codeRange: ''
+      }
     }
     this.inputParent = createRef()
   }
@@ -144,8 +159,8 @@ class BetRemindItem extends Component<Props, {}> {
     })
     this.getCurIssueData()
     this.getHistoryIssue()
+    this.getBestLudan(this.props.gamedata.lotteryId);
   }
-
 
   getCurIssueData = () => {
     APIs.curIssue({gameid: this.props.gamedata.lotteryId})
@@ -342,16 +357,6 @@ class BetRemindItem extends Component<Props, {}> {
   getLimit = (gameId: any) => {
     let xh = this.props.store.game.getGameLimitLevelByGameId(gameId);
     let limitListItem = this.props.store.game.getLimitListItemById(gameId);
-    // if(xh) {
-    //   if (this.props.store.game.limitList && this.props.store.game.limitList[gameId]) {
-    //     return this.props.store.game.limitList[gameId].kqPrizeLimit[xh.level - 1]
-    //   }
-    // } else {
-    //   if (this.props.store.game.limitList && this.props.store.game.limitList[gameId]) {
-    //     return this.props.store.game.limitList[gameId].kqPrizeLimit[0]
-    //   }
-    // }
-    
     if (xh) {
       return this.props.store.game.getKqLimitLevelItemById(gameId, xh.level)
     } else {
@@ -359,17 +364,33 @@ class BetRemindItem extends Component<Props, {}> {
     }
   }
 
+  updateBestLudan(bestLudan: GameData) {
+    if (bestLudan) {
+      this.setState({gamedata: bestLudan})
+    }
+  }
+
+  getBestLudan(id: number) {
+    APIs.getBestLudan({lotteryId: id}).then((data: any) => {
+      if (data.success === 1) {
+        if (data.bestLudan) {
+          this.updateBestLudan(data.bestLudan);
+        }
+      }
+    });
+  }
+
   render() {
     return (
       <div className="bet-remind">
         <div className="bet-remind-header flex jc-s-b">
-          <Tooltip title={this.props.gamedata.lotteryName} >
-            <span className="lottery-name">{ this.props.gamedata.lotteryName }</span>
+          <Tooltip title={this.state.gamedata.lotteryName} >
+            <span className="lottery-name">{ this.state.gamedata.lotteryName }</span>
           </Tooltip>
           <div className="right">
-            { this.props.gamedata.pos }<span className="c-red">{ this.props.gamedata.notifyVal }</span>
+            { this.state.gamedata.pos }<span className="c-red">{ this.state.gamedata.notifyVal }</span>
               - 
-            { this.notifyType() }<span className="c-red">{ this.props.gamedata.contCount }</span>{this.props.gamedata.unit}
+            { this.notifyType() }<span className="c-red">{ this.state.gamedata.contCount }</span>{this.state.gamedata.unit}
           </div>
           <span 
             onClick={ this.changeOpen }
@@ -382,11 +403,11 @@ class BetRemindItem extends Component<Props, {}> {
           this.getLuDan()
         }
         <div className="bet-remind-play">
-          {this.state.showHeader ? <BetRemindTime gamedata={this.props.gamedata} remainTime={this.state.remainTime} removeItem={this.props.removeItem} curIssue={this.state.curIssue} /> : ''}
+          {this.state.showHeader ? <BetRemindTime gamedata={this.state.gamedata} remainTime={this.state.remainTime} removeItem={this.props.removeItem} curIssue={this.state.curIssue} /> : ''}
           
           <div className="bet-list clearfix" ref={this.inputParent}>
             {/* <div className="flex jc-s-b fw-w"> */}
-            {this.props.gamedata.codeRange.split(',').map((item, index) => {
+            {this.state.gamedata.codeRange.split(',').map((item, index) => {
               return (
                 <div key={index} className={`flex1 bet-item ${(index + 1) % 2 === 0 ? 'flt-r' : 'flt-l'}`}>
                   <span className="bet-ball">{item.slice(-1)}</span>

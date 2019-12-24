@@ -478,7 +478,8 @@ class Game extends Component<Props, object> {
           <div className="recent-open">
             <div className="tabs">
               <span className={ `tab ${ this.state.tabIndex === 0 ? 'active' : '' }` } onClick={ () => this.changeTabIndex(0) }>近期开奖</span>
-              <span className={ `tab ${ this.state.tabIndex === 1 ? 'active' : '' }` } onClick={ () => this.changeTabIndex(1) }>投注提醒 <Icon theme="filled" type="setting" /></span>
+              {/* <span className={ `tab ${ this.state.tabIndex === 1 ? 'active' : '' }` } onClick={ () => this.changeTabIndex(1) }>投注提醒 <Icon theme="filled" type="setting" /></span> */}
+              <span className={ `tab ${ this.state.tabIndex === 1 ? 'active' : '' }` } onClick={ () => this.changeTabIndex(1) }>投注提醒</span>
             </div>
             {
               this.state.tabIndex === 0 ? <RecentOpen curMenuIndex={this.state.curMenuIndex} curSubMenuIndex={this.state.curSubMenuIndex} gameId={this.id} issueList={this.state.issueList.slice(0)} gameType={this.gameType} /> : <BetRemind />
