@@ -78,9 +78,9 @@ class LobbyGame extends Component<Props, object> {
       defaultSubMenu,
       bestLudan
     }
-    if (!limitItem) {
+    // if (!limitItem) {
       this.getLimitData(props.gameId);
-    }
+    // }
   }
   componentWillMount() {
     this.init();
