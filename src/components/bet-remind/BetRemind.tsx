@@ -70,6 +70,11 @@ class BetRemind extends Component {
   }
 
   addBetRemind = (arr: any) => {
+    arr = arr.filter((item: any) => {
+      return !this.state.list.find((sitem) => {
+        return item.lotteryId === sitem.lotteryId && item.codeStyle === sitem.codeStyle && item.pos === sitem.pos && item.issue === sitem.issue && item.notifyType === sitem.notifyType
+      });
+    });
     this.setState({
       list: this.state.list.concat(arr)
     })
@@ -106,28 +111,46 @@ class BetRemind extends Component {
   getShowList = (): any[] => {
     return this.state.list.slice(0, this.state.size).map((item, index) => {
       let gameType = getGameTypeByGameId(item.lotteryId)
-      return <BetRemindItem removeItem={this.removeItem} key={item.codeStyle + item.lotteryId + item.pos + item.notifyType + item.issue} open={index === 0} gamedata={item} gameType={gameType} />
+      return <BetRemindItem removeItem={this.removeItem} key={item.codeStyle + item.lotteryId + item.pos + item.notifyType + item.contCount + item.issue} open={index === 0} gamedata={item} gameType={gameType} />
     })
   }
 
   removeItem = (game: any) => {
-    let idx: any = ''
-    this.state.list.some((item, index) => {
-      if (item.lotteryId === game.lotteryId && item.codeStyle === game.codeStyle && item.pos === game.pos && item.issue === game.issue && item.notifyType === game.notifyType) {
-        idx = index
-        return true
+    // let idx: any = ''
+    // this.state.list.some((item, index) => {
+    //   if (item.lotteryId === game.lotteryId && item.codeStyle === game.codeStyle && item.pos === game.pos && item.issue === game.issue && item.notifyType === game.notifyType) {
+    //     idx = index
+    //     return true
+    //   }
+    // })
+    // if (typeof idx === 'number') {
+    //   let temp = [...this.state.list]
+    //   temp.splice(idx, 1)
+    //   this.setState({
+    //     list: temp,
+    //     size: this.state.size + 1
+    //   });
+    //   if (temp.length <= 0) {
+    //     this.getBetRemind();
+    //   }
+    // }
+    let count: number = 0;
+    let list = this.state.list.slice(0);
+    let pos: number = -1;
+    this.state.list.forEach(() => {
+      pos = list.findIndex((item, i) => (item.lotteryId === game.lotteryId && item.codeStyle === game.codeStyle && item.pos === game.pos && item.issue === game.issue && item.notifyType === game.notifyType));
+      if (pos >= 0) {
+        count++;
+        list.splice(pos, 1);
       }
-    })
-    if (typeof idx === 'number') {
-      let temp = [...this.state.list]
-      temp.splice(idx, 1)
-      this.setState({
-        list: temp,
-        size: this.state.size + 1
-      });
-      if (temp.length <= 0) {
-        this.getBetRemind();
-      }
+    });
+    // console.log('list=', list.length, this.state.list.length, count, pos);
+    this.setState({
+      list,
+      size: this.state.size + count
+    });
+    if (list.length <= 0) {
+      this.getBetRemind();
     }
   }
 
