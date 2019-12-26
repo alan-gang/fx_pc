@@ -231,10 +231,12 @@ class RecentOpen extends Component<Props, Object> {
     if (this.state.selectMenu.indexOf('_lhh') !== -1) {
       return [lhMap[this.props.gameType][this.state.selectMenu]]
     }
-    if (temp.recentChild && temp.subMethods) {
+    if (temp && temp.recentChild && temp.subMethods) {
       return temp.subMethods[this.props.curSubMenuIndex].recentType
     }
-    return temp.recentType
+    if (temp) {
+      return temp.recentType
+    }
   }
 
   componentWillMount() {
@@ -285,7 +287,7 @@ class RecentOpen extends Component<Props, Object> {
   }
 
   render() {
-    
+
     return (
       <div className="recent-open-comp">
         <div className="recent-open-header recent-item">

@@ -127,7 +127,7 @@ class Game extends Component<Props, object> {
     this.getCurIssue(this.id);
     this.getUserPoint(this.id);
     this.getHistoryIssue(this.id);
-    // this.getLimitData(this.id);
+    this.getBestLudanByGameId(this.id);
   }
   initSocket() {
     this.mysocket = new Socket({
@@ -154,23 +154,23 @@ class Game extends Component<Props, object> {
     this.gameType = getGameTypeByGameId(this.id);
     Bus.emit('gameIdChanged', this.id);
     if (this.props.match.params.id !== nextProps.match.params.id) {
-      let limitItem = this.props.store.game.getLimitListItemById(this.id);
-      let bestLudan: BestLudanItem = limitItem && limitItem.bestLudan;
-      let ludanTab = getLunDanTabByName(this.gameType, bestLudan && bestLudan.codeStyle);
-      let menus: GameMethodMenu[] = getMethodsConfigByType(this.gameType);
-      let curMenuIndex = bestLudan && getMethodPosByGameTypeAndId(this.gameType, bestLudan.methodId) || 0;
-      let curMenuEname = menus && menus[curMenuIndex].ename
-      let ludanMenus = getTabsByType(this.gameType, curMenuEname);
+      // let limitItem = this.props.store.game.getLimitListItemById(this.id);
+      // let bestLudan: BestLudanItem = limitItem && limitItem.bestLudan;
+      // let ludanTab = getLunDanTabByName(this.gameType, bestLudan && bestLudan.codeStyle);
+      // let menus: GameMethodMenu[] = getMethodsConfigByType(this.gameType);
+      // let curMenuIndex = bestLudan && getMethodPosByGameTypeAndId(this.gameType, bestLudan.methodId) || 0;
+      // let curMenuEname = menus && menus[curMenuIndex].ename
+      // let ludanMenus = getTabsByType(this.gameType, curMenuEname);
       let gameLimitLevel = this.props.store.game.getGameLimitLevelByGameId(this.id); // 设置的限红数据
       let limitListItem = this.props.store.game.getLimitListItemById(this.id); 
       this.setState({
-        curMenuIndex,
-        curMenuEname,
-        curGameMethodItems: this.getMethodItemsByIds((menus && menus[curMenuIndex].ids) || []),
-        subMethods: (menus && menus[curMenuIndex].subMethods) || [],
-        defaultMenu: (ludanTab && ludanTab.name) || '',
-        defaultSubMenu: (ludanTab && ludanTab.subM && ludanTab.subM.length > 0) ? bestLudan.codeStyle.split('_')[1] : '',
-        isShowLudan: ludanMenus && ludanMenus.length > 0,
+        // curMenuIndex,
+        // curMenuEname,
+        // curGameMethodItems: this.getMethodItemsByIds((menus && menus[curMenuIndex].ids) || []),
+        // subMethods: (menus && menus[curMenuIndex].subMethods) || [],
+        // defaultMenu: (ludanTab && ludanTab.name) || '',
+        // defaultSubMenu: (ludanTab && ludanTab.subM && ludanTab.subM.length > 0) ? bestLudan.codeStyle.split('_')[1] : '',
+        // isShowLudan: ludanMenus && ludanMenus.length > 0,
         isShowLimitSetDialog: !gameLimitLevel,
         limitLevelList: !gameLimitLevel ? (limitListItem ? limitListItem.kqPrizeLimit : []) : []
       });
@@ -205,7 +205,6 @@ class Game extends Component<Props, object> {
     });
     return mItems;
   }
-
   // 更新玩法菜单选中的index
   updateMethodMenuIndex = (index: number) => {
     this.setState({curMenuIndex: index});
@@ -394,13 +393,11 @@ class Game extends Component<Props, object> {
       }
     });
   }
-
   changeTabIndex = (idx: number) => {
     this.setState({
       tabIndex: idx
     })
   }
-
   getLimitData(id: number) {
     APIs.lottSets({lotteryIds: id, v: 1}).then((data: any) => {
       if (data.success === 1) {
@@ -418,6 +415,27 @@ class Game extends Component<Props, object> {
   }
   componentWillUnmount() {
     this.mysocket && this.mysocket.removeListen();
+  }
+  updateInfoWithBestLudan(bestLudan: BestLudanItem) {
+    let ludanTab = getLunDanTabByName(this.gameType, bestLudan && bestLudan.codeStyle);
+    let menus: GameMethodMenu[] = getMethodsConfigByType(this.gameType);
+    let curMenuIndex = bestLudan && getMethodPosByGameTypeAndId(this.gameType, bestLudan.methodId) || 0;
+    let curMenuEname = menus && menus[curMenuIndex] && menus[curMenuIndex].ename
+    let ludanMenus = getTabsByType(this.gameType, curMenuEname);
+    this.setState({
+      curMenuIndex,
+      curMenuEname,
+      curGameMethodItems: this.getMethodItemsByIds((menus && menus[curMenuIndex] && menus[curMenuIndex].ids) || []),
+      subMethods: (menus && menus[curMenuIndex] && menus[curMenuIndex].subMethods) || [],
+      defaultMenu: (ludanTab && ludanTab.name) || '',
+      defaultSubMenu: (ludanTab && ludanTab.subM && ludanTab.subM.length > 0) ? bestLudan.codeStyle.split('_')[1] : '',
+      isShowLudan: ludanMenus && ludanMenus.length > 0
+    });
+  }
+  getBestLudanByGameId(id: number) {
+    APIs.getBestLudan({lotteryId: id}).then((data: any) => {
+      this.updateInfoWithBestLudan(data.bestLudan);
+    });
   }
   render() {
     return (

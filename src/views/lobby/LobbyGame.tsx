@@ -78,9 +78,9 @@ class LobbyGame extends Component<Props, object> {
       defaultSubMenu,
       bestLudan
     }
-    // if (!limitItem) {
-      this.getLimitData(props.gameId);
-    // }
+
+    this.getBestLudanByGameId(props.gameId);
+
   }
   componentWillMount() {
     this.init();
@@ -102,7 +102,7 @@ class LobbyGame extends Component<Props, object> {
           if (data.content && data.content.length > 0 && parseInt(data.content[0].lottId, 10) === this.props.gameId) {
             this.openWinCode(parseInt(data.content[0].lottId, 10), data.content[0]);
             setTimeout(() => {
-              this.getLimitData(this.props.gameId);
+              this.getBestLudanByGameId(this.props.gameId);
             }, 2000)
           }
         }
@@ -198,14 +198,12 @@ class LobbyGame extends Component<Props, object> {
       defaultMenu,
       bestLudan
     });
+    this.props.store.game.updateLimitListItemBestLudan(bestLudan);
   }
-  getLimitData(id: number) {
+  getBestLudanByGameId(id: number) {
     APIs.getBestLudan({lotteryId: id}).then((data: any) => {
-      if (data.success === 1) {
-        if (data.bestLudan) {
-          // let bestLudan: BestLudanItem = data.bestLudan;
-          this.updateBestLudan(data.bestLudan);
-        }
+      if (data.success === 1 && data.bestLudan) {
+        this.updateBestLudan(data.bestLudan);
       }
     });
   }
