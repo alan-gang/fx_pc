@@ -13,6 +13,7 @@ interface Props {
 interface State {
   timer: any;
   time: string;
+  timeCls: string;
 }
 
 @inject_unmount
@@ -22,7 +23,8 @@ class BetRemindTime extends Component<Props, {}> {
     super(props)
     this.state = {
       timer: '',
-      time: '00:00:00'
+      time: '00:00:00',
+      timeCls: ''
     }
   }
 
@@ -67,7 +69,7 @@ class BetRemindTime extends Component<Props, {}> {
     return (
       <div className="lottery">
         <span className="issue">{ this.props.curIssue }期</span>
-        <span className="time">{this.state.time}</span>
+        <span className={`time ${this.state.timeCls}`}>{this.state.time}</span>
       </div>
     )
   }

@@ -144,7 +144,6 @@ class BetRemind extends Component {
         list.splice(pos, 1);
       }
     });
-    // console.log('list=', list.length, this.state.list.length, count, pos);
     this.setState({
       list,
       size: this.state.size + count
