@@ -297,7 +297,7 @@ const methodItems: any = {
       methodTypeName: 'rx_nzn',
       class: 'one-line-balls',
       rows: [
-        getCommonRow({n: '一中一', nonasv: true, noodd: true, noInput: true, oddIndex: 7, col: 2, vs:[{s: false, n: '01'},{s: false, n: '02'},{s: false, n: '03'},{s: false, n: '04'},{s: false, n: '05'},{s: false, n: '06'}, {s: false, n: '07'}, {s: false, n: '08'}, {s: false, n: '09'}, {s: false, n: '10'}, {s: false, n: '11'}]})
+        getCommonRow({n: '一中一', nonasv: true, noodd: true, noInput: true, oddIndex: 0, col: 2, vs:[{s: false, n: '01'},{s: false, n: '02'},{s: false, n: '03'},{s: false, n: '04'},{s: false, n: '05'},{s: false, n: '06'}, {s: false, n: '07'}, {s: false, n: '08'}, {s: false, n: '09'}, {s: false, n: '10'}, {s: false, n: '11'}]})
       ]
     }
   },
@@ -307,7 +307,7 @@ const methodItems: any = {
       methodTypeName: 'rx_nzn',
       class: 'one-line-balls',
       rows: [
-        getCommonRow({n: '二中二', nonasv: true, noodd: true, noInput: true, oddIndex: 6, col: 2, vs:[{s: false, n: '01'},{s: false, n: '02'},{s: false, n: '03'},{s: false, n: '04'},{s: false, n: '05'},{s: false, n: '06'}, {s: false, n: '07'}, {s: false, n: '08'}, {s: false, n: '09'}, {s: false, n: '10'}, {s: false, n: '11'}]})
+        getCommonRow({n: '二中二', nonasv: true, noodd: true, noInput: true, oddIndex: 0, col: 2, vs:[{s: false, n: '01'},{s: false, n: '02'},{s: false, n: '03'},{s: false, n: '04'},{s: false, n: '05'},{s: false, n: '06'}, {s: false, n: '07'}, {s: false, n: '08'}, {s: false, n: '09'}, {s: false, n: '10'}, {s: false, n: '11'}]})
       ]
     }
   },
@@ -317,7 +317,7 @@ const methodItems: any = {
       methodTypeName: 'rx_nzn',
       class: 'one-line-balls',
       rows: [
-        getCommonRow({n: '三中三', nonasv: true, noodd: true, noInput: true, oddIndex: 4, col: 2, vs:[{s: false, n: '01'},{s: false, n: '02'},{s: false, n: '03'},{s: false, n: '04'},{s: false, n: '05'},{s: false, n: '06'}, {s: false, n: '07'}, {s: false, n: '08'}, {s: false, n: '09'}, {s: false, n: '10'}, {s: false, n: '11'}]})
+        getCommonRow({n: '三中三', nonasv: true, noodd: true, noInput: true, oddIndex: 0, col: 2, vs:[{s: false, n: '01'},{s: false, n: '02'},{s: false, n: '03'},{s: false, n: '04'},{s: false, n: '05'},{s: false, n: '06'}, {s: false, n: '07'}, {s: false, n: '08'}, {s: false, n: '09'}, {s: false, n: '10'}, {s: false, n: '11'}]})
       ]
     }
   },
@@ -327,7 +327,7 @@ const methodItems: any = {
       methodTypeName: 'rx_nzn',
       class: 'one-line-balls',
       rows: [
-        getCommonRow({n: '四中四', nonasv: true, noodd: true, noInput: true, oddIndex: 2, col: 2, vs:[{s: false, n: '01'},{s: false, n: '02'},{s: false, n: '03'},{s: false, n: '04'},{s: false, n: '05'},{s: false, n: '06'}, {s: false, n: '07'}, {s: false, n: '08'}, {s: false, n: '09'}, {s: false, n: '10'}, {s: false, n: '11'}]})
+        getCommonRow({n: '四中四', nonasv: true, noodd: true, noInput: true, oddIndex: 0, col: 2, vs:[{s: false, n: '01'},{s: false, n: '02'},{s: false, n: '03'},{s: false, n: '04'},{s: false, n: '05'},{s: false, n: '06'}, {s: false, n: '07'}, {s: false, n: '08'}, {s: false, n: '09'}, {s: false, n: '10'}, {s: false, n: '11'}]})
       ]
     }
   },
@@ -347,7 +347,7 @@ const methodItems: any = {
       methodTypeName: 'rx_nzn',
       class: 'one-line-balls',
       rows: [
-        getCommonRow({n: '六中五', nonasv: true, noodd: true, noInput: true, oddIndex: 1, col: 2, vs:[{s: false, n: '01'},{s: false, n: '02'},{s: false, n: '03'},{s: false, n: '04'},{s: false, n: '05'},{s: false, n: '06'}, {s: false, n: '07'}, {s: false, n: '08'}, {s: false, n: '09'}, {s: false, n: '10'}, {s: false, n: '11'}]})
+        getCommonRow({n: '六中五', nonasv: true, noodd: true, noInput: true, oddIndex: 0, col: 2, vs:[{s: false, n: '01'},{s: false, n: '02'},{s: false, n: '03'},{s: false, n: '04'},{s: false, n: '05'},{s: false, n: '06'}, {s: false, n: '07'}, {s: false, n: '08'}, {s: false, n: '09'}, {s: false, n: '10'}, {s: false, n: '11'}]})
       ]
     }
   },
@@ -357,7 +357,7 @@ const methodItems: any = {
       methodTypeName: 'rx_nzn',
       class: 'one-line-balls',
       rows: [
-        getCommonRow({n: '七中五', nonasv: true, noodd: true, noInput: true, oddIndex: 3, col: 2, vs:[{s: false, n: '01'},{s: false, n: '02'},{s: false, n: '03'},{s: false, n: '04'},{s: false, n: '05'},{s: false, n: '06'}, {s: false, n: '07'}, {s: false, n: '08'}, {s: false, n: '09'}, {s: false, n: '10'}, {s: false, n: '11'}]})
+        getCommonRow({n: '七中五', nonasv: true, noodd: true, noInput: true, oddIndex: 0, col: 2, vs:[{s: false, n: '01'},{s: false, n: '02'},{s: false, n: '03'},{s: false, n: '04'},{s: false, n: '05'},{s: false, n: '06'}, {s: false, n: '07'}, {s: false, n: '08'}, {s: false, n: '09'}, {s: false, n: '10'}, {s: false, n: '11'}]})
       ]
     }
   },
@@ -367,7 +367,7 @@ const methodItems: any = {
       methodTypeName: 'rx_nzn',
       class: 'one-line-balls',
       rows: [
-        getCommonRow({n: '八中五', nonasv: true, noodd: true, noInput: true, oddIndex: 5, col: 2, vs:[{s: false, n: '01'},{s: false, n: '02'},{s: false, n: '03'},{s: false, n: '04'},{s: false, n: '05'},{s: false, n: '06'}, {s: false, n: '07'}, {s: false, n: '08'}, {s: false, n: '09'}, {s: false, n: '10'}, {s: false, n: '11'}]})
+        getCommonRow({n: '八中五', nonasv: true, noodd: true, noInput: true, oddIndex: 0, col: 2, vs:[{s: false, n: '01'},{s: false, n: '02'},{s: false, n: '03'},{s: false, n: '04'},{s: false, n: '05'},{s: false, n: '06'}, {s: false, n: '07'}, {s: false, n: '08'}, {s: false, n: '09'}, {s: false, n: '10'}, {s: false, n: '11'}]})
       ]
     }
   },
