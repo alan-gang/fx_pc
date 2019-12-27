@@ -6,6 +6,7 @@ import * as _ from 'underscore'
 import Bus from '../../utils/eventBus'
 import inject_unmount from '../../components/inject_unmount'
 import dayjs from 'dayjs'
+import RefreshBar from './RefreshBar';
 
 import './betRemind.styl'
 
@@ -13,7 +14,12 @@ interface State {
   isOpen: boolean;
   list: any[];
   size: number;
+  isAutoRefresh: boolean;
+  autoRefreshRemainTime: number;
+  autoRefreshRemainTimeFmt: string;
 }
+
+const AUTO_REFRESH_SECONDS = 20;
 @inject_unmount
 class BetRemind extends Component {
   state: State
@@ -27,7 +33,10 @@ class BetRemind extends Component {
     this.state = {
       isOpen: false,
       list: [],
-      size: 10
+      size: 10,
+      isAutoRefresh: true,
+      autoRefreshRemainTime: AUTO_REFRESH_SECONDS,
+      autoRefreshRemainTimeFmt: '20'
     }
     this.listBox = createRef()
     this.listContainer = createRef()
@@ -37,13 +46,34 @@ class BetRemind extends Component {
   componentDidMount() {
     this.getBetRemind()
     Bus.addListener('__pushBetRemind', this.addBetRemind)
-    this.startIntervalResetOrder()
+    // this.startIntervalResetOrder()
+    this.startRefreshCount();
   }
 
   componentWillUnmount() {
     Bus.removeListener('__pushBetRemind', this.addBetRemind)
     if (this.timeoutTimer) clearTimeout(this.timeoutTimer)
     if (this.timer) clearInterval(this.timer)
+  }
+
+  switchAutoRefresh = () => {
+    this.setState({isAutoRefresh: !this.state.isAutoRefresh});
+    if (this.state.isAutoRefresh) {
+      if (this.timer) clearInterval(this.timer);
+    } else {
+      this.startRefreshCount();
+    }
+  }
+
+  startRefreshCount() {
+    this.timer = setInterval(() => {
+      this.setState({autoRefreshRemainTime: this.state.autoRefreshRemainTime - 1, autoRefreshRemainTimeFmt: String(this.state.autoRefreshRemainTime - 1).padStart(2, '0')}, () => {
+        if (this.state.autoRefreshRemainTime <= 0) {
+          this.getBetRemind()
+          this.setState({autoRefreshRemainTime: AUTO_REFRESH_SECONDS});
+        }
+      })
+    }, 1000);
   }
 
   startIntervalResetOrder() {
@@ -166,6 +196,7 @@ class BetRemind extends Component {
   render() {
     return (
       <div className="bet-remind-list" ref={this.listBox} onScroll={this.handleScrollThrottled}>
+        <RefreshBar isAutoRefresh={this.state.isAutoRefresh} remainTime={this.state.autoRefreshRemainTimeFmt} switchAutoRefresh={this.switchAutoRefresh} refresh={this.getBetRemind}/>
         <div ref={this.listContainer} className="list-container">
           {this.getShowList()}
         </div>

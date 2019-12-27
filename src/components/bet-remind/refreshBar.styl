@@ -1,0 +1,27 @@
+.fresh-bar-view {
+  padding 0 0.16rem 0 0.12rem
+  height 0.50rem
+  position absolute
+  top 0.38rem
+  left 0
+  width 100%
+  background $theme-bg-color
+  border-bottom solid 0.01rem $theme-bd-color-1
+  z-index 10
+  .ant-switch {
+    width 0.64rem
+    height 0.28rem
+    line-height 0.28rem
+  }
+  .ant-switch::after {
+    width 0.22rem
+    height 0.22rem
+    margin-top 0.01rem
+  }
+  .ant-switch-checked {
+    background $switch-selected-bg-color
+  }
+  .btn-refresh svg {
+    color $theme-txt-color-2
+  }
+}
