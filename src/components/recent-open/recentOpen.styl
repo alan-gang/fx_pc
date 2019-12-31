@@ -93,3 +93,27 @@
           background-color #fff
           border none
           border-top 2px solid $theme-txt-color-6
+    .recent-open-comp.k3 {
+      .code {
+        display flex
+        align-items center
+        justify-content center
+      }
+      dice() {
+        width 0.2rem
+        height 0.2rem
+        display inline-block
+        background-size 100%
+        margin-right 0.04rem
+        border-radius 0
+      }
+      for num in 1 2 3 4 5 6 {
+        .n-{num} {
+          background url("../../assets/images/default/dice-" + num + ".png") center no-repeat
+          dice()
+        }
+      }
+      .open-num:last-child {
+        margin 0
+      }
+    }

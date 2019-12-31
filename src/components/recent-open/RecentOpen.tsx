@@ -3,7 +3,7 @@ import { methodsConfig } from '../../game/gameMethods'
 import { getStyleTxtColor } from '../../utils/colorConfig'
 import memoize from 'memoize-one'
 import { GameMethodMenu } from '../../typings/games'
-
+import { LOTTERY_TYPES } from '../../utils/config'
 import './recentOpen.styl'
 import Bus from 'src/utils/eventBus'
 
@@ -281,7 +281,7 @@ class RecentOpen extends Component<Props, Object> {
           cn = 'text-orange'
         }
       }
-      return <span key={index} className={cn}>{num}</span>
+      return <span key={index} className={`${cn} open-num n-${num}`}>{this.props.gameType === LOTTERY_TYPES.K3 ? '' : num }</span>
     })
     return (<div className='code'>{temp}</div>)
   }
@@ -289,7 +289,7 @@ class RecentOpen extends Component<Props, Object> {
   render() {
 
     return (
-      <div className="recent-open-comp">
+      <div className={`recent-open-comp ${this.props.gameType}`}>
         <div className="recent-open-header recent-item">
           <div>期号</div>
           {((this.method && this.method[0].changeTitle) || ['开奖号码']).map((title: string, index: number, arr: any[]) => <div className={arr.length > 1 ? 'other-title' : ''} key={title}>{title}</div>)}
