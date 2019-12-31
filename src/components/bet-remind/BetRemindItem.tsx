@@ -191,7 +191,8 @@ class BetRemindItem extends Component<Props, {}> {
       .then((data: any) => {
         if (data.success === 1) {
           this.setState({
-            issueList: this.fmtIssueListData(data.items)
+            // issueList: this.fmtIssueListData(data.items)
+            issueList: data.items
           })
         }
       })
