@@ -35,3 +35,12 @@ export function countRepeat(data: any[]): number {
   let temp = data.join(',').split(',');
   return temp.length - Array.from(new Set(temp)).length;
 }
+
+/**
+ * 是否为豹子
+ * @param nums 
+ * 1,1,1
+ */
+export function isTriple(nums: any[]): boolean {
+  return nums.every((n, i) => i < nums.length - 1 ? n === nums[i + 1] : true);
+}

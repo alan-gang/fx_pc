@@ -6,6 +6,7 @@ import { GameMethodMenu } from '../../typings/games'
 import { LOTTERY_TYPES } from '../../utils/config'
 import './recentOpen.styl'
 import Bus from 'src/utils/eventBus'
+import { isTriple } from '../../utils/game';
 
 interface Props {
   gameId: number;
@@ -58,6 +59,9 @@ const HZ = (props: any) => {
   }
   let dx = tot > props.type.min ? '大' : '小'
   let ds = tot % 2 === 0 ? '双' : '单'
+  if (props.gameType === LOTTERY_TYPES.K3 && isTriple(nums)) {
+    ds = dx = '豹';
+  }
   return (
     <div>
       <span className="sum">{tot}</span>
@@ -67,7 +71,6 @@ const HZ = (props: any) => {
           <span className={`m-l-10 ${getStyleTxtColor(ds)}`}>{ds}</span>
         </Fragment>
       }
-      
     </div>
   )
 }
@@ -287,7 +290,6 @@ class RecentOpen extends Component<Props, Object> {
   }
 
   render() {
-
     return (
       <div className={`recent-open-comp ${this.props.gameType}`}>
         <div className="recent-open-header recent-item">
@@ -300,29 +302,28 @@ class RecentOpen extends Component<Props, Object> {
         <div className="recent-list">
           {
             this.props.issueList.map(issue => {
-
               return (<div key={issue.lottId + 'ltId' + issue.issue + this.state.selectMenu} className="recent-item">
                 <div>{issue.issue.slice(-4)}</div>
                 {this.getOpenCode(issue)}
-                {
-                  this.method && this.method.map((tp: any, index: number) => {
-                    switch(tp.type) {
-                      case 'dx':
-                        return <DX key={index} issue={issue} type={tp} />
-                      case 'ds':
-                        return <DS key={index} issue={issue} type={tp} />
-                      case 'hz':
-                        return <HZ key={index} issue={issue} type={tp} />
-                      case 'kd':
-                        return <KD key={index} issue={issue} />
-                      case 'ys':
-                        return <Color key={index} issue={issue} />
-                      case 'lh':
-                        return <LH key={index} selectMenu={this.state.selectMenu} issue={issue} type={tp} />
-                      default: return ''
-                    }
-                  })
-                }
+                  {
+                    this.method && this.method.map((tp: any, index: number) => {
+                      switch(tp.type) {
+                        case 'dx':
+                          return <DX key={index} issue={issue} type={tp} />
+                        case 'ds':
+                          return <DS key={index} issue={issue} type={tp} />
+                        case 'hz':
+                          return <HZ key={index} issue={issue} type={tp} gameType={this.props.gameType} />
+                        case 'kd':
+                          return <KD key={index} issue={issue} />
+                        case 'ys':
+                          return <Color key={index} issue={issue} />
+                        case 'lh':
+                          return <LH key={index} selectMenu={this.state.selectMenu} issue={issue} type={tp} />
+                        default: return ''
+                      }
+                    })
+                  }
               </div>)
             })
           }
