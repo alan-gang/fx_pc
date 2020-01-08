@@ -12,6 +12,7 @@ import moment from 'moment';
 import APIs from './http/APIs';
 import { getUrlParams } from './utils/common';
 import { getAllGameIds } from './game/games';
+import StickyPlayTypeChange from './components/sticky-play-type-change';
 
 import 'moment/locale/zh-cn';
 import 'antd/dist/antd.less';
@@ -21,11 +22,21 @@ import Socket from './socket';
 
 moment.locale('zh-cn');
 
+interface State {
+  offsetLeft: number;
+}
+
 @observer
 class App extends Component<Props, object> {
+  pageContainerRef: React.RefObject<HTMLElement>;
+  state: State;
   constructor(props: Props) {
     super(props);
     this.init();
+    this.pageContainerRef = React.createRef();
+    this.state = {
+      offsetLeft: 0
+    }
   }
   init() {
     let sessionData: any = sessionStorage.getItem('sessionData');
@@ -43,6 +54,9 @@ class App extends Component<Props, object> {
   }
   componentWillMount() {
     // this.getCfgInfo();
+  }
+  componentDidMount() {
+    this.updatePosition();
   }
   autoLogin(params: object) {
     APIs.signIn(params).then((data: any) => {
@@ -99,6 +113,12 @@ class App extends Component<Props, object> {
       }
     });
   }
+  updatePosition() {
+    if (this.pageContainerRef.current) {
+      let { offsetWidth, offsetLeft } = this.pageContainerRef.current;
+      this.setState({offsetLeft: offsetWidth + offsetLeft})
+    }
+  }
   render() {
     return (
       <ConfigProvider locale={zhCN}>
@@ -109,9 +129,10 @@ class App extends Component<Props, object> {
               <Suspense fallback={<Loading />}>
                 <GameMenu />
               </Suspense>
-              <article className="page-view">
+              <article className="page-view" ref={this.pageContainerRef}>
                 <RouterConfig />
               </article>
+              <StickyPlayTypeChange offsetLeft={this.state.offsetLeft} />
             </article>
           </Router>
         </Provider>
