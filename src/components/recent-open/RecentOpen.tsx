@@ -231,7 +231,7 @@ class RecentOpen extends Component<Props, Object> {
 
   get method() {
     let temp: GameMethodMenu = this.getMethod(this.props.gameType, this.props.curMenuIndex, this.props.curSubMenuIndex)
-    if (this.state.selectMenu.indexOf('_lhh') !== -1) {
+    if (this.state.selectMenu.indexOf('_lhh') !== -1 && lhMap[this.props.gameType]) {
       return [lhMap[this.props.gameType][this.state.selectMenu]]
     }
     if (temp && temp.recentChild && temp.subMethods) {
@@ -257,8 +257,8 @@ class RecentOpen extends Component<Props, Object> {
   } 
 
   getOpenCode = (issue: any) => {
-    let range = this.method && this.method[0].range
-    let changeTitle = this.method && this.method[0].changeTitle
+    let range = this.method && this.method[0] && this.method[0].range
+    let changeTitle = this.method && this.method[0] && this.method[0].changeTitle
     let nums = issue.code.split(',')
     let arr: any[] = []
     if (Array.isArray(changeTitle) && Array.isArray(range)) {
@@ -267,7 +267,7 @@ class RecentOpen extends Component<Props, Object> {
           arr.push(<span key={index} className="text-orange min-w-36">{num}</span>)
         }
       })
-      if (changeTitle.length < 2) return (<div className='code'>{arr}</div>)
+      if (changeTitle && changeTitle.length < 2) return (<div className='code'>{arr}</div>)
       return arr
     }
     let temp = nums.map((num: string, index: number) => {
@@ -294,7 +294,7 @@ class RecentOpen extends Component<Props, Object> {
       <div className={`recent-open-comp ${this.props.gameType}`}>
         <div className="recent-open-header recent-item">
           <div>期号</div>
-          {((this.method && this.method[0].changeTitle) || ['开奖号码']).map((title: string, index: number, arr: any[]) => <div className={arr.length > 1 ? 'other-title' : ''} key={title}>{title}</div>)}
+          {((this.method && this.method[0] && this.method[0].changeTitle) || ['开奖号码']).map((title: string, index: number, arr: any[]) => <div className={arr.length > 1 ? 'other-title' : ''} key={title}>{title}</div>)}
           {this.method && this.method.map((tp: any, index: number) => {
             return (<div key={tp.title} className={tp.type + ' other-title'}>{tp.title}</div>)
           })}
