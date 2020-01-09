@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { getUrlParams } from '../../utils/common';
 import './index.styl';
 
 interface IPlayType {
@@ -12,14 +13,14 @@ interface IPlayType {
 }
 
 let playTypes: IPlayType[] = [
-  { id: 1, title: '官方玩法' , name: 'offical', icon: '', url: '/?from=JN', active: false, show: true },
+  { id: 1, title: '官方玩法' , name: 'offical', icon: '', url: '/?from=KQ', active: false, show: true },
   { id: 2, title: '快钱玩法' , name: 'fast', icon: '', url: '', active: true, show: true },
-  { id: 3, title: '基诺玩法' , name: 'keno', icon: '', url: '/keno/?from=JN', active: false, show: false }
+  { id: 3, title: '基诺玩法' , name: 'keno', icon: '', url: '/keno/?from=KQ', active: false, show: true }
 ]
 
 interface Props {
   offsetLeft: number,
-  playTypes?: number[]
+  playTypeIds?: number[]
 }
 
 interface State {
@@ -27,7 +28,7 @@ interface State {
   offsetLeft: number;
 }
 
-const DEFAULT_PLAY_TYPES = [1, 2];
+const DEFAULT_PLAY_TYPES = [2];
 
 /**
  * 玩法切换
@@ -36,23 +37,63 @@ class StickyPlayTypeChange extends PureComponent<Props, {}>{
   state: State;
   constructor(props: Props) {
     super(props);
-    let pTypes = this.filter(props.playTypes)
+    let pTypes = this.filter(props.playTypeIds);
+    pTypes = this.updateUrls(pTypes)
     this.state = {
       playTypes: pTypes,
       offsetLeft: 0
     }
     this.goto = this.goto.bind(this);
   }
-  componentDidMount() {
-
-  }
   componentWillReceiveProps(nextProps: Props) {
-    if (this.props.playTypes && nextProps.playTypes && this.props.playTypes.length !== nextProps.playTypes.length) {
-      this.setState({playTypes: this.filter(nextProps.playTypes)});
+    if (this.props.playTypeIds && nextProps.playTypeIds && this.props.playTypeIds.length !== nextProps.playTypeIds.length) {
+      this.setState({playTypes: this.filter(nextProps.playTypeIds)});
     }
   }
-  filter(pTypes: number[] = DEFAULT_PLAY_TYPES) {
-    return playTypes.filter((p) => pTypes.includes(p.id));
+  getParams() {
+    const sessionData: any = sessionStorage.getItem('sessionData');
+    const hash = window.location.hash;
+    const agentCode = getUrlParams('agentCode', hash);
+    const param = getUrlParams('param', hash);
+    const gameid = getUrlParams('gameid');
+    let data: any = {
+      agentCode,
+      param
+    };
+    if (!agentCode && !param && sessionData) {
+      data = JSON.parse(sessionData);
+    }
+    if (gameid) {
+      data.gameid = gameid;
+    }
+    return data;
+  }
+  objToUrl(params: any) {
+    let ps = [];
+    for (let p in params) {
+      ps.push(`${p}=${params[p]}`);
+    }
+    return ps.join('&');
+  }
+  updateUrls(pTypes: IPlayType[]) {
+    let params = this.getParams();
+    let paramsUrl = this.objToUrl(params);
+    pTypes.forEach((item) => {
+      switch(item.name) {
+        case 'offical':
+          item.url = '/?from=KQ&' + paramsUrl;
+          break;
+        case 'keno':
+          item.url = '/keno/?from=KQ&' + paramsUrl;
+          break;
+        default:
+          break;
+      }
+    });
+    return pTypes;
+  }
+  filter(playTypeIds: number[] = DEFAULT_PLAY_TYPES) {
+    return playTypes.filter((p) => playTypeIds.includes(p.id));
   }
   goto(item: IPlayType) {
     if (item.url && item.url.length > 0) {
