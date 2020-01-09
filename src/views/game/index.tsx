@@ -216,6 +216,9 @@ class Game extends Component<Props, object> {
   methodMenuChangedCB = (method: GameMethodMenu) => {
     let curGameMethodItems = this.getMethodItemsByIds(method.ids || []);
     let ludanMenus = getTabsByType(this.gameType, method.ename);
+    const isShowLudan = ludanMenus && ludanMenus.length > 0;
+    // 不需要路单需要触发事件重写一下数据
+    if (!isShowLudan) Bus.emit('ludanSelectMenuChange', '')
     this.setState({
       subMethods: method.subMethods || [],
       curGameMethodItems,
@@ -225,7 +228,7 @@ class Game extends Component<Props, object> {
       curMenuEname: method.ename,
       defaultMenu: '',
       defaultSubMenu: '',
-      isShowLudan: ludanMenus && ludanMenus.length > 0
+      isShowLudan,
     }, this.updateOddsOfMethod);
   }
   updateSubMethods = (method: GameSubMethodMenu) => {

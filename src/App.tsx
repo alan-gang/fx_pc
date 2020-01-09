@@ -24,6 +24,7 @@ moment.locale('zh-cn');
 
 interface State {
   offsetLeft: number;
+  playTypes: number[]
 }
 
 @observer
@@ -35,7 +36,8 @@ class App extends Component<Props, object> {
     this.init();
     this.pageContainerRef = React.createRef();
     this.state = {
-      offsetLeft: 0
+      offsetLeft: 0,
+      playTypes: [1, 2]
     }
   }
   init() {
@@ -69,6 +71,7 @@ class App extends Component<Props, object> {
         this.updateBalance();
         store.game.updateAvailableGames();
         // this.initSocket();
+        this.setState({playTypes: data.playTypes});
       }
     });
   }
@@ -132,7 +135,7 @@ class App extends Component<Props, object> {
               <article className="page-view" ref={this.pageContainerRef}>
                 <RouterConfig />
               </article>
-              <StickyPlayTypeChange offsetLeft={this.state.offsetLeft} />
+              <StickyPlayTypeChange offsetLeft={this.state.offsetLeft} playTypes={this.state.playTypes} />
             </article>
           </Router>
         </Provider>

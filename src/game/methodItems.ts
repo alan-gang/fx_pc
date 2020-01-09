@@ -572,7 +572,7 @@ const methodItems: any = {
       {s: false, n: '4', col: 12, class: 'icon', icons: [4,4,4]}, 
       {s: false, n: '5', col: 12, class: 'icon', icons: [5,5,5]}, 
       {s: false, n: '6', col: 12, class: 'icon', icons: [6,6,6]},
-      {s: false, n: '全骰', col: 12, class: 'white-bg-img'}
+      {s: false, n: '全骰', col: 12, class: 'white-bg-img', oddIndex: 1}
     ];
     return {
       rows: [

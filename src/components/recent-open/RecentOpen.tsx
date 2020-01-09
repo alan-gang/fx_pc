@@ -230,6 +230,7 @@ class RecentOpen extends Component<Props, Object> {
   })
 
   get method() {
+    // console.log('info method 0=', this.props.gameType, this.props.curMenuIndex, this.props.curSubMenuIndex, this.state.selectMenu)
     let temp: GameMethodMenu = this.getMethod(this.props.gameType, this.props.curMenuIndex, this.props.curSubMenuIndex)
     if (this.state.selectMenu.indexOf('_lhh') !== -1 && lhMap[this.props.gameType]) {
       return [lhMap[this.props.gameType][this.state.selectMenu]]
@@ -295,7 +296,7 @@ class RecentOpen extends Component<Props, Object> {
         <div className="recent-open-header recent-item">
           <div>期号</div>
           {((this.method && this.method[0] && this.method[0].changeTitle) || ['开奖号码']).map((title: string, index: number, arr: any[]) => <div className={arr.length > 1 ? 'other-title' : ''} key={title}>{title}</div>)}
-          {this.method && this.method.map((tp: any, index: number) => {
+          {this.method && this.method.map((tp: any = {}, index: number) => {
             return (<div key={tp.title} className={tp.type + ' other-title'}>{tp.title}</div>)
           })}
         </div>
