@@ -52,19 +52,19 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/fastm/fastm/static/js/9.5650d1ba.chunk.js"
   },
   {
-    "revision": "4a08dead6d2cb5d3ea7b",
-    "url": "/fastm/fastm/static/js/main.08bd3f72.chunk.js"
+    "revision": "26942196c39914a002b4",
+    "url": "/fastm/fastm/static/js/main.dd8d20a7.chunk.js"
   },
   {
     "revision": "b130f559aee90ef9c868",
     "url": "/fastm/fastm/static/js/runtime-main.7af6654f.js"
   },
   {
-    "revision": "ad0869c00ce14ed5d636dfd169ee4990",
+    "revision": "017099d1e74d716ebfa5cd21b36acc3c",
     "url": "/fastm/index.html"
   },
   {
-    "revision": "4a08dead6d2cb5d3ea7b",
+    "revision": "26942196c39914a002b4",
     "url": "/fastm/static/css/main.dfca195d.chunk.css"
   },
   {

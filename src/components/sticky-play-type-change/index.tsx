@@ -13,9 +13,9 @@ interface IPlayType {
 }
 
 let playTypes: IPlayType[] = [
-  { id: 1, title: '官方玩法' , name: 'offical', icon: '', url: '/?from=KQ', active: false, show: true },
+  { id: 1, title: '官方玩法' , name: 'offical', icon: '', url: '/', active: false, show: true },
   { id: 2, title: '快钱玩法' , name: 'fast', icon: '', url: '', active: true, show: true },
-  { id: 3, title: '基诺玩法' , name: 'keno', icon: '', url: '/keno/?from=KQ', active: false, show: true }
+  { id: 3, title: '基诺玩法' , name: 'keno', icon: '', url: '/keno/', active: false, show: true }
 ]
 
 interface Props {
@@ -28,7 +28,8 @@ interface State {
   offsetLeft: number;
 }
 
-const DEFAULT_PLAY_TYPES = [2];
+// const DEFAULT_PLAY_TYPES = [2];
+const DEFAULT_PLAY_TYPES = [1,2,3];
 
 /**
  * 玩法切换
@@ -52,7 +53,8 @@ class StickyPlayTypeChange extends PureComponent<Props, {}>{
   }
   getParams() {
     const sessionData: any = sessionStorage.getItem('sessionData');
-    const hash = window.location.hash;
+    let hash = window.location.hash;
+    hash = hash.slice(hash.indexOf('?') !== -1 ? hash.indexOf('?') + 1 : 0);
     const agentCode = getUrlParams('agentCode', hash);
     const param = getUrlParams('param', hash);
     const gameid = getUrlParams('gameid');
@@ -81,10 +83,10 @@ class StickyPlayTypeChange extends PureComponent<Props, {}>{
     pTypes.forEach((item) => {
       switch(item.name) {
         case 'offical':
-          item.url = '/?from=KQ&' + paramsUrl;
+          item.url = '/#/?from=out&' + paramsUrl;
           break;
         case 'keno':
-          item.url = '/keno/?from=KQ&' + paramsUrl;
+          item.url = '/keno/#/?' + paramsUrl;
           break;
         default:
           break;

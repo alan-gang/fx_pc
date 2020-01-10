@@ -37,13 +37,16 @@ class App extends Component<Props, object> {
     this.pageContainerRef = React.createRef();
     this.state = {
       offsetLeft: 0,
-      playTypeIds: [2]
+      // playTypeIds: [2]
+      playTypeIds: [1,2,3]
     }
   }
   init() {
     let sessionData: any = sessionStorage.getItem('sessionData');
-    let agentCode = getUrlParams('agentCode');
-    let param = getUrlParams('param');
+    let hash = window.location.hash;
+    hash = hash.slice(hash.indexOf('?') !== -1 ? hash.indexOf('?') + 1 : 0);
+    let agentCode = getUrlParams('agentCode', hash);
+    let param = getUrlParams('param', hash);
     let data = {
       agentCode,
       param
