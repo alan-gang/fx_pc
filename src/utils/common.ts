@@ -58,3 +58,15 @@ export function getLHH(num1: number, num2: number) {
 export function getCharOfPosition(txt: string, pos: number): string {
   return txt[pos] || '';
 }
+
+/**
+ * @desc 返回指定精度的字符串
+ * @param {Number} num 数字
+ * @param {Number} digital 精度，默认为0
+ * @return {String} 指定精度的字符串
+ */
+export function toFixed(num: number = 0, digital: number = 0) {
+  let ns = String(num).split('.');
+  if (digital === 0) return ns[0];
+  return ns[0] + '.' + (ns[1] || '').substring(0, digital).padEnd(digital, '0');
+}

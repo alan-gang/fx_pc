@@ -4,7 +4,7 @@ import { orderList } from '../../http/APIs'
 import { numberWithCommas } from '../../utils/num'
 import { Table, Select, Input } from 'antd'
 import { getAllGames } from '../../game/games'
-
+import { toFixed } from '../../utils/common'
 import Colors from '../../utils/colorConfig'
 
 import './index.styl'
@@ -246,7 +246,8 @@ class BetRecords extends Component<Props, object> {
           title: '奖金',
           dataIndex: 'bonus',
           render: (bonus: any, record: any) => {
-            let temp = Number(bonus).toFixed(2)
+            // let temp = Number(bonus).toFixed(2)
+            let temp = toFixed(Number(bonus), 2)
             if (record.stat === 0) {
               return '--'
             }
