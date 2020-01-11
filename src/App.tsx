@@ -44,7 +44,7 @@ class App extends Component<Props, object> {
   init() {
     let sessionData: any = sessionStorage.getItem('sessionData');
     let hash = window.location.hash;
-    hash = hash.slice(hash.indexOf('?') !== -1 ? hash.indexOf('?') + 1 : 0);
+    hash = hash.substring(hash.indexOf('?'));
     let agentCode = getUrlParams('agentCode', hash);
     let param = getUrlParams('param', hash);
     let data = {
