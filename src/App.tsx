@@ -51,7 +51,7 @@ class App extends Component<Props, object> {
       agentCode,
       param
     };
-    if (!agentCode && !param && sessionData) {
+    if (!agentCode || !param && sessionData) {
       data = JSON.parse(sessionData);
     }
     this.autoLogin(data);

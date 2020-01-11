@@ -62,7 +62,7 @@ class StickyPlayTypeChange extends PureComponent<Props, {}>{
       agentCode,
       param
     };
-    if (!agentCode && !param && sessionData) {
+    if (!agentCode || !param && sessionData) {
       data = JSON.parse(sessionData);
     }
     if (gameid) {
@@ -80,13 +80,18 @@ class StickyPlayTypeChange extends PureComponent<Props, {}>{
   updateUrls(pTypes: IPlayType[]) {
     let params = this.getParams();
     let paramsUrl = this.objToUrl(params);
+    let from: string = getUrlParams('from');
+    let decodeUrl = '';
+    if (from) {
+      decodeUrl = decodeURIComponent(from);
+    }
     pTypes.forEach((item) => {
       switch(item.name) {
         case 'offical':
-          item.url = '/#/?from=out&' + paramsUrl;
+          item.url = decodeUrl || `/?from=${from}#/?out=1&${paramsUrl}`;
           break;
         case 'keno':
-          item.url = '/keno/#/?' + paramsUrl;
+          item.url = `/keno/?from=${from}#/?${paramsUrl}`;
           break;
         default:
           break;
