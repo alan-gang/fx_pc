@@ -295,42 +295,61 @@ class BetRemindItem extends Component<Props, {}> {
     if (this.disable) return;
     let totMoney = 0
     let totProjs = 0
-    let betList = []
+    let betList: any = []
     let types = this.props.gamedata.codeRange.split(',')
     let limit = this.getLimit(this.props.gamedata.lotteryId)
+    let inputs: any[] = []
     if (this.inputParent.current) {
       let list: any = this.inputParent.current.children
-      let inputs: any[] = []
+      // let inputs: any[] = []
       for (let i = 0; i < list.length; i++) {
         if (list[i].className.indexOf('bet-item') !== -1) {
           let arr = list[i].children
           for (let j = 0; j < arr.length; j++) {
             if (arr[j].nodeName === 'INPUT') {
-              if (arr[j].value > 0) {
+              // if (arr[j].value > 0) {
                 inputs.push(arr[j])
-              }
+              // }
             }
           }
         }
       }
       let flag = false
-      betList = inputs.map((ipt, i) => {
-        let val = Number(ipt.value)
-        if (limit.maxAmt < val || limit.minAmt > val) {
-          let msg = limit.maxAmt < val ? '投注超出限红' : '投注低于最低限红'
-          flag = true
-          message.warning(msg)
-        }
-        totMoney += val
-        return {
-          content: this.props.gamedata.pos ? this.props.gamedata.pos + '-' + types[i] : types[i],
-          methodId: this.props.gamedata.methodId + '',
-          projs: 1,
-          money: val + ''
+      // betList = inputs.map((ipt, i) => {
+      //   let val = Number(ipt.value)
+      //   if (limit.maxAmt < val || limit.minAmt > val) {
+      //     let msg = limit.maxAmt < val ? '投注超出限红' : '投注低于最低限红'
+      //     flag = true
+      //     message.warning(msg)
+      //   }
+      //   totMoney += val
+      //   return {
+      //     content: this.props.gamedata.pos ? this.props.gamedata.pos + '-' + types[i] : types[i],
+      //     methodId: this.props.gamedata.methodId + '',
+      //     projs: 1,
+      //     money: val + ''
+      //   }
+      // })
+      inputs.forEach((ipt, i) => {
+        if (ipt.value > 0) {
+          let val = Number(ipt.value)
+          if (limit.maxAmt < val || limit.minAmt > val) {
+            let msg = limit.maxAmt < val ? '投注超出限红' : '投注低于最低限红'
+            flag = true
+            message.warning(msg)
+          }
+          totMoney += val
+          betList.push({
+            content: this.props.gamedata.pos ? this.props.gamedata.pos + '-' + types[i] : types[i],
+            methodId: this.props.gamedata.methodId + '',
+            projs: 1,
+            money: val + ''
+          });
         }
       })
       if (flag) return
-      totProjs = inputs.length
+      // totProjs = inputs.length
+      totProjs = betList.length
       if (!totMoney) return message.warning('请输入投注金额!')
       let params = {
         ...this.state.kqargses,
@@ -417,7 +436,7 @@ class BetRemindItem extends Component<Props, {}> {
                 <div key={index} className={`flex1 bet-item ${(index + 1) % 2 === 0 ? 'flt-r' : 'flt-l'}`}>
                   <span className="bet-ball">{item.slice(-1)}</span>
                   <span className="odd">{this.getOdd(item)}</span>
-                  <input onChange={this.inputValChange} type="text"/>
+                  <input onChange={this.inputValChange} type="text" />
                 </div>
               )
             })}
