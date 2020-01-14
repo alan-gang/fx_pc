@@ -125,9 +125,10 @@ class Game extends Component<Props, object> {
   }
   init() {
     this.getCurIssue(this.id);
-    this.getUserPoint(this.id);
     this.getHistoryIssue(this.id);
-    this.getBestLudanByGameId(this.id);
+    this.getBestLudanByGameId(this.id, () => {
+      this.getUserPoint(this.id);
+    });
   }
   initSocket() {
     this.mysocket = new Socket({
@@ -435,9 +436,10 @@ class Game extends Component<Props, object> {
       isShowLudan: ludanMenus && ludanMenus.length > 0
     });
   }
-  getBestLudanByGameId(id: number) {
+  getBestLudanByGameId(id: number, cb?: Function) {
     APIs.getBestLudan({lotteryId: id}).then((data: any) => {
       this.updateInfoWithBestLudan(data.bestLudan);
+      cb && cb();
     });
   }
   render() {
