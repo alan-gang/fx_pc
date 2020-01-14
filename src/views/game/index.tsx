@@ -457,7 +457,7 @@ class Game extends Component<Props, object> {
             getNewestIssue={this.getCurIssue}
           />
           <section className="game-main">
-            <MethodMenu gameType={this.gameType} curMenuIndex={this.state.curMenuIndex} methodMenuChangedCB={this.methodMenuChangedCB} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
+            <MethodMenu odds={this.state.odds} gameType={this.gameType} curMenuIndex={this.state.curMenuIndex} methodMenuChangedCB={this.methodMenuChangedCB} updateMethodMenuIndex={this.updateMethodMenuIndex}/>
             {this.state.subMethods.length > 0 && 
               <SubMethodMenu 
                 gameType={this.gameType} 
@@ -472,7 +472,8 @@ class Game extends Component<Props, object> {
               curGameMethodItems={this.state.curGameMethodItems} 
               gameType={this.gameType} 
               defaultInitMethodItemAmount={this.state.defaultInitMethodItemAmount}
-              updateMethdItem={this.updateMethdItem} 
+              updateMethdItem={this.updateMethdItem}
+              odds={this.state.odds}
             />
             <OrderBar 
               gameId={this.id} 

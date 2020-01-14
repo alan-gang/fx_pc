@@ -21,6 +21,7 @@ interface Props {
   curGameMethodItems: any[];
   defaultInitMethodItemAmount: number;
   updateMethdItem(i: number, j: number, k: number, selected?: boolean | undefined, value?: string | undefined): void;
+  odds: any[];
 }
 
 @inject('store')
@@ -52,7 +53,10 @@ class Play extends Component<Props, object> {
     this.forceUpdate();
   }
   render() {
-    let curGameMethodItems = this.props.curGameMethodItems;
+    let curGameMethodItems = this.props.curGameMethodItems.filter(item => {
+      let methodId = item.id.split(':')[0]
+      return this.props.odds[methodId]
+    });
     return (
       <article className={`play-view ${this.props.gameType}`}>
         {curGameMethodItems.map((methodItem: any, i: number) => (
