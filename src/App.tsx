@@ -31,6 +31,7 @@ interface State {
 class App extends Component<Props, object> {
   pageContainerRef: React.RefObject<HTMLElement>;
   state: State;
+  mysocket?: Socket;
   constructor(props: Props) {
     super(props);
     this.init();
@@ -80,7 +81,7 @@ class App extends Component<Props, object> {
     });
   }
   initSocket() {
-    new Socket({
+    this.mysocket = new Socket({
       url: store.common.broadcaseWSUrl,
       name: 'appIndex',
       receive: (data: any) => {
@@ -88,9 +89,9 @@ class App extends Component<Props, object> {
           this.updateBalance();
         }
       },
-      // open: () => {
-      //   mysocket.send(JSON.stringify(Object.assign({action: 'noauth'}, {})));
-      // }
+      open: () => {
+        this.mysocket && this.mysocket.send(JSON.stringify(Object.assign({action: 'noauth'}, {})));
+      }
     }, true);
   }
   // getCfgInfo() {
