@@ -218,7 +218,7 @@ class BetRemindItem extends Component<Props, {}> {
   getCurIssueFromProps(gameid: number, issueList: any[] = [], curServerTime?: number) {
     issueList = issueList.length > 0 ? issueList : this.props.issueList;
     curServerTime = curServerTime || this.props.curServerTime;
-    if (issueList && issueList.length > 0) {
+    if (issueList && issueList.length > 0 && curServerTime > 0) {
       let data = issueList.find((issue) => issue.lotteryid === gameid);
       if (data) {
         let kqargses = this.state.kqargses;

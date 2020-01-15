@@ -53,10 +53,7 @@ class Play extends Component<Props, object> {
     this.forceUpdate();
   }
   render() {
-    let curGameMethodItems = this.props.curGameMethodItems.filter(item => {
-      let methodId = item.id.split(':')[0]
-      return this.props.odds[methodId]
-    });
+    let curGameMethodItems = this.props.curGameMethodItems;
     return (
       <article className={`play-view ${this.props.gameType}`}>
         {curGameMethodItems.map((methodItem: any, i: number) => (

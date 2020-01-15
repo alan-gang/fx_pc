@@ -280,6 +280,10 @@ class Game extends Component<Props, object> {
       });
       return methodItem;
     });
+    curGameMethodItems = curGameMethodItems.filter(item => {
+      let methodId = item.id.split(':')[0]
+      return odds[methodId]
+    });
     this.setState({curGameMethodItems});
   }
 
@@ -400,6 +404,11 @@ class Game extends Component<Props, object> {
     APIs.myNewPoint({gameid}).then((data: any) => {
       if (data.success === 1) {
         this.setState({odds: data.items})
+        // test code
+        if (data.items) {
+          delete data.items['1251']
+          delete data.items['1250']
+        }
         this.updateOddsOfMethod(data.items);
       }
     });
