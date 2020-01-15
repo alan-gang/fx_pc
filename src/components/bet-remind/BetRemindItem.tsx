@@ -71,7 +71,14 @@ class BetRemindItem extends Component<Props, {}> {
       curIssue: '',
       curDateTime: 0,
       remainTime: -1,
-      kqargses: any,
+      kqargses: {
+        issue: 0,
+        lotteryId: props.gamedata.lotteryId,
+        totMoney: 0,
+        totProjs: 0,
+        isusefree: 0,
+        betList: []
+      },
       timeCls: '',
       time: '00:00:00',
       showHeader: false,
