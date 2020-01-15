@@ -53,8 +53,10 @@ class Lobby extends Component<Props, object> {
       this.props.store.game.getAvailableGames((availableGames: number[]) => {
         this.setState({
           curGames: this.filterAvailableGames(getAllGames())
-        }, this.init)
+        }, this.init);
       });
+    } else {
+      this.init();
     }
   }
   goto = (path: string) => {
