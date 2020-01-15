@@ -1,5 +1,5 @@
 import React, { Component, createRef, RefObject } from 'react'
-import { getBetRemind } from '../../http/APIs'
+import APIs, { getBetRemind } from '../../http/APIs'
 import BetRemindItem from './BetRemindItem'
 import { getGameTypeByGameId, getGameById } from '../../game/games'
 import * as _ from 'underscore'
@@ -17,9 +17,15 @@ interface State {
   isAutoRefresh: boolean;
   autoRefreshRemainTime: number;
   autoRefreshRemainTimeFmt: string;
+  issueList: any[];
+  recentCodeList: any[];
+  curServerTime: number;
 }
 
 const AUTO_REFRESH_SECONDS = 20;
+const DEFAULT_SIZE = 10;
+
+let lastScrollTop: number = 0;
 @inject_unmount
 class BetRemind extends Component {
   state: State
@@ -33,10 +39,13 @@ class BetRemind extends Component {
     this.state = {
       isOpen: false,
       list: [],
-      size: 10,
+      size: DEFAULT_SIZE,
       isAutoRefresh: true,
       autoRefreshRemainTime: AUTO_REFRESH_SECONDS,
-      autoRefreshRemainTimeFmt: '20'
+      autoRefreshRemainTimeFmt: '20',
+      issueList: [],
+      recentCodeList: [],
+      curServerTime: 0
     }
     this.listBox = createRef()
     this.listContainer = createRef()
@@ -120,9 +129,9 @@ class BetRemind extends Component {
     getBetRemind()
       .then((res: any) => {
         if (res.success === 1) {
-          this.setState({
-            list: this.filterBetRemindList(res.data)
-          })
+          let list = this.filterBetRemindList(res.data);
+          this.getData(list);
+          this.setState({list});
         }
       })
   }
@@ -141,7 +150,7 @@ class BetRemind extends Component {
   getShowList = (): any[] => {
     return this.state.list.slice(0, this.state.size).map((item, index) => {
       let gameType = getGameTypeByGameId(item.lotteryId)
-      return <BetRemindItem removeItem={this.removeItem} key={item.codeStyle + item.lotteryId + item.pos + item.notifyType + item.contCount + item.issue} open={index === 0} gamedata={item} gameType={gameType} />
+      return <BetRemindItem removeItem={this.removeItem} key={item.codeStyle + item.lotteryId + item.pos + item.notifyType + item.contCount + item.issue} open={index === 0} gamedata={item} gameType={gameType} issueList={this.state.issueList} recentCodeList={this.state.recentCodeList} curServerTime={this.state.curServerTime} />
     })
   }
 
@@ -186,12 +195,53 @@ class BetRemind extends Component {
   handleScroll = (e: any) => {
     if (this.listContainer.current && this.listBox.current && e.target) {
       if (this.listContainer.current.offsetHeight - this.listBox.current.offsetHeight - e.target.scrollTop) {
-        this.setState({
-          size: this.state.size + 5
-        })
+        // console.log('e.target.scrollTop', e.target.scrollTop, this.state.size, this.state.list.length)
+        if (e.target.scrollTop > lastScrollTop && this.state.size < this.state.list.length) {
+          this.getData();
+          this.setState({
+            size: this.state.size + 5
+          });
+        }
+        lastScrollTop = e.target.scrollTop;
       }
     }
-  } 
+  }
+
+  // 批量获取奖期列表，历史开奖列表
+  getData(list?: any[]) {
+    let ids = this.getGameIdsFromList(list || this.state.list, 'lotteryId');
+    const joinIds = ids.join(',');
+    this.getIssuesByGameIds(joinIds);
+    this.getBatchRecentCodesByGameIds(joinIds);
+  }
+
+  /**
+   * 从任何一个列表提取给定属性组成的列表，已去重
+   * @param list 
+   * @param prop 想要提取的属性
+   */
+  getGameIdsFromList(list: any[] = [], prop: string = 'lotteryid') {
+    let ids = list.map((item) => item[prop]);
+    return [...new Set(ids)];
+  }
+
+  // 批量获取期号
+  getIssuesByGameIds(ids: string) {
+    APIs.getIssuesByGameIds({gameid: ids}).then((data: any) => {
+      if (data.success > 0) {
+        this.setState({issueList: data.items, curServerTime: data.current});
+      }
+    });
+  }
+
+  // 批量获取历史开奖
+  getBatchRecentCodesByGameIds(ids: string) {
+    APIs.getBatchRecentCodesByGameIds({gameid: ids}).then((data: any) => {
+      if (data.success > 0) {
+        this.setState({recentCodeList: data.data});
+      }
+    });
+  }
 
   render() {
     return (
