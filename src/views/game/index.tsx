@@ -404,11 +404,6 @@ class Game extends Component<Props, object> {
     APIs.myNewPoint({gameid}).then((data: any) => {
       if (data.success === 1) {
         this.setState({odds: data.items})
-        // test code
-        if (data.items) {
-          delete data.items['1251']
-          delete data.items['1250']
-        }
         this.updateOddsOfMethod(data.items);
       }
     });
