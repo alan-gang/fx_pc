@@ -73,21 +73,24 @@ class App extends Component<Props, object> {
         // this.getUserPrefence();
         this.updateBalance();
         store.game.updateAvailableGames();
-        // this.initSocket();
+        this.initSocket();
         // this.setState({playTypeIds: data.playTypes});
         this.setState({playTypeIds: [1,2,3]});
       }
     });
   }
   initSocket() {
-    let mysocket = new Socket({
+    new Socket({
       url: store.common.broadcaseWSUrl,
       name: 'appIndex',
       receive: (data: any) => {
+        if (data.type === 'prizeNotice') {
+          this.updateBalance();
+        }
       },
-      open: () => {
-        mysocket.send(JSON.stringify(Object.assign({action: 'noauth'}, {})));
-      }
+      // open: () => {
+      //   mysocket.send(JSON.stringify(Object.assign({action: 'noauth'}, {})));
+      // }
     }, true);
   }
   // getCfgInfo() {
