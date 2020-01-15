@@ -154,13 +154,14 @@ class LobbyGame extends Component<Props, object> {
   }
   getCurIssueFromProps(gameid: number, issueList: any[] = [], curServerTime?: number) {
     issueList = issueList.length > 0 ? issueList : this.props.issueList;
+    curServerTime = curServerTime || this.props.curServerTime;
     if (issueList && issueList.length > 0) {
       let data = issueList.find((issue) => issue.lotteryid === gameid);
       if (data) {
         this.setState({
           curIssue: data.issue,
-          curTime: curServerTime || this.props.curServerTime,
-          remainTime: Math.floor((data.saleend - data.current) / 1000) || (this.state.remainTime + 0.05)
+          curTime: curServerTime,
+          remainTime: Math.floor((data.saleend - curServerTime) / 1000) || (this.state.remainTime + 0.05)
         })
       }
     }

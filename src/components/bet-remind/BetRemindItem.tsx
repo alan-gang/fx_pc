@@ -34,6 +34,9 @@ interface Props {
   gameType: string;
   store?: any;
   removeItem: Function;
+  issueList: any[];
+  recentCodeList: any[];
+  curServerTime: number;
 }
 
 interface State {
@@ -157,9 +160,16 @@ class BetRemindItem extends Component<Props, {}> {
         betList: []
       }
     })
-    this.getCurIssueData()
-    this.getHistoryIssue()
-    // this.getBestLudan(this.props.gamedata.lotteryId);
+    // this.getCurIssueData()
+    // this.getHistoryIssue()
+    this.getCurIssueFromProps(this.props.gamedata.lotteryId);
+    this.getHistoryIssueFromProps(this.props.gamedata.lotteryId);
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    // console.log('nextProps=', nextProps)
+    this.getCurIssueFromProps(this.props.gamedata.lotteryId, nextProps.issueList);
+    this.getHistoryIssueFromProps(this.props.gamedata.lotteryId, nextProps.recentCodeList);
   }
 
   getCurIssueData = () => {
@@ -196,6 +206,46 @@ class BetRemindItem extends Component<Props, {}> {
           })
         }
       })
+  }
+
+  getCurIssueFromProps(gameid: number, issueList: any[] = [], curServerTime?: number) {
+    issueList = issueList.length > 0 ? issueList : this.props.issueList;
+    curServerTime = curServerTime || this.props.curServerTime;
+    if (issueList && issueList.length > 0) {
+      let data = issueList.find((issue) => issue.lotteryid === gameid);
+      if (data) {
+        let kqargses = this.state.kqargses;
+        if (data.issue !== this.props.gamedata.issue) {
+          this.props.removeItem(this.props.gamedata);
+          return;
+        }
+        this.setState({
+          curIssue: data.issue,
+          curDateTime: curServerTime,
+          remainTime: Math.floor((data.saleend - curServerTime) / 1000),
+          showHeader: true,
+          kqargses: Object.assign(kqargses, {issue: data.issue})
+        })
+      } else {
+        this.setState({
+          curIssue: ''
+        })
+      }
+      return;
+    }
+  }
+
+  getHistoryIssueFromProps(gameid: number, recentCodeList: any[] = []) {
+    recentCodeList = recentCodeList.length > 0 ? recentCodeList : this.props.recentCodeList;
+    if (recentCodeList && recentCodeList.length > 0) {
+      let data = recentCodeList.find((item) => item[gameid] && item[gameid].length > 0);
+      data = data && data[gameid];
+      if (data) {
+        this.setState({
+          issueList: data
+        });
+      }
+    }
   }
 
   // 开奖数据整理
@@ -358,7 +408,8 @@ class BetRemindItem extends Component<Props, {}> {
         totProjs,
         isFastBet: 1
       }
-      params.limitLevel = this.getLimit(params.lotteryId).level
+      let limitLevel = this.getLimit(params.lotteryId);
+      params.limitLevel = limitLevel && limitLevel.level;
       this.disable = true;
       setTimeout(() => {
         this.disable = false;
