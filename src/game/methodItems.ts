@@ -221,7 +221,7 @@ const methodItems: any = {
     return {
       class: 'layout-c-2 left',
       rows: [
-        getCommonRow({n: '总和尾', nonasv: true, vs: [{s: false, n: '大', pv: '和尾大', oddIndex: 1, col: 12, pn: ''}, {s: false, n: '小', pv: '和尾小', oddIndex: 1, col: 12, pn: ''}]}),
+        getCommonRow({n: '总和尾', nonasv: true, vs: [{s: false, n: '大', pv: '和尾大', oddIndex: 4, col: 12, pn: ''}, {s: false, n: '小', pv: '和尾小', oddIndex: 3, col: 12, pn: ''}]}),
       ]
     }
   },
