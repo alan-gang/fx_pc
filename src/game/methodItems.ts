@@ -605,7 +605,7 @@ const methodItems: any = {
   },
   '5056:1' () {
     // K3 颜色
-    let vs = [{s: false, n: '全红', col: 12, oddIndex: 0, class: 'white-bg-img'}, {s: false, n: '全黑', col: 12, oddIndex: 1, class: 'white-bg-img'}, {s: false, n: '1红2黑', col: 12, oddIndex: 2, class: 'white-bg-img'}, {s: false, n: '2红1黑', col: 12, oddIndex: 3, class: 'white-bg-img'}];
+    let vs = [{s: false, n: '全红', col: 12, oddIndex: 0, class: 'white-bg-img'}, {s: false, n: '全黑', col: 12, oddIndex: 2, class: 'white-bg-img'}, {s: false, n: '1红2黑', col: 12, oddIndex: 3, class: 'white-bg-img'}, {s: false, n: '2红1黑', col: 12, oddIndex: 1, class: 'white-bg-img'}];
     return {
       rows: [
         getCommonRow({nonasv: true, n: '颜色', nstyle: 'ys', vs: cpArr(vs)}),
