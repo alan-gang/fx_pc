@@ -83,5 +83,5 @@ methods.set('pk10_5vs6_lhh', {id: '116', title: '第五名VS第六名', methodId
 methods.set('pk10_gy_dx', {id: '117', title: '冠亚和大小', methodId: '4053', method: 'ww_dx', type: LOTTERY_TYPES.PK10, pos: 0});
 methods.set('pk10_gy_ds', {id: '118', title: '冠亚和单双', methodId: '4053', method: 'ww_ds', type: LOTTERY_TYPES.PK10, pos: 0});
 
-methods.set('k3_zh_dx', {id: '200', title: '大小', methodId: '5018', method: 'zh_dx', type: LOTTERY_TYPES.K3});
-methods.set('k3_zh_ds', {id: '201', title: '单双', methodId: '5018', method: 'zh_ds', type: LOTTERY_TYPES.K3});
+methods.set('k3_zh_dx', {id: '200', title: '大小', methodId: '5050', method: 'zh_dx', type: LOTTERY_TYPES.K3});
+methods.set('k3_zh_ds', {id: '201', title: '单双', methodId: '5050', method: 'zh_ds', type: LOTTERY_TYPES.K3});
