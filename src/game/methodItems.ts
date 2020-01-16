@@ -611,7 +611,7 @@ const methodItems: any = {
   },
   '5057:1' () {
     // K3 跨度
-    let vs = [{s: false, n: '0', col: 8, oddIndex: 0, pv: '0'}, {s: false, n: '1', col: 8, oddIndex: 1, pv: '1'}, {s: false, n: '2', col: 8, oddIndex: 2, pv: '2'}, {s: false, n: '3', col: 8, oddIndex: 3, pv: '3'}, {s: false, n: '4', col: 8, oddIndex: 2, pv: '4'}, {s: false, n: '5', col: 8, oddIndex: 3, pv: '5'}];
+    let vs = [{s: false, n: '0', col: 8, oddIndex: 0, pv: '0'}, {s: false, n: '1', col: 8, oddIndex: 1, pv: '1'}, {s: false, n: '2', col: 8, oddIndex: 2, pv: '2'}, {s: false, n: '3', col: 8, oddIndex: 3, pv: '3'}, {s: false, n: '4', col: 8, oddIndex: 2, pv: '4'}, {s: false, n: '5', col: 8, oddIndex: 1, pv: '5'}];
     return {
       rows: [
         getCommonRow({nonasv: true, n: '跨度', vs: cpArr(vs)})
