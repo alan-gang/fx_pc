@@ -65,6 +65,7 @@ const methodItems: any = {
     return {
       layout: 'col',
       class: 'no-t-b',
+      refShowMethodItems: ['1250:1'],
       rows: [
         getCommonRow({n: '万位', hidePos: true, vs: [{s: false, n: '0'}, {s: false, n: '1'}, {s: false, n: '2'}, {s: false, n: '3'},{s: false, n: '4'},{s: false, n: '5'},{s: false, n: '6'},{s: false, n: '7'},{s: false, n: '8'},{s: false, n: '9'}]}),
         getCommonRow({n: '千位', hidePos: true, vs: [{s: false, n: '0'}, {s: false, n: '1'}, {s: false, n: '2'}, {s: false, n: '3'},{s: false, n: '4'},{s: false, n: '5'},{s: false, n: '6'},{s: false, n: '7'},{s: false, n: '8'},{s: false, n: '9'}]}),
@@ -448,8 +449,9 @@ const methodItems: any = {
     // 冠亚和大, 冠亚和小， 冠亚和单，冠亚和双 
     return {
       class: 'no-b-m no-t-b',
+      refShowMethodItems: ['4050:1'],
       rows: [
-        getCommonRow({nonasv: true, hidePos: true, vs: [{s: false, n: '大单', oddIndex: 0, col: 6}, {s: false, n: '大双', oddIndex: 0, col: 6}, {s: false, n: '小单', oddIndex: 1, col: 6}, {s: false, n: '小双', oddIndex: 0, col: 6}]}),
+        getCommonRow({n: '冠亚和值1', nonasv: true, hidePos: true, vs: [{s: false, n: '大单', oddIndex: 0, col: 6}, {s: false, n: '大双', oddIndex: 0, col: 6}, {s: false, n: '小单', oddIndex: 1, col: 6}, {s: false, n: '小双', oddIndex: 0, col: 6}]}),
       ]
     }
   },
@@ -458,9 +460,10 @@ const methodItems: any = {
     let c = {s: false, col: 6, dis: false}
     let vs = [cp({n: '03', pv: '3', oddIndex: 0}, c), cp({n: '04', pv: '4', oddIndex: 0}, c), cp({n: '05', pv: '5', oddIndex: 1}, c), cp({n: '06', pv: '6', oddIndex: 1}, c), cp({n: '07', pv: '7', oddIndex: 2}, c), cp({n: '08', pv: '8', oddIndex: 2}, c), cp({n: '09', pv: '9', oddIndex: 3}, c), cp({n: '10', pv: '10', oddIndex: 3}, c), cp({n: '11', pv: '11', oddIndex: 4}, c), cp({n: '12', pv: '12', oddIndex: 3}, c), cp({n: '13', pv: '13', oddIndex: 3}, c), cp({n: '14', pv: '14', oddIndex: 2}, c), cp({n: '15', pv: '15', oddIndex: 2}, c), cp({n: '16', pv: '16', oddIndex: 1}, c), cp({n: '17', pv: '17', oddIndex: 1}, c), cp({n: '18', pv: '18', oddIndex: 0}, c), cp({n: '19', pv: '19', oddIndex: 0}, c)];
     return {
+      refShowMethodItems: ['4050:1', '4051:1'],
       class: 'no-t-b',
       rows: [
-        getCommonRow({n: '', hidePos: true, vs: cpArr(vs)})
+        getCommonRow({n: '冠亚和值2', hidePos: true, vs: cpArr(vs)})
       ]
     }
   },

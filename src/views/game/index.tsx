@@ -267,8 +267,22 @@ class Game extends Component<Props, object> {
     }
     let curGameMethodItems = this.state.curGameMethodItems;
     let methodId: string = '';
+    let hasOdd: boolean = true;
     curGameMethodItems = curGameMethodItems.map((methodItem: any) => {
+      // 检查共用位置title的玩法是否有odd
+      if (methodItem.refShowMethodItems && methodItem.refShowMethodItems.length > 0) {
+        hasOdd = methodItem.refShowMethodItems.some((item: string) => {
+          methodId = item.split(':')[0];
+          return odds[methodId] && odds[methodId].length > 0;
+        });
+      }
       methodItem.rows = methodItem.rows.map((row: any) => {
+        // 更新是否隐藏位置title
+        if (methodItem.refShowMethodItems && methodItem.refShowMethodItems.length > 0) {
+          row.hidePos = hasOdd;
+          row.class = (row.class || '').replace('no-t-b', '');
+        }
+        // 更新玩法odd
         row.vs = row.vs.map((vsItem: any) => {
           methodId = methodItem.id.split(':')[0];
           if (odds[methodId] && odds[methodId][vsItem.oddIndex || 0]) {
@@ -280,9 +294,10 @@ class Game extends Component<Props, object> {
       });
       return methodItem;
     });
+    // 过滤没有奖级的玩法
     curGameMethodItems = curGameMethodItems.filter(item => {
-      let methodId = item.id.split(':')[0]
-      return odds[methodId]
+      let methodId = item.id.split(':')[0];
+      return odds[methodId];
     });
     this.setState({curGameMethodItems});
   }
