@@ -62,6 +62,9 @@ const HZ = (props: any) => {
   if (props.gameType === LOTTERY_TYPES.K3 && isTriple(nums)) {
     ds = dx = '豹';
   }
+  if (props.gameType === LOTTERY_TYPES.G11X5 && tot === props.type.min) {
+    dx = '和';
+  }
   return (
     <div>
       <span className="sum">{tot}</span>

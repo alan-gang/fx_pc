@@ -72,7 +72,7 @@ export let methodsConfig: MethodsConfig = {
     {
       name: '整合',
       ename: 'zhenghe',
-      recentType: [hz({min: 22})],
+      recentType: [hz({min: 30})],
       ids: ['2050:1', '2050:2', '2053:2', '2051:1']
     },
     {
