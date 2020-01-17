@@ -77,6 +77,8 @@ class App extends Component<Props, object> {
         this.initSocket();
         // this.setState({playTypeIds: data.playTypes});
         this.setState({playTypeIds: [1,2,3]});
+      } else {
+        this.getCfgInfo();
       }
     });
   }
@@ -90,25 +92,28 @@ class App extends Component<Props, object> {
         }
       },
       open: () => {
-        // this.mysocket && this.mysocket.send(JSON.stringify(Object.assign({action: 'noauth'}, {})));
-        this.mysocket && this.mysocket.send(JSON.stringify({
-          parameter: {
-            userId: store.user.userId,
-            app: 'web'
-          },
-          action: 'auth'
-        }))
+        if (this.mysocket) {
+          let params: any = {action: 'noauth'};
+          if (store.user.login) {
+            params = {
+              parameter: {
+                userId: store.user.userId,
+                app: 'web'
+              },
+              action: 'auth'
+            };
+          }
+          this.mysocket.send(JSON.stringify(params));
+        }
       }
     }, true);
   }
-  // getCfgInfo() {
-    // APIs.getCfgInfo({}).then(({broadcaseWSUrl}: any) => {
-      // if (!Socket.sockets.user) {
-      //   Socket.connect(broadcaseWSUrl, 'user', this.connected);
-      // }
-      // Socket.notify.messages.push(this.message);
-    // });
-  // }
+  getCfgInfo() {
+    APIs.getCfgInfo({}).then(({broadcaseWSUrl}: any) => {
+      store.common.setBroadcaseWSUrl(broadcaseWSUrl);
+      this.initSocket();
+    });
+  }
   updateBalance() {
     store.user.updateBalance();
   }
