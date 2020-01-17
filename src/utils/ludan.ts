@@ -316,7 +316,6 @@ function getDxDs(codeStyleMethod: any, methodName: string): string {
     if (codeStyleMethod.data && typeof codeStyleMethod.data[0] === 'object') {
       let val = codeStyleMethod.data[0][p];
       return val || (codeStyleMethod.data.find((item: any) => item.pos === p ) || {}).val || '';
-
     }
     return '';
   }
@@ -354,11 +353,9 @@ export function getLuDanListByMethod(issueList: any[], type: string, name: strin
           case 'zh_ds':
           case 'zhw_wsdx':
           case 'zhw_wsds':
-            // item = cs.value[0][mObj.method.split('_')[1]];
             item = getDxDs(cs, mObj.method);
             break;
           case 'wg_lhh':
-            // item = cs.value[0];
             let d = (toString.call(cs.data) === '[object Array]' && cs.data.length > 0) ? cs.data : cs.value;
             item = d[0] && d[0].val;
             break;
@@ -392,7 +389,6 @@ export function getLuDanListByMethod(issueList: any[], type: string, name: strin
           case '9_ds':  
           case '10_dx':  
           case '10_ds':  
-            // item = cs.value[mObj.pos][mObj.method.split('_')[1]];
             let data = (toString.call(cs.data) === '[object Array]' && cs.data.length > 0) ? cs.data : cs.value;
             item = data[mObj.pos][mObj.method.split('_')[1]];
             break;
