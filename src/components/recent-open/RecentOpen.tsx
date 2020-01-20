@@ -27,6 +27,7 @@ const DX = (props: any) => {
     <div className="letter-2">
       {props.issue.code.split(',').map((num: string, index: number) => {
         let text = Number(num) > props.type.min ? '大' : '小'
+        if (props.type.sum) text = Number(num) === props.type.sum ? '和' : text
         return <span key={index} className={`${getStyleTxtColor(text)}`}>{text}</span>
       })}
     </div>

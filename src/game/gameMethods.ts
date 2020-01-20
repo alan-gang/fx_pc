@@ -78,7 +78,7 @@ export let methodsConfig: MethodsConfig = {
     {
       name: '定位',
       ename: 'dw',
-      recentType: [dx({min: 4})],
+      recentType: [dx({min: 4, sum: 11})],
       ids: ['2052:1']
     },
     {
