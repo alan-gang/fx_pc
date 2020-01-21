@@ -12,6 +12,7 @@ import local from '../../utils/local'
 import { message, Tooltip } from 'antd'
 import inject_unmount from '../inject_unmount'
 import BetRemindTime from './BetRemindTime'
+import _ from 'lodash'
 
 interface GameData {
   codeStyle: string;
@@ -169,14 +170,24 @@ class BetRemindItem extends Component<Props, {}> {
     })
     // this.getCurIssueData()
     // this.getHistoryIssue()
-    this.getCurIssueFromProps(this.props.gamedata.lotteryId);
-    this.getHistoryIssueFromProps(this.props.gamedata.lotteryId);
+  }
+  
+  componentDidMount() {
+    this.getCurIssueFromProps(this.props.gamedata.lotteryId, this.props.issueList);
+    this.getHistoryIssueFromProps(this.props.gamedata.lotteryId, this.props.recentCodeList);
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    // console.log('nextProps=', nextProps)
-    this.getCurIssueFromProps(this.props.gamedata.lotteryId, nextProps.issueList);
-    this.getHistoryIssueFromProps(this.props.gamedata.lotteryId, nextProps.recentCodeList);
+    if (this.props.curServerTime !== nextProps.curServerTime || !_.isEqual(this.props.issueList, nextProps.issueList)) {
+      if (nextProps.curServerTime) {
+        this.getCurIssueFromProps(this.props.gamedata.lotteryId, nextProps.issueList, nextProps.curServerTime);
+      } else {
+        this.getCurIssueFromProps(this.props.gamedata.lotteryId, nextProps.issueList);
+      }
+    }
+    if (!_.isEqual(this.props.recentCodeList, nextProps.recentCodeList)) {
+      this.getHistoryIssueFromProps(this.props.gamedata.lotteryId, nextProps.recentCodeList);
+    }
   }
 
   getCurIssueData = () => {
