@@ -1,9 +1,15 @@
 .lobby-view {
-  .lobby-game-ls {
+  .lobby-game-ls > div {
     width 11.9rem
     min-height 9rem
     margin-top 0.2rem
+    display flex
     flex-wrap wrap
     justify-content space-between
+    .loader {
+      width 100%
+      text-align center
+      color $theme-txt-color-4
+    }
   }
 }

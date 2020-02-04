@@ -38,8 +38,7 @@ class App extends Component<Props, object> {
     this.pageContainerRef = React.createRef();
     this.state = {
       offsetLeft: 0,
-      // playTypeIds: [2]
-      playTypeIds: [1,2,3]
+      playTypeIds: []
     }
   }
   init() {
@@ -63,6 +62,10 @@ class App extends Component<Props, object> {
   }
   componentDidMount() {
     this.updatePosition();
+    window.addEventListener('resize', this.updatePosition, false);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updatePosition, false);
   }
   autoLogin(params: object) {
     APIs.signIn(params).then((data: any) => {
@@ -75,8 +78,7 @@ class App extends Component<Props, object> {
         this.updateBalance();
         store.game.updateAvailableGames();
         this.initSocket();
-        // this.setState({playTypeIds: data.playTypes});
-        this.setState({playTypeIds: [1,2,3]});
+        this.setState({playTypeIds: data.playTypes});
       } else {
         this.getCfgInfo();
       }
@@ -136,8 +138,8 @@ class App extends Component<Props, object> {
       }
     });
   }
-  updatePosition() {
-    if (this.pageContainerRef.current) {
+  updatePosition = () => {
+    if (this.pageContainerRef && this.pageContainerRef.current) {
       let { offsetWidth, offsetLeft } = this.pageContainerRef.current;
       this.setState({offsetLeft: offsetWidth + offsetLeft})
     }

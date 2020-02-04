@@ -1,4 +1,4 @@
-function inject_unount (target: any){
+function inject_unmount (target: any){
   // 改装componentWillUnmount，销毁的时候记录一下
   let next = target.prototype.componentWillUnmount
   target.prototype.componentWillUnmount = function () {
@@ -13,4 +13,4 @@ function inject_unount (target: any){
   }
 }
 
-export default inject_unount
+export default inject_unmount
