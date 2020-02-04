@@ -203,6 +203,7 @@ class Lobby extends Component<Props, object> {
             pageStart={0}
             loadMore={this.loadMore}
             hasMore={this.state.hasMore}
+            threshold={1000}
             loader={<div className="loader" key={0}>{this.state.isLoading ? '加载中...' : ''}</div>}
           >
             {this.state.curGames.slice(0, curPageNo * PAGE_SIZE).map((game: Game) => (
