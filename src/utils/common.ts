@@ -1,11 +1,14 @@
+
 /*
 @desc 获取URL上的参数
 */
-export function getUrlParams(name: string, url?: string): string {
+export function getUrlParams(name: string, url?: string, needDecode: boolean = true): string {
   let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
   let rs = (url || window.location.search).substr(1).match(reg);
+  if (needDecode === false) return rs ? rs[2] : '';
   return rs ? decodeURI(rs[2]) : '';
 }
+
 
 /**
  * 是否偶数
