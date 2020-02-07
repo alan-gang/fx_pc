@@ -57,8 +57,8 @@ class StickyPlayTypeChange extends PureComponent<Props, {}>{
     const sessionData: any = sessionStorage.getItem('sessionData');
     let hash = window.location.hash;
     hash = hash.substring(hash.indexOf('?'));
-    const agentCode = getUrlParams('agentCode',  hash, false);
-    const param = getUrlParams('param',  hash, false);
+    const agentCode = getUrlParams('agentCode',  hash);
+    const param = getUrlParams('param',  hash);
     const gameid = getUrlParams('gameid');
     let data: any = {
       agentCode,
