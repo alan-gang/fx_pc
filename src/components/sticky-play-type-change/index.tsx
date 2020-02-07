@@ -48,7 +48,9 @@ class StickyPlayTypeChange extends PureComponent<Props, {}>{
   }
   componentWillReceiveProps(nextProps: Props) {
     if (this.props.playTypeIds && nextProps.playTypeIds && this.props.playTypeIds.length !== nextProps.playTypeIds.length) {
-      this.setState({playTypes: this.filter(nextProps.playTypeIds)});
+      let pTypes = this.filter(nextProps.playTypeIds);
+      pTypes = this.updateUrls(playTypes)
+      this.setState({playTypes: pTypes});
     }
   }
   getParams() {

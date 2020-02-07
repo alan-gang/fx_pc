@@ -157,7 +157,7 @@ class App extends Component<Props, object> {
               <article className="page-view" ref={this.pageContainerRef}>
                 <RouterConfig />
               </article>
-              <StickyPlayTypeChange offsetLeft={this.state.offsetLeft} playTypeIds={this.state.playTypeIds} />
+              { this.state.playTypeIds && this.state.playTypeIds.length > 0 && <StickyPlayTypeChange offsetLeft={this.state.offsetLeft} playTypeIds={this.state.playTypeIds} /> }
             </article>
           </Router>
         </Provider>
