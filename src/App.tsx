@@ -46,7 +46,7 @@ class App extends Component<Props, object> {
     let hash = window.location.hash;
     hash = hash.substring(hash.indexOf('?'));
     let agentCode = getUrlParams('agentCode', hash);
-    let param = getUrlParams('param', hash);
+    let param = decodeURIComponent(getUrlParams('param', hash));
     let data = {
       agentCode,
       param
