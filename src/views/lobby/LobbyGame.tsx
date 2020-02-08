@@ -8,6 +8,7 @@ import APIs from '../../http/APIs';
 import { getGameTypeByGameId } from '../../game/games';
 import { getLunDanTabByName, getLunDanFullTitleByName, getMethodENameByLudanName, getLudanTabByTypeAndName } from '../../utils/ludan';
 import Socket from '../../socket';
+import inject_unmount from '../../components/inject_unmount';
 
 import './lobbyGame.styl';
 
@@ -50,6 +51,7 @@ let bestLudanConfig: any = {
 
 @inject("store")
 @observer
+@inject_unmount
 class LobbyGame extends Component<Props, object> {
   state: State;
   mysocket?: Socket;
@@ -213,7 +215,11 @@ class LobbyGame extends Component<Props, object> {
       this.gotoGame();
     } else {
       let limitListItem = this.props.store.game.getLimitListItemById(this.props.gameId);
-      this.setState({isShowLimitSetDialog: true, limitLevelList: limitListItem ? limitListItem.kqPrizeLimit : []});
+      if (limitListItem && limitListItem.kqPrizeLimit) {
+        this.setState({isShowLimitSetDialog: true, limitLevelList: limitListItem.kqPrizeLimit});
+      } else {
+        this.getLimitData(this.props.gameId);
+      }
     }
   }
   onLimitChoiceCB = (level: number) => {
@@ -268,6 +274,14 @@ class LobbyGame extends Component<Props, object> {
         this.updateBestLudan(besetLudan);
       }
     }
+  }
+  getLimitData(id: number) {
+    APIs.lottSets({lotteryIds: id, v: 1}).then((data: any) => {
+      if (data.success === 1) {
+        let limitListItem = data.data[id];
+        this.setState({isShowLimitSetDialog: true, limitLevelList: limitListItem ? limitListItem.kqPrizeLimit : []});
+      }
+    });
   }
   render() {
     return (
