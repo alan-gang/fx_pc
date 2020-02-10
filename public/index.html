@@ -26,6 +26,19 @@
     -->
     <title>东森-快钱</title>
     <script>
+      (function() {
+        var DESIGN_WIDTH = 1920;
+        function updateRootFontSize() {
+          var docWidth = document.documentElement.clientWidth;
+          document.documentElement.style.fontSize = (docWidth / DESIGN_WIDTH * 100) + 'px'
+        }
+        updateRootFontSize();
+        window.addEventListener('resize', () => {
+          updateRootFontSize();
+        }, false);
+      })();
+    </script>
+    <script>
       if (window.location.search.indexOf('isDemo=1') == -1) {
         var names = {
           uw888: {

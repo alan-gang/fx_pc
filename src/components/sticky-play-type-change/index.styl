@@ -6,6 +6,7 @@
   &>header {
     height 0.54rem
     background url('../../assets/images/default/play-change-bg.png') no-repeat
+    background-size 100%
   }
   borderBottomRadius() {
     border-bottom-left-radius 0.03rem
@@ -21,6 +22,10 @@
     height 0.54rem
     background $sticky-play-type-item-bg-color
     font-size 0.13rem
+    text-align center
+    @media screen and (max-width: 1600px) {
+      font-size 0.12rem
+    }
     &.active {
       color $theme-txt-color-4
       background $sticky-play-type-item-active-bg-color

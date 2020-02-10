@@ -24,6 +24,7 @@ interface State {
 @observer
 class GameMenu extends Component<Props, object> {
   rootSubmenuKeys = ['box', LOTTERY_TYPES.SSC, LOTTERY_TYPES.G11X5, LOTTERY_TYPES.PK10, LOTTERY_TYPES.K3];
+  DESIGN_WIDTH: number = 1920;
   MAIN_WIDTH: number = 1200;
   MENU_WIDTH: number = 210;
   DEFAULT_GAME_TYPE: string = LOTTERY_TYPES.SSC;
@@ -190,8 +191,11 @@ class GameMenu extends Component<Props, object> {
   }
 
   updatePosition() {
+    const rate = document.documentElement.clientWidth / this.DESIGN_WIDTH;
+    const mainWidth = rate * this.MAIN_WIDTH;
+    const menuWidth = rate * this.MENU_WIDTH;
     this.setState({
-      offsetLeft: (document.documentElement.clientWidth - this.MAIN_WIDTH) / 2 - this.MENU_WIDTH > 0 ? (document.documentElement.clientWidth - this.MAIN_WIDTH) / 2 - this.MENU_WIDTH - 10 : 0
+      offsetLeft: (document.documentElement.clientWidth - mainWidth) / 2 - menuWidth > 0 ? (document.documentElement.clientWidth - mainWidth) / 2 - menuWidth - 10 : 0
     });
   }
 
@@ -301,7 +305,7 @@ class GameMenu extends Component<Props, object> {
           selectedKeys={this.state.selectedKeys}
           defaultSelectedKeys={this.state.defaultSelectedKeys}
           onOpenChange={this.onOpenChange}
-          style={{ width: 200 }}
+          style={{ width: '100%' }}
           subMenuCloseDelay={0}
           subMenuOpenDelay={0}
         >

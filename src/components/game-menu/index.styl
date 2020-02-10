@@ -11,6 +11,7 @@
     color $theme-txt-color-4
     border-top-left-radius 0.08rem
     border-top-right-radius 0.08rem
+    background-size 100%
   }
   .game-type-icon {
     display inline-block
@@ -28,6 +29,9 @@
     display flex
     justify-content space-between
     align-items center
+    @media screen and (max-width: 1600px) {
+      font-size 0.12rem
+    }
     .nav-link-wp {
       flexLayout() {
         flex 1
@@ -83,7 +87,7 @@
   // }
 
   .ant-menu-root {
-    height 8.55rem
+    height 8rem
     overflow-x hidden
     overflow-y auto
     border-bottom-left-radius 0.08rem
