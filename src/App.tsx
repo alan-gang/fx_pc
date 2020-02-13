@@ -55,7 +55,6 @@ class App extends Component<Props, object> {
       data = JSON.parse(sessionData);
     }
     this.autoLogin(data);
-    this.getLimitData(getAllGameIds());
   }
   componentWillMount() {
     // this.getCfgInfo();
@@ -70,6 +69,7 @@ class App extends Component<Props, object> {
   autoLogin(params: object) {
     APIs.signIn(params).then((data: any) => {
       if (data.success > 0) {
+        this.getLimitData(getAllGameIds());
         store.common.setBroadcaseWSUrl(data.broadcaseWSUrl);
         store.user.setName(data.userName);
         store.user.setUserId(data.userId);
