@@ -11,8 +11,8 @@
     "fastm/static/js/4.c40b0079.chunk.js": "/fastm/fastm/static/js/4.c40b0079.chunk.js",
     "fastm/static/js/4.c40b0079.chunk.js.map": "/fastm/fastm/static/js/4.c40b0079.chunk.js.map",
     "main.css": "/fastm/static/css/main.dfca195d.chunk.css",
-    "main.js": "/fastm/fastm/static/js/main.95ad91cf.chunk.js",
-    "main.js.map": "/fastm/fastm/static/js/main.95ad91cf.chunk.js.map",
+    "main.js": "/fastm/fastm/static/js/main.82c5ed31.chunk.js",
+    "main.js.map": "/fastm/fastm/static/js/main.82c5ed31.chunk.js.map",
     "runtime-main.js": "/fastm/fastm/static/js/runtime-main.8f2d9661.js",
     "runtime-main.js.map": "/fastm/fastm/static/js/runtime-main.8f2d9661.js.map",
     "fastm/static/js/7.10efa085.chunk.js": "/fastm/fastm/static/js/7.10efa085.chunk.js",
@@ -32,7 +32,7 @@
     "fastm/static/js/14.f6248e37.chunk.js": "/fastm/fastm/static/js/14.f6248e37.chunk.js",
     "fastm/static/js/14.f6248e37.chunk.js.map": "/fastm/fastm/static/js/14.f6248e37.chunk.js.map",
     "index.html": "/fastm/index.html",
-    "precache-manifest.fef16f920206b62d910092c3866571e5.js": "/fastm/precache-manifest.fef16f920206b62d910092c3866571e5.js",
+    "precache-manifest.938e2de6998b963a1d4cd502a5b8b2cf.js": "/fastm/precache-manifest.938e2de6998b963a1d4cd502a5b8b2cf.js",
     "service-worker.js": "/fastm/service-worker.js",
     "static/css/main.dfca195d.chunk.css.map": "/fastm/static/css/main.dfca195d.chunk.css.map",
     "static/media/1.png": "/fastm/static/media/1.0df24675.png",
@@ -83,6 +83,6 @@
     "fastm/static/js/runtime-main.8f2d9661.js",
     "fastm/static/js/7.10efa085.chunk.js",
     "static/css/main.dfca195d.chunk.css",
-    "fastm/static/js/main.95ad91cf.chunk.js"
+    "fastm/static/js/main.82c5ed31.chunk.js"
   ]
 }

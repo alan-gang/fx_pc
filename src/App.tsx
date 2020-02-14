@@ -32,6 +32,7 @@ class App extends Component<Props, object> {
   pageContainerRef: React.RefObject<HTMLElement>;
   state: State;
   mysocket?: Socket;
+  invokedLogin: boolean = false;
   constructor(props: Props) {
     super(props);
     this.init();
@@ -68,6 +69,7 @@ class App extends Component<Props, object> {
   }
   autoLogin(params: object) {
     APIs.signIn(params).then((data: any) => {
+      this.invokedLogin = true;
       if (data.success > 0) {
         this.getLimitData(getAllGameIds());
         store.common.setBroadcaseWSUrl(data.broadcaseWSUrl);
@@ -149,16 +151,18 @@ class App extends Component<Props, object> {
       <ConfigProvider locale={zhCN}>
         <Provider store={store}>
           <Router>
-            <article className="pg-c">
-              <Header />
-              <Suspense fallback={<Loading />}>
-                <GameMenu />
-              </Suspense>
-              <article className="page-view" ref={this.pageContainerRef}>
-                <RouterConfig />
+            { this.invokedLogin && 
+              <article className="pg-c">
+                <Header />
+                <Suspense fallback={<Loading />}>
+                  <GameMenu />
+                </Suspense>
+                <article className="page-view" ref={this.pageContainerRef}>
+                  <RouterConfig />
+                </article>
+                { this.state.playTypeIds && this.state.playTypeIds.length > 0 && <StickyPlayTypeChange offsetLeft={this.state.offsetLeft} playTypeIds={this.state.playTypeIds} /> }
               </article>
-              { this.state.playTypeIds && this.state.playTypeIds.length > 0 && <StickyPlayTypeChange offsetLeft={this.state.offsetLeft} playTypeIds={this.state.playTypeIds} /> }
-            </article>
+            }
           </Router>
         </Provider>
       </ConfigProvider>
