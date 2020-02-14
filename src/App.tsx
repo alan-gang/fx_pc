@@ -24,7 +24,8 @@ moment.locale('zh-cn');
 
 interface State {
   offsetLeft: number;
-  playTypeIds: number[]
+  playTypeIds: number[];
+  invokedLogin: boolean;
 }
 
 @observer
@@ -32,14 +33,14 @@ class App extends Component<Props, object> {
   pageContainerRef: React.RefObject<HTMLElement>;
   state: State;
   mysocket?: Socket;
-  invokedLogin: boolean = false;
   constructor(props: Props) {
     super(props);
     this.init();
     this.pageContainerRef = React.createRef();
     this.state = {
       offsetLeft: 0,
-      playTypeIds: []
+      playTypeIds: [],
+      invokedLogin: false
     }
   }
   init() {
@@ -69,9 +70,9 @@ class App extends Component<Props, object> {
   }
   autoLogin(params: object) {
     APIs.signIn(params).then((data: any) => {
-      this.invokedLogin = true;
-      if (data.success > 0) {
-        this.getLimitData(getAllGameIds());
+      this.setState({invokedLogin: true});
+      this.getLimitData(getAllGameIds());
+      if (data.success > 0) {  
         store.common.setBroadcaseWSUrl(data.broadcaseWSUrl);
         store.user.setName(data.userName);
         store.user.setUserId(data.userId);
@@ -151,7 +152,7 @@ class App extends Component<Props, object> {
       <ConfigProvider locale={zhCN}>
         <Provider store={store}>
           <Router>
-            { this.invokedLogin && 
+            { this.state.invokedLogin && 
               <article className="pg-c">
                 <Header />
                 <Suspense fallback={<Loading />}>
