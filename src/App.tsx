@@ -85,6 +85,7 @@ class App extends Component<Props, object> {
       } else {
         this.getCfgInfo();
       }
+      this.updatePosition();
     });
   }
   initSocket() {
